@@ -24,22 +24,20 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Image Move Test")
 move_speed = 8
 
-all_image_objects = []
+##dictionary containing all game layers. Game will have 6 depth layers, and each object will be added to the corseponding list in the dict
+all_image_objects = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
 
 back_image = image_object("Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
-all_image_objects.append(back_image)
-
-##duck_image = image_object("5a0193067ca233f48ba6272c.png", 300, 300, 400, 250, 4)
-##all_image_objects.append(duck_image)
+all_image_objects[5].append(back_image)
 
 backbush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 500, 400, 200, 4)
-all_image_objects.append(backbush_image)
+all_image_objects[4].append(backbush_image)
 
 bush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 700, 400, 315, 2)
-all_image_objects.append(bush_image)
+all_image_objects[2].append(bush_image)
 
 sec_bush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 900, 400, 400, 2)
-all_image_objects.append(sec_bush_image)
+all_image_objects[2].append(sec_bush_image)
 
 bar_ui = image_object("bar.png", 0, 25, 750, 160, 0)
 ammo_ui = image_object("ammo4.png", 100, 200, 750, 75, 0)
@@ -63,13 +61,6 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        ##if event.type == pygame.MOUSEBUTTONDOWN:
-            ##if event.button == 1:
-                ##shooting = True
-        ##elif event.type == pygame.MOUSEBUTTONUP:
-            ##if event.button == 1:
-                ##shooting = False
-    # Clear the screen
     screen.fill((255, 255, 255))
 
     keys = pygame.key.get_pressed()
@@ -77,31 +68,44 @@ while running:
     # Update image position
     if keys[pygame.K_LEFT] and current_x <= 250:
         current_x += depth_movement(5, move_speed)
-        for image in all_image_objects:
-            image.image_rect.x += depth_movement(image.depth, move_speed)
+        i = 6
+        while i > 0:
+            i -= 1
+            for image in all_image_objects[i]:
+                image.image_rect.x += depth_movement(image.depth, move_speed)
+            
         for bullet in gun.bullets:
             bullet.posx += depth_movement(3, move_speed)
 
     if keys[pygame.K_RIGHT] and current_x >= -250:
         current_x -= depth_movement(5, move_speed)
-        for image in all_image_objects:
-            image.image_rect.x -= depth_movement(image.depth, move_speed)
+        i = 6
+        while i > 0:
+            i -= 1
+            for image in all_image_objects[i]:
+                image.image_rect.x -= depth_movement(image.depth, move_speed)
         for bullet in gun.bullets:
             bullet.posx -= depth_movement(3, move_speed)
     
     if keys[pygame.K_DOWN] and crouched == False:
         crouched = True
         move_speed = 5
-        for image in all_image_objects:
-            image.image_rect.y -= depth_movement(image.depth, 500)
+        i = 6
+        while i > 0:
+            i -= 1
+            for image in all_image_objects[i]:
+                image.image_rect.y -= depth_movement(image.depth, 500)
         for bullet in gun.bullets:
             bullet.posy -= depth_movement(3, 500)
     
     if keys[pygame.K_UP] and crouched == True:
         crouched = False
         move_speed = 8
-        for image in all_image_objects:
-            image.image_rect.y += depth_movement(image.depth, 500)
+        i = 6
+        while i > 0:
+            i -= 1
+            for image in all_image_objects[i]:
+                image.image_rect.y += depth_movement(image.depth, 500)
         for bullet in gun.bullets:
             bullet.posy += depth_movement(3, 500)
     
@@ -130,8 +134,11 @@ while running:
         bar_ui = image_object("bar.png", fired_cd, 25, 750, 160, 0)
 
     # Draw the image
-    for image in all_image_objects:
-        screen.blit(image.image, image.image_rect)
+    i = 6
+    while i > 0:
+        i -= 1
+        for image in all_image_objects[i]:
+            screen.blit(image.image, image.image_rect)
     # Update the display
     if fired_cd > 0:
         fired_cd -= 1
