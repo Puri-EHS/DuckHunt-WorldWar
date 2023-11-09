@@ -3,7 +3,7 @@ import pygame
 import sys
 from image_obj import image_object
 import time
-
+from Gun import Gun
 def depth_movement(obj_depth, move_amount):
     if obj_depth != 0:
         obj_move = move_amount/obj_depth
@@ -51,11 +51,21 @@ fired_cd = 0
 reload_time = 0
 reloading = False
 
+
+gun = Gun()
+
+shooting = False
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                shooting = True
+        elif event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                shooting = False
     # Clear the screen
     screen.fill((255, 255, 255))
 
@@ -115,6 +125,15 @@ while running:
     
     screen.blit(bar_ui.image, bar_ui.image_rect)
     screen.blit(ammo_ui.image, ammo_ui.image_rect)
+
+    gun.update ()
+    gun.render(screen)
+
+    if shooting:
+        gun.shoot(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+
+    gun.update_bullets(screen)
+
     pygame.display.flip()
 
 # Quit Pygame
