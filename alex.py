@@ -4,6 +4,7 @@ import sys
 from image_obj import image_object
 import time
 from Gun import Gun
+
 def depth_movement(obj_depth, move_amount):
     if obj_depth != 0:
         obj_move = move_amount/obj_depth
@@ -30,13 +31,16 @@ all_image_objects = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
 back_image = image_object("Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
 all_image_objects[5].append(back_image)
 
-backbush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 500, 400, 200, 4)
+duck_image = image_object("5a0193067ca233f48ba6272c.png", 250, 250, 400, 300, 4)
+all_image_objects[4].append(duck_image)
+
+backbush_image = image_object("SavannahShrubFront.png", 2100, 700, 400, 125, 4)
 all_image_objects[4].append(backbush_image)
 
-bush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 700, 400, 315, 2)
+bush_image = image_object("SavannahShrubFront.png", 2100, 1100, 400, 175, 2)
 all_image_objects[2].append(bush_image)
 
-sec_bush_image = image_object("FrontShrubSavannah-1.png.png", 2100, 900, 400, 400, 2)
+sec_bush_image = image_object("SavannahShrubFront.png", 2100, 1200, 400, 250, 2)
 all_image_objects[2].append(sec_bush_image)
 
 bar_ui = image_object("bar.png", 0, 25, 750, 160, 0)
