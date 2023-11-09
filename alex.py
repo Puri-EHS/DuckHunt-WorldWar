@@ -4,7 +4,7 @@ import sys
 from image_obj import image_object
 import time
 from Gun import Gun
-
+from TestCharacter import dude
 def depth_movement(obj_depth, move_amount):
     if obj_depth != 0:
         obj_move = move_amount/obj_depth
@@ -31,10 +31,12 @@ all_image_objects = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
 back_image = image_object("Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
 all_image_objects[5].append(back_image)
 
-duck_image = image_object("5a0193067ca233f48ba6272c.png", 250, 250, 400, 300, 4)
-all_image_objects[4].append(duck_image)
+ai = dude(400, 199)
+ai.velocity = 3
+duck_image = image_object("5a0193067ca233f48ba6272c.png", 250, 250, ai.x, ai.y, 4)
 
-backbush_image = image_object("SavannahShrubFront.png", 2100, 700, 400, 125, 4)
+
+backbush_image = image_object("SavannahBackBush.png", 2100, 700, 400, 400, 4)
 all_image_objects[4].append(backbush_image)
 
 bush_image = image_object("SavannahShrubFront.png", 2100, 1100, 400, 175, 2)
@@ -55,13 +57,17 @@ ammo = 4
 fired_cd = 0
 reload_time = 0
 reloading = False
-
+x_from_origin = 0
 
 gun = Gun()
 
 shooting = False
 
 while running:
+    ai.update()
+    duck_image.image_rect.x = ai.x + x_from_origin
+    duck_image.image_rect.y = ai.y
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -80,6 +86,7 @@ while running:
             
         for bullet in gun.bullets:
             bullet.posx += depth_movement(3, move_speed)
+        x_from_origin += depth_movement(4, move_speed)
 
     if keys[pygame.K_RIGHT] and current_x >= -250:
         current_x -= depth_movement(5, move_speed)
@@ -90,7 +97,8 @@ while running:
                 image.image_rect.x -= depth_movement(image.depth, move_speed)
         for bullet in gun.bullets:
             bullet.posx -= depth_movement(3, move_speed)
-    
+        x_from_origin -= depth_movement(4, move_speed)
+
     if keys[pygame.K_DOWN] and crouched == False:
         crouched = True
         move_speed = 5
@@ -141,6 +149,8 @@ while running:
     i = 6
     while i > 0:
         i -= 1
+        if i == 4:
+            screen.blit(duck_image.image, duck_image.image_rect)
         for image in all_image_objects[i]:
             screen.blit(image.image, image.image_rect)
     # Update the display
@@ -149,6 +159,7 @@ while running:
     
     screen.blit(bar_ui.image, bar_ui.image_rect)
     screen.blit(ammo_ui.image, ammo_ui.image_rect)
+    
 
     gun.update ()
     gun.render(screen)
