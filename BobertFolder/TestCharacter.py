@@ -12,23 +12,25 @@ def normalize(v):
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[0] < 800 and v[0] > 0) and (v[1] < 600 and v[1] > 0):
+    if (v[0] < 800 and v[0] > 0) and (v[1] < 300 and v[1] > 0): #limit the movement to the upper half of the screen
         return True
     return False
+def quadratic_bezier_curve(p0, p1, p2, t):
+    # Calculate the quadratic Bezier curve point at time t
+    return ((1-t)**2 * p0[0] + 2 * (1-t) * t * p1[0] + t**2 * p2[0], (1-t)**2 * p0[1] + 2 * (1-t) * t * p1[1] + t**2 * p2[1])
 
 class dude:
     def __init__(self, x, y):
         self.prev_direction = 0
-        
+        self.fly_out_bezier = self.pick_random_flyout()
+        self.t_val = 0
+        self.in_flyout = True
         self.x = x
         self.y = y
         self.velocity = 0.1
         self.point_radius_min = 100 #in pixels
         self.point_radius_max = 200
         self.rand_point = (-5, -5)
-
-    def draw(self, screen):
-        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), 10)
         
     def shift_angle(self):
         rando = random.randint(1, 100)
@@ -54,7 +56,11 @@ class dude:
             else:
                 self.prev_direction = -1
                 return 3.1415926535
-        
+
+    def draw(self, screen):
+        pygame.draw.circle(screen, (255, 0, 0), (self.x, self.y), 10)
+    
+    
     
     def pick_random_point(self):
         #pick random angle
@@ -69,9 +75,25 @@ class dude:
                 break
         
         #shifting random point
-            
+    
+    def pick_random_flyout(self):
+        random_x = random.randrange(0, 800)
+        p1 = (random_x, 300)
+        p2 = (random.randrange(0, 800), random.randrange(0, 600))
+        p3 = (random.randrange(0, 800), random.randrange(100, 200))
+        return [p1, p2, p3]
+    
+    
         
     def update(self):
+        if(self.in_flyout):
+            self.t_val += 0.05
+            if self.t_val > 1:
+                self.in_flyout = False
+            position = quadratic_bezier_curve(self.fly_out_bezier[0], self.fly_out_bezier[1], self.fly_out_bezier[2], self.t_val)
+            self.x = position[0]
+            self.y = position[1]
+        
         direction = subtract_vectors(self.rand_point, (self.x, self.y))
         distance = magnitude(direction)
 
