@@ -17,7 +17,7 @@ def in_bounds(v):
     return False
 def quadratic_bezier_curve(p0, p1, p2, t):
     # Calculate the quadratic Bezier curve point at time t
-    return ((1-t)**2 * p0[0] + 2 * (1-t) * t * p1[0] + t**2 * p2[0], (1-t)**2 * p0[1] + 2 * (1-t) * t * p1[1] + t**2 * p2[1])
+    return (1-t)**2 * p0 + 2 * (1-t) * t * p1 + t**2 * p2
 
 class dude:
     def __init__(self, x, y):
@@ -84,16 +84,8 @@ class dude:
         return [p1, p2, p3]
     
     
-        
+    
     def update(self):
-        if(self.in_flyout):
-            self.t_val += 0.05
-            if self.t_val > 1:
-                self.in_flyout = False
-            position = quadratic_bezier_curve(self.fly_out_bezier[0], self.fly_out_bezier[1], self.fly_out_bezier[2], self.t_val)
-            self.x = position[0]
-            self.y = position[1]
-        
         direction = subtract_vectors(self.rand_point, (self.x, self.y))
         distance = magnitude(direction)
 
