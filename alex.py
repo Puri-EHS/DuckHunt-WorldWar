@@ -46,8 +46,8 @@ all_image_objects[2].append(bush_image)
 sec_bush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 1200, 400, 250, 2)
 all_image_objects[2].append(sec_bush_image)
 
-bar_ui = image_object("bar.png", 0, 25, 750, 160, 0)
-ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+bar_ui = image_object("bar.png", 0, 25, 765, 75, 0)
+ammo_ui = image_object("Images/Weapons/ammo4.png", 50, 100, 765, 50, 0)
 
 # Main game loop
 running = True
@@ -128,7 +128,7 @@ while running:
         fired_cd = 50
         ammo -= 1
         ammo_str = "Images/Weapons/ammo" + str(ammo) + ".png"
-        ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
+        ammo_ui = image_object(ammo_str, 50, 100, 765, 50, 0)
         
    
     if ammo == 0 and reloading == False:
@@ -140,12 +140,12 @@ while running:
     if ammo == 0 and reloading == True and reload_time == 0:
         reloading = False
         ammo = 4
-        ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+        ammo_ui = image_object("Images/Weapons/ammo4.png", 50, 100, 765, 50, 0)
 
     if reloading:
-        bar_ui = image_object("bar.png", reload_time/2, 25, 750, 160, 0)
+        bar_ui = image_object("bar.png", reload_time/2, 25, 765, 75, 0)
     elif fired_cd > 0:
-        bar_ui = image_object("bar.png", fired_cd, 25, 750, 160, 0)
+        bar_ui = image_object("bar.png", fired_cd, 25, 765, 75, 0)
 
     duck_image.image_rect.x = ai.x + x_from_origin
     duck_image.image_rect.y = ai.y + y_from_origin
