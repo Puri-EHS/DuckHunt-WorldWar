@@ -5,6 +5,7 @@ from image_obj import image_object
 import time
 from Gun import Gun
 from TestCharacter import dude
+
 def depth_movement(obj_depth, move_amount):
     if obj_depth != 0:
         obj_move = move_amount/obj_depth
@@ -28,7 +29,7 @@ move_speed = 8
 ##dictionary containing all game layers. Game will have 6 depth layers, and each object will be added to the corseponding list in the dict
 all_image_objects = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
 
-back_image = image_object("Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
+back_image = image_object("Images/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
 all_image_objects[5].append(back_image)
 
 ai = dude(400, 199)
@@ -36,17 +37,17 @@ ai.velocity = 3
 duck_image = image_object("5a0193067ca233f48ba6272c.png", 250, 250, ai.x, ai.y, 4)
 
 
-backbush_image = image_object("SavannahBackBush.png", 2100, 700, 400, 400, 4)
+backbush_image = image_object("Images/Environments/SavannahBackBush.png", 2100, 700, 400, 400, 4)
 all_image_objects[4].append(backbush_image)
 
-bush_image = image_object("SavannahShrubFront.png", 2100, 1100, 400, 175, 2)
+bush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 1100, 400, 175, 2)
 all_image_objects[2].append(bush_image)
 
-sec_bush_image = image_object("SavannahShrubFront.png", 2100, 1200, 400, 250, 2)
+sec_bush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 1200, 400, 250, 2)
 all_image_objects[2].append(sec_bush_image)
 
 bar_ui = image_object("bar.png", 0, 25, 750, 160, 0)
-ammo_ui = image_object("ammo4.png", 100, 200, 750, 75, 0)
+ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
 
 # Main game loop
 running = True
@@ -58,6 +59,7 @@ fired_cd = 0
 reload_time = 0
 reloading = False
 x_from_origin = 0
+y_from_origin = 0
 
 gun = Gun()
 
@@ -65,8 +67,6 @@ shooting = False
 
 while running:
     ai.update()
-    duck_image.image_rect.x = ai.x + x_from_origin
-    duck_image.image_rect.y = ai.y
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -109,7 +109,8 @@ while running:
                 image.image_rect.y -= depth_movement(image.depth, 500)
         for bullet in gun.bullets:
             bullet.posy -= depth_movement(3, 500)
-    
+        y_from_origin -= depth_movement(4, 500)
+
     if keys[pygame.K_UP] and crouched == True:
         crouched = False
         move_speed = 8
@@ -120,12 +121,13 @@ while running:
                 image.image_rect.y += depth_movement(image.depth, 500)
         for bullet in gun.bullets:
             bullet.posy += depth_movement(3, 500)
-    
+        y_from_origin += depth_movement(4, 500)
+
     if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0:
         shooting = True
         fired_cd = 50
         ammo -= 1
-        ammo_str = "ammo" + str(ammo) + ".png"
+        ammo_str = "Images/Weapons/ammo" + str(ammo) + ".png"
         ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
         
    
@@ -138,13 +140,15 @@ while running:
     if ammo == 0 and reloading == True and reload_time == 0:
         reloading = False
         ammo = 4
-        ammo_ui = image_object("ammo4.png", 100, 200, 750, 75, 0)
+        ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
 
     if reloading:
         bar_ui = image_object("bar.png", reload_time/2, 25, 750, 160, 0)
     elif fired_cd > 0:
         bar_ui = image_object("bar.png", fired_cd, 25, 750, 160, 0)
 
+    duck_image.image_rect.x = ai.x + x_from_origin
+    duck_image.image_rect.y = ai.y + y_from_origin
     # Draw the image
     i = 6
     while i > 0:
