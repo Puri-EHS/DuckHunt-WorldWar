@@ -7,7 +7,7 @@ import constants
 class PlayerGun:
     def __init__(self):
 
-        self.crosshair = pygame.image.load("./crosshair.png").convert_alpha()
+        self.crosshair = pygame.image.load("ankit/crosshair.png").convert_alpha()
         self.crosshair_coords = (400, 300)
         self.cross_surf = pygame.Surface((self.crosshair.get_width(), self.crosshair.get_height()), pygame.SRCALPHA)
         self.cross_surf.blit(self.crosshair, (0,0))
@@ -23,15 +23,15 @@ class PlayerGun:
         self.idle_images = []
         self.shoot_images= []
 
-        self.idle_images.append(Spritesheet("./gun.png").image_at((128*2, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((128*2, 0, 128, 120)))
         self.idle_images[0] = pygame.transform.flip(self.idle_images[0], True, False)
-        self.idle_images.append(Spritesheet("./gun.png").image_at((0, 0, 128, 120)))
-        self.idle_images.append(Spritesheet("./gun.png").image_at((128*2, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((0, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((128*2, 0, 128, 120)))
 
-        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*4, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*4, 0, 128, 120)))
         self.shoot_images[0] = pygame.transform.flip(self.shoot_images[0], True, False)
-        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*3, 0, 128, 120)))
-        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*4, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*3, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*4, 0, 128, 120)))
 
 
         for i in range(len(self.idle_images)):
