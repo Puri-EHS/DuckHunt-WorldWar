@@ -18,7 +18,6 @@ def in_bounds(v):
 def quadratic_bezier_curve(p0, p1, p2, t):
     # Calculate the quadratic Bezier curve point at time t
     return (1-t)**2 * p0 + 2 * (1-t) * t * p1 + t**2 * p2
-
 class dude:
     def __init__(self, x, y):
         self.prev_direction = 0
@@ -27,7 +26,7 @@ class dude:
         self.in_flyout = True
         self.x = x
         self.y = y
-        self.velocity = 0.1
+        self.velocity = 0.5
         self.point_radius_min = 100 #in pixels
         self.point_radius_max = 200
         self.rand_point = (-5, -5)
@@ -43,14 +42,14 @@ class dude:
                 self.prev_direction = 0
                 return 0
         if(self.prev_direction == 1):
-            if(rando < 90):
+            if(rando < 70):
                 self.prev_direction = -1
                 return 3.1415926535
             else:
                 self.prev_direction = 1
                 return 0
         if(self.prev_direction == -1):
-            if(rando < 90):
+            if(rando < 70):
                 self.prev_direction = 1
                 return 0
             else:
@@ -78,22 +77,32 @@ class dude:
     
     def pick_random_flyout(self):
         random_x = random.randrange(0, 800)
-        p1 = (random_x, 300)
-        p2 = (random.randrange(0, 800), random.randrange(0, 600))
-        p3 = (random.randrange(0, 800), random.randrange(100, 200))
+        p1 = pygame.math.Vector2(random_x, 300)
+        p2 = pygame.math.Vector2(random.randrange(0, 800), random.randrange(0, 300))
+        p3 = pygame.math.Vector2(random.randrange(0, 800), random.randrange(100, 200))
         return [p1, p2, p3]
     
     
     
     def update(self):
-        direction = subtract_vectors(self.rand_point, (self.x, self.y))
-        distance = magnitude(direction)
-
-        # If close enough to the target, set a new random target
-        if distance < 5 or (self.rand_point[0] < 0 and self.rand_point[1] < 0):
-            self.pick_random_point()
+        if(self.in_flyout):
+            self.t_val += 0.001
+            if self.t_val > 1:
+                self.in_flyout = False
+            position = quadratic_bezier_curve(self.fly_out_bezier[0], self.fly_out_bezier[1], self.fly_out_bezier[2], self.t_val)
+            self.x = position[0]
+            self.y = position[1]
+            print("hi")
         else:
-            # Normalize the direction and move
-            normalized_direction = normalize(direction)
-            self.x += normalized_direction[0] * self.velocity
-            self.y += normalized_direction[1] * self.velocity
+            direction = subtract_vectors(self.rand_point, (self.x, self.y))
+            distance = magnitude(direction)
+
+            # If close enough to the target, set a new random target
+            if distance < 5 or (self.rand_point[0] < 0 and self.rand_point[1] < 0):
+                self.pick_random_point()
+            else:
+                # Normalize the direction and move
+                normalized_direction = normalize(direction)
+                self.x += normalized_direction[0] * self.velocity
+                self.y += normalized_direction[1] * self.velocity
+            print("ther stuff")
