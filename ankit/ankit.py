@@ -8,13 +8,13 @@ if not constants.USE_MOUSE:
     import multiprocessing as mp
     from gesture import get_points
 
+pygame.mixer.init()
 
 def depth_movement(obj_depth, move_amount):
     if obj_depth != 0:
         obj_move = move_amount/obj_depth
     else:
         obj_move = 0
-    
     return obj_move
 
 def main(queue):

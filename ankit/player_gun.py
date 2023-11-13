@@ -7,7 +7,9 @@ import constants
 class PlayerGun:
     def __init__(self):
 
-        self.crosshair = pygame.image.load("ankit/crosshair.png").convert_alpha()
+        self.shoot_sound = pygame.mixer.Sound("shoot.mp3")
+
+        self.crosshair = pygame.image.load("./crosshair.png").convert_alpha()
         self.crosshair_coords = (400, 300)
         self.cross_surf = pygame.Surface((self.crosshair.get_width(), self.crosshair.get_height()), pygame.SRCALPHA)
         self.cross_surf.blit(self.crosshair, (0,0))
@@ -63,21 +65,28 @@ class PlayerGun:
 
 
     def update(self, queue):
+        self.shoot_frames += 1
         if not constants.USE_MOUSE:
             if not queue.empty():
-                tip, nuckle = queue.get()
-                print(tip)
+                tip, nuckle = queue.get() 
+                # queue system could be the culprit for rare rapid shooting, but either way its kinda bad for this use case
 
                 if tip is not None:
+                    
+                    if self.did_just_shoot and self.shoot_frames > self.shoot_frame_time:
+                        self.crosshair_coords = (800 - tip.x * 800, tip.y * 600)
+                        self.prev_crosshair_coords = self.crosshair_coords
+
+
+                    
                     if not self.did_just_shoot:
-                        if self.crosshair_coords[1] - tip.y * 600 > 50:
+                        if self.crosshair_coords[1] - tip.y * 600 > 100:
                             self.shoot()
                         else:
                             self.prev_crosshair_coords = self.crosshair_coords
                             self.crosshair_coords = (800 - tip.x * 800, tip.y * 600)
-                    elif self.shoot_frames > self.shoot_frame_time:
-                        self.prev_crosshair_coords = self.crosshair_coords
-                        self.crosshair_coords = (800 - tip.x * 800, tip.y * 600)
+
+                
         else:
             self.crosshair_coords = pygame.mouse.get_pos()
 
@@ -90,8 +99,9 @@ class PlayerGun:
             self.gun_image_index = 2
 
 
-        self.shoot_frames += 1
+        
         if(self.did_just_shoot and self.shoot_frames > self.shoot_frame_time):
+
             self.did_just_shoot = False
         elif not self.did_just_shoot:
             self.cur_image = self.idle_images[self.gun_image_index]
@@ -110,5 +120,9 @@ class PlayerGun:
         self.cur_image = self.shoot_images[self.gun_image_index]
         self.did_just_shoot = True
         self.shoot_frames = 0
+        pygame.mixer.Sound.play(self.shoot_sound)
+
+        
+
 
 
