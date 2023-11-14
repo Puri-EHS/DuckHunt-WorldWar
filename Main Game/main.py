@@ -32,23 +32,23 @@ def main(queue):
 
     all_image_objects = []
 
-    back_image = image_object("Images/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
+    back_image = image_object("Main Game/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
     all_image_objects.append(back_image)
 
     ##duck_image = image_object("5a0193067ca233f48ba6272c.png", 300, 300, 400, 250, 4)
     ##all_image_objects.append(duck_image)
 
-    backbush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 500, 400, 200, 4)
+    backbush_image = image_object("Main Game/FrontShrubSavannah-1.png.png", 2100, 500, 400, 200, 4)
     all_image_objects.append(backbush_image)
 
-    bush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 700, 400, 315, 2)
+    bush_image = image_object("Main Game/SavannahShrubFront.png", 2100, 700, 400, 315, 2)
     all_image_objects.append(bush_image)
 
-    sec_bush_image = image_object("Images/Environments/SavannahShrubFront.png", 2100, 900, 400, 400, 2)
+    sec_bush_image = image_object("Main Game/SavannahShrubFront.png", 2100, 900, 400, 400, 2)
     all_image_objects.append(sec_bush_image)
 
-    bar_ui = image_object("bar.png", 0, 25, 750, 160, 0)
-    ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+    bar_ui = image_object("Main Game/bar.png", 0, 25, 750, 160, 0)
+    ammo_ui = image_object("Main Game/ammo4.png", 100, 200, 750, 75, 0)
 
     # Main game loop
     running = True
@@ -118,7 +118,7 @@ def main(queue):
             shooting = True
             fired_cd = 50
             ammo -= 1
-            ammo_str = "Images/Weapons/ammo" + str(ammo) + ".png"
+            ammo_str = "Main Game/ammo" + str(ammo) + ".png"
             ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
             
     
@@ -131,12 +131,12 @@ def main(queue):
         if ammo == 0 and reloading == True and reload_time == 0:
             reloading = False
             ammo = 4
-            ammo_ui = image_object("Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+            ammo_ui = image_object("Main Game/ammo4.png", 100, 200, 750, 75, 0)
 
         if reloading:
-            bar_ui = image_object("bar.png", reload_time/2, 25, 750, 160, 0)
+            bar_ui = image_object("Main Game/bar.png", reload_time/2, 25, 750, 160, 0)
         elif fired_cd > 0:
-            bar_ui = image_object("bar.png", fired_cd, 25, 750, 160, 0)
+            bar_ui = image_object("Main Game/bar.png", fired_cd, 25, 750, 160, 0)
 
         # Draw the image
         for image in all_image_objects:
