@@ -16,7 +16,11 @@ screen_height = 600
 
 # Create the screen
 screen = pygame.display.set_mode((screen_width, screen_height))
-background_image = image_object("Images/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
+
+#background_image = image_object("Images/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
+background_image = image_object("Images/Environments/DuckHuntMenuBackground.png", 800,600,400,300,5)
+title_image = image_object("Images/DuckHuntTitle.png", 600, 400, 400, 200, 5)
+
 
 
 while True:
@@ -26,5 +30,5 @@ while True:
             exit()
     
     screen.blit(background_image.image, background_image.image_rect)
-    
+    screen.blit(title_image.image, title_image.image_rect)
     pygame.display.update()
