@@ -3,6 +3,7 @@ from image_obj import image_object
 from player_gun import PlayerGun
 import constants
 from TestCharacter import dude
+from bird_obj import bird_object
 
 if not constants.USE_MOUSE:
     import multiprocessing as mp
@@ -32,7 +33,7 @@ def main(queue):
 
     ai = dude(400, 199)
     ai.velocity = 30
-    duck_image = image_object("5a0193067ca233f48ba6272c.png", 250, 250, ai.x, ai.y, 4)
+    duck_image = bird_object("5a0193067ca233f48ba6272c.png", 250, 250, ai.x, ai.y, 4, 1000, 0)
 
 
     all_image_objects = {0: [], 1: [], 2: [], 3: [], 4: [], 5: []}
@@ -54,7 +55,9 @@ def main(queue):
 
     bar_ui = image_object("Main Game/bar.png", 0, 25, 750, 160, 0)
     ammo_ui = image_object("Main Game/ammo4.png", 100, 200, 750, 75, 0)
-
+    hit_point_ui = image_object("Main Game/hit_point_ui.png", 250, 75, 120, 50, 0)
+    hit_point_bar = image_object("Main Game/bar.png", 250, 70, 120, 60, 0)
+    # hitbar hidden at x = -125, aka move left a total of 245
     # Main game loop
     running = True
     crouched = False
@@ -139,14 +142,17 @@ def main(queue):
                 bullet.posy += depth_movement(3, 500)
             y_from_origin += depth_movement(4, 500)
         
-        if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0:
+        if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0 and crouched == False:
             shooting = True
             fired_cd = 50
             ammo -= 1
             ammo_str = "Main Game/ammo" + str(ammo) + ".png"
             ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
             
-    
+            if (gun.crosshair_coords[0] - duck_image.image_rect.x < 200) and (gun.crosshair_coords[0] - duck_image.image_rect.x > -25):
+                if (gun.crosshair_coords[1] - duck_image.image_rect.y < 200) and (gun.crosshair_coords[1] - duck_image.image_rect.y > -25):
+                    hit_point_bar.image_rect.x -= 50
+
         if ammo == 0 and reloading == False:
             reloading = True
             reload_time = 150
@@ -180,6 +186,8 @@ def main(queue):
         
         screen.blit(bar_ui.image, bar_ui.image_rect)
         screen.blit(ammo_ui.image, ammo_ui.image_rect)
+        screen.blit(hit_point_bar.image, hit_point_bar.image_rect)
+        screen.blit(hit_point_ui.image, hit_point_ui.image_rect)
 
         gun.update(queue)
         gun.render(screen)
@@ -191,6 +199,7 @@ def main(queue):
         gun.update_bullets(screen)
 
         pygame.display.flip()
+        print(gun.crosshair_coords, duck_image.image_rect.x, duck_image.image_rect.y)
 
 
 if __name__ == '__main__':
