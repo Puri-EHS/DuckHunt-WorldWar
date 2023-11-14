@@ -25,15 +25,15 @@ class PlayerGun:
         self.idle_images = []
         self.shoot_images= []
 
-        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((128*2, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("./gun.png").image_at((128*2, 0, 128, 120)))
         self.idle_images[0] = pygame.transform.flip(self.idle_images[0], True, False)
-        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((0, 0, 128, 120)))
-        self.idle_images.append(Spritesheet("ankit/gun.png").image_at((128*2, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("./gun.png").image_at((0, 0, 128, 120)))
+        self.idle_images.append(Spritesheet("./gun.png").image_at((128*2, 0, 128, 120)))
 
-        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*4, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*4, 0, 128, 120)))
         self.shoot_images[0] = pygame.transform.flip(self.shoot_images[0], True, False)
-        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*3, 0, 128, 120)))
-        self.shoot_images.append(Spritesheet("ankit/gun.png").image_at((128*4, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*3, 0, 128, 120)))
+        self.shoot_images.append(Spritesheet("./gun.png").image_at((128*4, 0, 128, 120)))
 
 
         for i in range(len(self.idle_images)):
@@ -116,11 +116,14 @@ class PlayerGun:
             bullet.move()
             bullet.render(screen)
 
-    def shoot(self):
+    def shoot(self, enemies):
         self.cur_image = self.shoot_images[self.gun_image_index]
         self.did_just_shoot = True
         self.shoot_frames = 0
         pygame.mixer.Sound.play(self.shoot_sound)
+
+        # basic collision detection - could use octree system later maybe - space partitioning
+
 
         
 

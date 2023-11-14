@@ -1,7 +1,9 @@
 import pygame
 from image_obj import image_object
 from player_gun import PlayerGun
+from target import Target
 import constants
+
 
 
 if not constants.USE_MOUSE:
@@ -48,7 +50,7 @@ def main(queue):
     all_image_objects.append(sec_bush_image)
 
     bar_ui = image_object("../bar.png", 0, 25, 750, 160, 0)
-    ammo_ui = image_object("../Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+    ammo_ui = image_object("../MainGame/Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
 
     # Main game loop
     running = True
@@ -62,6 +64,8 @@ def main(queue):
 
 
     gun = PlayerGun()
+
+    targets = [Target(400, 300, 10, 10)]
 
     shooting = False
 
@@ -156,6 +160,9 @@ def main(queue):
             shooting = False
 
         gun.update_bullets(screen)
+
+        for target in targets:
+            target.render()
 
         pygame.display.flip()
 
