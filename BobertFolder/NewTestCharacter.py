@@ -31,7 +31,7 @@ class dude2:
         self.x = x
         self.y = y
         self.velocity = vel
-        self.possible_cover_points = None
+        self.possible_cover_points = [(330, 366), (422, 351), (379, 359), (490, 356), (670, 363), (600, 352), (31, 379), (141, 369), (241, 374), (744, 369), (658, 368)]
         #when the duck is strafing, it is moving side to side or up and down dodging shoots and shootin every so often
         #when the duck is taking cover it is rapidly flying downwards to duck from your fire
         #pop shooting is when the duck is behind cover and perodically popping its head up to shoot you 
@@ -47,6 +47,8 @@ class dude2:
         self.current_cover_point = None
         
         self.rand_point = (-1, -1)
+        
+        self.rand_cover_point = None
     def in_bush(self):
         return False
 
@@ -63,6 +65,7 @@ class dude2:
         
         if(self.state == self.states[1] and self.move_towards((300, 300), 2)):
             self.lock_state = True
+            #start timer
             self.state = self.states[2]
             return
         if(not self.lock_state and not self.state == self.states[1]):
@@ -70,25 +73,27 @@ class dude2:
     
     
     #popping up and down behavior 
-    def pop_behavior(self, cover_position, pop_distance):
+    def pop_behavior(self, pop_distance):
         global last_pop_time, is_duck_popped
 
         current_time = time.time()
         if current_time - last_pop_time > pop_interval:
+            if(not is_duck_popped):
+                self.rand_cover_point = self.get_random_cover_point()
             if is_duck_popped:
                 # Duck back into cover
-                self.duck_rect.topleft = cover_position
+                self.duck_rect.topleft = self.rand_cover_point
             else:
                 # Pop out of cover
                 # Assuming the cover is vertical, and the duck pops up
-                self.duck_rect.topleft = (cover_position[0], cover_position[1] - pop_distance)
+                self.duck_rect.topleft = (self.rand_cover_point[0], self.rand_cover_point[1] - pop_distance)
 
             is_duck_popped = not is_duck_popped
             last_pop_time = current_time
     
     #taking cover logic
-    def get_random_cover_point(self, cover_points):
-        return random.choice(cover_points)
+    def get_random_cover_point(self):
+        return random.choice(self.possible_cover_points)
     
     def move_towards(self, target, speed):
         # Check if the duck has reached close enough to the target
@@ -115,7 +120,7 @@ class dude2:
     def pick_random_point(self):
         while(True):
             random_radius = random.randint(150, 250)
-            rand_angle = random.uniform(-1 * math.pi/4, math.pi/4) +   (math.pi * random.randint(0, 1))
+            rand_angle = random.uniform(-1 * math.pi/3, math.pi/3) +   (math.pi * random.randint(0, 1))
             
             self.rand_point = (self.x + (random_radius * math.cos(rand_angle)), self.y + (random_radius * math.sin(rand_angle)))
             if(in_bounds(self.rand_point)):
@@ -133,8 +138,6 @@ class dude2:
             normalized_direction = normalize(direction)
             self.duck_rect.x += normalized_direction[0] * self.velocity
             self.duck_rect.y += normalized_direction[1] * self.velocity
-        print(distance)
-    
     
     
     def update(self):
@@ -144,7 +147,7 @@ class dude2:
         elif(self.state == self.states[1]):
             self.move_towards((300, 300), 6)
         elif(self.state == self.states[2]):
-            self.pop_behavior((300, 300), 50)
+            self.pop_behavior(120)
         else:
             self.flying()
             

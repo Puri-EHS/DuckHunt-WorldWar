@@ -16,7 +16,6 @@ class Gun:
         pygame.draw.line(screen, (0,0,0), (400, 600), (400 + math.cos(self.angle)*50, 600 - math.sin(self.angle)*50), 5)
 
     def update_bullets(self, screen):
-        print(len(self.bullets))
         for bullet in self.bullets:
             bullet.move()
             bullet.render(screen)

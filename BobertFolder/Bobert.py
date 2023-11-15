@@ -127,8 +127,7 @@ while running:
         ammo -= 1
         ammo_str = "Images/Weapons/ammo" + str(ammo) + ".png"
         ammo_ui = image_object(ammo_str, 50, 100, 765, 50, 0)
-        print()
-        
+        print(pygame.mouse.get_pos())
    
     if ammo == 0 and reloading == False:
         reloading = True
