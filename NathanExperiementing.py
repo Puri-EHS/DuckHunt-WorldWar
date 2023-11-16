@@ -19,8 +19,8 @@ class Startscreen:
 
     background_image = image_object("Images/Environments/DuckHuntMenuBackground.png", 800,600,400,300,5)
     title_image = image_object("Images/UI/DuckHuntTitle.png", 600, 400, 400, 200, 5)
-    play_game_button = image_object("Images/UI/PlayButton.png", 1200, 600, 650, 350, 5)
-    # options_button = image_object()
+    play_game_button = image_object("Images/UI/PlayButton.png", 218, 76, 425, 280, 4)
+    options_button = image_object("Images/UI/OptionButton.png", 218, 76, 425, 376, 4)
 
     def play_button_clicked(screen):
         color = (255, 0, 0)
@@ -33,14 +33,13 @@ class Startscreen:
                 pygame.quit()
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = event.pos
-                if play_game_button.image_rect.collidepoint(x,y):
+                if play_game_button.image_rect.collidepoint(event.pos):
                     play_button_clicked(screen)
                     
         #builds the screen
         screen.blit(background_image.image, background_image.image_rect)
         screen.blit(title_image.image, title_image.image_rect)
         screen.blit(play_game_button.image, play_game_button.image_rect)
-        
+        screen.blit(options_button.image, options_button.image_rect)
         
         pygame.display.update()
