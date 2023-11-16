@@ -7,30 +7,40 @@ import time
 from Gun import Gun
 
 #code for start screen
+class Startscreen:
+    pygame.init()
 
-pygame.init()
+    # Screen dimensions
+    screen_width = 800
+    screen_height = 600
 
-# Screen dimensions
-screen_width = 800
-screen_height = 600
+    # Create the screen
+    screen = pygame.display.set_mode((screen_width, screen_height))
 
-# Create the screen
-screen = pygame.display.set_mode((screen_width, screen_height))
+    background_image = image_object("Images/Environments/DuckHuntMenuBackground.png", 800,600,400,300,5)
+    title_image = image_object("Images/UI/DuckHuntTitle.png", 600, 400, 400, 200, 5)
+    play_game_button = image_object("Images/UI/PlayButton.png", 1200, 600, 650, 350, 5)
+    # options_button = image_object()
 
-background_image = image_object("Images/Environments/DuckHuntMenuBackground.png", 800,600,400,300,5)
-title_image = image_object("Images/UI/DuckHuntTitle.png", 600, 400, 400, 200, 5)
-play_game_button = image_object("Images/UI/PlayButton.png", 1200, 600, 650, 350, 5)
-# options_button = image_object()
+    def play_button_clicked(screen):
+        color = (255, 0, 0)
+        pygame.draw.rect(screen, color, pygame.Rect(30, 30, 60, 60))
+        pygame.display.update()
 
-
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
-    
-    screen.blit(background_image.image, background_image.image_rect)
-    screen.blit(title_image.image, title_image.image_rect)
-    screen.blit(play_game_button.image, play_game_button.image_rect)
-    
-    pygame.display.update()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                x, y = event.pos
+                if play_game_button.image_rect.collidepoint(x,y):
+                    play_button_clicked(screen)
+                    
+        #builds the screen
+        screen.blit(background_image.image, background_image.image_rect)
+        screen.blit(title_image.image, title_image.image_rect)
+        screen.blit(play_game_button.image, play_game_button.image_rect)
+        
+        
+        pygame.display.update()
