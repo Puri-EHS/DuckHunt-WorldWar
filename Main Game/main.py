@@ -43,9 +43,6 @@ def main(queue):
     back_image = image_object("Main Game/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
     all_image_objects[5].append(back_image)
 
-    ##duck_image = image_object("5a0193067ca233f48ba6272c.png", 300, 300, 400, 250, 4)
-    ##all_image_objects.append(duck_image)
-
     backbush_image = image_object("Main Game/FrontShrubSavannah-1.png.png", 2100, 500, 400, 200, 4)
     all_image_objects[4].append(backbush_image)
 
@@ -59,7 +56,6 @@ def main(queue):
     duck_image = bird_object("5a0193067ca233f48ba6272c.png", 200, 200, 600, 200, 4, duck_hp_max, 0)
     ai = dude2(600, 200, 0.1, duck_image.image_rect)
 
-    #ai.velocity = 75
 
 
     bar_ui = image_object("Main Game/bar.png", 0, 25, 750, 160, 0)
@@ -69,16 +65,15 @@ def main(queue):
     # hitbar hidden at x = -125, aka move left a total of 245
     # 0% = -125; 100% = 120
 
+
     # Main game loop
     running = True
     crouched = False
-    jump = False
     current_x = 0
     ammo = 4
     fired_cd = 0
     reload_time = 0
     reloading = False
-    
     y_from_origin = 0
 
 
@@ -114,9 +109,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.x += depth_movement(image.depth, move_speed)
-                
-            for bullet in gun.bullets:
-                bullet.posx += depth_movement(3, move_speed)
             x_moved_last_tick += depth_movement(4, move_speed)
 
         if keys[pygame.K_RIGHT] and current_x >= -250:
@@ -126,8 +118,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.x -= depth_movement(image.depth, move_speed)
-            for bullet in gun.bullets:
-                bullet.posx -= depth_movement(3, move_speed)
             x_moved_last_tick -= depth_movement(4, move_speed)
 
         if keys[pygame.K_DOWN] and crouched == False:
@@ -138,8 +128,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.y -= depth_movement(image.depth, 500)
-            for bullet in gun.bullets:
-                bullet.posy -= depth_movement(3, 500)
             y_from_origin -= depth_movement(4, 500)
 
         if keys[pygame.K_UP] and crouched == True:
@@ -150,8 +138,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.y += depth_movement(image.depth, 500)
-            for bullet in gun.bullets:
-                bullet.posy += depth_movement(3, 500)
             y_from_origin += depth_movement(4, 500)
         
         if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0 and crouched == False:
