@@ -81,7 +81,7 @@ def main(queue):
     player_gun_damage = 100
     shooting = False
     hit_tic = 0
-    hit_image = image_object("Main Game/hit_img.png", 90, 90, 400, 300, 4)
+    hit_image = image_object("Main Game/hit_img.png", 135, 135, 400, 300, 4)
     while running:
         x_moved_last_tick = 0
         ai.update()
@@ -153,7 +153,7 @@ def main(queue):
                 if (gun.crosshair_coords[1] - duck_obj.image_rect.y < 200) and (gun.crosshair_coords[1] - duck_obj.image_rect.y > -25):
                     duck_obj.hp -= player_gun_damage
                     hit_tic = 5
-                    hit_image = image_object("Main Game/hit_img.png", 90, 90, gun.crosshair_coords[0], gun.crosshair_coords[1], 4)
+                    hit_image = image_object("Main Game/hit_img.png", 135, 135, gun.crosshair_coords[0], gun.crosshair_coords[1], 4)
 
         if ammo == 0 and reloading == False:
             reloading = True
