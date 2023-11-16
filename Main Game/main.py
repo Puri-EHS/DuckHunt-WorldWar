@@ -22,7 +22,6 @@ def depth_movement(obj_depth, move_amount):
 def hp_to_bar_x(current, max):
     percent_hp = (current/max)*100
     x_val = 0 - 125 + (2.45*percent_hp)
-    print (x_val)
     return x_val
 
 def main(queue):
@@ -85,7 +84,6 @@ def main(queue):
     while running:
         x_moved_last_tick = 0
         ai.update()
-        hit = False
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
@@ -144,7 +142,7 @@ def main(queue):
         
         if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0 and crouched == False:
             shooting = True
-            fired_cd = 50
+            fired_cd = 30
             ammo -= 1
             ammo_str = "Main Game/ammo" + str(ammo) + ".png"
             ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
@@ -157,7 +155,7 @@ def main(queue):
 
         if ammo == 0 and reloading == False:
             reloading = True
-            reload_time = 150
+            reload_time = 100
         elif ammo == 0:
             reload_time -= 1
 
