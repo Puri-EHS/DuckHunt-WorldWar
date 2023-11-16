@@ -19,7 +19,7 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 
 background_image = image_object("Images/Environments/DuckHuntMenuBackground.png", 800,600,400,300,5)
 title_image = image_object("Images/UI/DuckHuntTitle.png", 600, 400, 400, 200, 5)
-# play_game_button = image_object()
+play_game_button = image_object("Images/UI/PlayButton.png", 1200, 600, 650, 350, 5)
 # options_button = image_object()
 
 
@@ -31,4 +31,6 @@ while True:
     
     screen.blit(background_image.image, background_image.image_rect)
     screen.blit(title_image.image, title_image.image_rect)
+    screen.blit(play_game_button.image, play_game_button.image_rect)
+    
     pygame.display.update()
