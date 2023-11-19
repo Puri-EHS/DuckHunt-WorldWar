@@ -26,6 +26,7 @@ pop_interval = 1.0  # Time in seconds between pops
 is_duck_popped = False  # Track whether the duck is popped out or in cover
 
 pick_new_point = True #should I pick a new point for flying
+time_when_popped = 0
 class dude2:
     def __init__(self, x, y, vel, duct_rect):
         self.x = x
@@ -45,30 +46,41 @@ class dude2:
         self.lock_state = False
         self.duck_rect = duct_rect
         self.current_cover_point = None
+        self.amount_of_pops = 0
         
         self.rand_point = (-1, -1)
         
         self.rand_cover_point = None
-    def in_bush(self):
-        return False
+        
+        #for strafting
+        self.prev_direction = 0
+        self.current_strafe_point = (-1, -1)
 
     def set_state(self):
+        global time_when_popped
         player_cursor_pos = pygame.mouse.get_pos()
-        if(distance(player_cursor_pos, (self.x, self.y)) < 50):
-            if(random.randint(0, 100) < 0): #change back to 60
+        if(distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) < 100 and not self.lock_state):
+            if(random.randint(0, 100) < 60): #change back to 60
                 self.lock_state = True
                 self.state = self.states[0]
             else:
-                self.lock_state = False
+                self.lock_state = True
                 self.state = self.states[1]
             return
-        
         if(self.state == self.states[1] and self.move_towards((300, 300), 2)):
             self.lock_state = True
-            #start timer
             self.state = self.states[2]
             return
+        
+        if(self.state == self.states[0] and distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) > 200):
+            self.lock_state = False
+            self.state = self.states[3]
+        if(self.amount_of_pops > 4):
+            self.amount_of_pops = 0
+            self.lock_state = False
+            self.state = self.states[3]
         if(not self.lock_state and not self.state == self.states[1]):
+            self.lock_state = False
             self.state = self.states[3]
     
     
@@ -87,6 +99,7 @@ class dude2:
                 # Pop out of cover
                 # Assuming the cover is vertical, and the duck pops up
                 self.duck_rect.topleft = (self.rand_cover_point[0], self.rand_cover_point[1] - pop_distance)
+                self.amount_of_pops += 1
 
             is_duck_popped = not is_duck_popped
             last_pop_time = current_time
@@ -140,10 +153,60 @@ class dude2:
             self.duck_rect.y += normalized_direction[1] * self.velocity
     
     
+    def shift_angle(self):
+        rando = random.randint(1, 100)
+        if(self.prev_direction == 0):
+            new_rando = random.randint(1, 2)
+            if(new_rando == 1):
+                self.prev_direction = -1
+                return 3.1416926535
+            else:
+                self.prev_direction = 0
+                return 0
+        if(self.prev_direction == 1):
+            if(rando < 100):
+                self.prev_direction = -1
+                return 3.1415926535
+            else:
+                self.prev_direction = 1
+                return 0
+        if(self.prev_direction == -1):
+            if(rando < 100):
+                self.prev_direction = 1
+                return 0
+            else:
+                self.prev_direction = -1
+                return 3.1415926535
+    
+    def pick_random_strafe_point(self):
+        #pick random angle
+        #then pick random radius, so like polar coordinates
+        while(True):
+            angle = random.randrange(-30, 30)
+            angle_in_radians = angle * 3.1415926535 / 180.0 + self.shift_angle()
+            rand_radius = random.randrange(20, 30)
+            self.current_strafe_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
+            self.current_strafe_point = (self.current_strafe_point[0] + self.x, self.current_strafe_point[1] + self.y)
+            if(in_bounds(self.current_strafe_point)):
+                break
+            
+    def strafe_flying(self):
+        direction = subtract_vectors(self.current_strafe_point, (self.duck_rect.x, self.duck_rect.y))
+        distance = magnitude(direction)
+
+        if distance < 5 or (self.current_strafe_point[0] < 0 and self.current_strafe_point[1] < 0):
+            self.pick_random_strafe_point()
+        else:
+            normalized_direction = normalize(direction)
+            self.duck_rect.x += normalized_direction[0] * self.velocity
+            self.duck_rect.y += normalized_direction[1] * self.velocity
+    
+    
     def update(self):
         self.set_state()
+        print(self.lock_state, self.state, self.duck_rect.topleft, self.duck_rect.x)
         if(self.state == self.states[0]):
-            pass
+            self.strafe_flying()
         elif(self.state == self.states[1]):
             self.move_towards((300, 300), 6)
         elif(self.state == self.states[2]):
