@@ -57,10 +57,9 @@ class dude2:
         self.current_strafe_point = (-1, -1)
 
     def set_state(self):
-        global time_when_popped
         player_cursor_pos = pygame.mouse.get_pos()
         if(distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) < 100 and not self.lock_state):
-            if(random.randint(0, 100) < 60): #change back to 60
+            if(random.randint(0, 100) < 80): #change back to 60
                 self.lock_state = True
                 self.state = self.states[0]
             else:
@@ -72,7 +71,7 @@ class dude2:
             self.state = self.states[2]
             return
         
-        if(self.state == self.states[0] and distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) > 200):
+        if(self.state == self.states[0] and distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) > 100):
             self.lock_state = False
             self.state = self.states[3]
         if(self.amount_of_pops > 4):
@@ -82,8 +81,7 @@ class dude2:
         if(not self.lock_state and not self.state == self.states[1]):
             self.lock_state = False
             self.state = self.states[3]
-    
-    
+            
     #popping up and down behavior 
     def pop_behavior(self, pop_distance):
         global last_pop_time, is_duck_popped
@@ -103,10 +101,6 @@ class dude2:
 
             is_duck_popped = not is_duck_popped
             last_pop_time = current_time
-    
-    #taking cover logic
-    def get_random_cover_point(self):
-        return random.choice(self.possible_cover_points)
     
     def move_towards(self, target, speed):
         # Check if the duck has reached close enough to the target
@@ -130,14 +124,26 @@ class dude2:
 
         return False
     
+    #taking cover logic
+    def get_random_cover_point(self):
+        return random.choice(self.possible_cover_points)
+    
     def pick_random_point(self):
         while(True):
             random_radius = random.randint(150, 250)
-            rand_angle = random.uniform(-1 * math.pi/3, math.pi/3) +   (math.pi * random.randint(0, 1))
+            rand_angle = random.uniform(-1 * math.pi/3, math.pi/3) + (math.pi * random.randint(0, 1))
             
             self.rand_point = (self.x + (random_radius * math.cos(rand_angle)), self.y + (random_radius * math.sin(rand_angle)))
             if(in_bounds(self.rand_point)):
                 break
+    
+    def pick_random_point(self):
+        if(self.state == self.states[3]):
+            self.pick_random_point()
+        elif(self.state == self.states[1]):
+            self.rand_point = self.get_random_cover_point()
+        elif(self.state == self.states[0]):
+            self.pick_random_strafe_point()
             
                
         
@@ -204,7 +210,7 @@ class dude2:
     
     def update(self):
         self.set_state()
-        print(self.lock_state, self.state, self.duck_rect.topleft, self.duck_rect.x)
+        print(self.lock_state, self.state, (self.duck_rect.x, self.duck_rect.y), pygame.mouse.get_pos(), distance(pygame.mouse.get_pos(), (self.duck_rect.x, self.duck_rect.y)))
         if(self.state == self.states[0]):
             self.strafe_flying()
         elif(self.state == self.states[1]):
