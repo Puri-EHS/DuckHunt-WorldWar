@@ -22,7 +22,6 @@ def depth_movement(obj_depth, move_amount):
 def hp_to_bar_x(current, max):
     percent_hp = (current/max)*100
     x_val = 0 - 125 + (2.45*percent_hp)
-    print (x_val)
     return x_val
 
 def main(queue):
@@ -43,9 +42,6 @@ def main(queue):
     back_image = image_object("Main Game/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
     all_image_objects[5].append(back_image)
 
-    ##duck_image = image_object("5a0193067ca233f48ba6272c.png", 300, 300, 400, 250, 4)
-    ##all_image_objects.append(duck_image)
-
     backbush_image = image_object("Main Game/FrontShrubSavannah-1.png.png", 2100, 500, 400, 200, 4)
     all_image_objects[4].append(backbush_image)
 
@@ -55,11 +51,10 @@ def main(queue):
     sec_bush_image = image_object("Main Game/SavannahShrubFront.png", 2100, 1200, 400, 275, 2)
     all_image_objects[2].append(sec_bush_image)
 
-    duck_hp_max = 250
-    duck_image = bird_object("5a0193067ca233f48ba6272c.png", 200, 200, 600, 200, 4, duck_hp_max, 0)
-    ai = dude2(600, 200, 0.1, duck_image.image_rect)
+    duck_hp_max = 500
+    duck_obj = bird_object("5a0193067ca233f48ba6272c.png", 200, 200, 600, 200, 4, duck_hp_max, 1)
+    ai = dude2(600, 200, 0.1, duck_obj.image_rect)
 
-    #ai.velocity = 75
 
 
     bar_ui = image_object("Main Game/bar.png", 0, 25, 750, 160, 0)
@@ -69,23 +64,23 @@ def main(queue):
     # hitbar hidden at x = -125, aka move left a total of 245
     # 0% = -125; 100% = 120
 
+
     # Main game loop
     running = True
     crouched = False
-    jump = False
     current_x = 0
     ammo = 4
     fired_cd = 0
     reload_time = 0
     reloading = False
-    
     y_from_origin = 0
-
+    
 
     gun = PlayerGun()
-    player_gun_damage = 50
+    player_gun_damage = 100
     shooting = False
-
+    hit_tic = 0
+    hit_image = image_object("Main Game/hit_img.png", 135, 135, 400, 300, 4)
     while running:
         x_moved_last_tick = 0
         ai.update()
@@ -114,9 +109,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.x += depth_movement(image.depth, move_speed)
-                
-            for bullet in gun.bullets:
-                bullet.posx += depth_movement(3, move_speed)
             x_moved_last_tick += depth_movement(4, move_speed)
 
         if keys[pygame.K_RIGHT] and current_x >= -250:
@@ -126,8 +118,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.x -= depth_movement(image.depth, move_speed)
-            for bullet in gun.bullets:
-                bullet.posx -= depth_movement(3, move_speed)
             x_moved_last_tick -= depth_movement(4, move_speed)
 
         if keys[pygame.K_DOWN] and crouched == False:
@@ -138,8 +128,6 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.y -= depth_movement(image.depth, 500)
-            for bullet in gun.bullets:
-                bullet.posy -= depth_movement(3, 500)
             y_from_origin -= depth_movement(4, 500)
 
         if keys[pygame.K_UP] and crouched == True:
@@ -150,25 +138,24 @@ def main(queue):
                 i -= 1
                 for image in all_image_objects[i]:
                     image.image_rect.y += depth_movement(image.depth, 500)
-            for bullet in gun.bullets:
-                bullet.posy += depth_movement(3, 500)
             y_from_origin += depth_movement(4, 500)
         
         if keys[pygame.K_SPACE] and ammo > 0 and fired_cd == 0 and crouched == False:
             shooting = True
-            fired_cd = 50
+            fired_cd = 30
             ammo -= 1
             ammo_str = "Main Game/ammo" + str(ammo) + ".png"
             ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
             
-            if (gun.crosshair_coords[0] - duck_image.image_rect.x < 150) and (gun.crosshair_coords[0] - duck_image.image_rect.x > -25):
-                if (gun.crosshair_coords[1] - duck_image.image_rect.y < 200) and (gun.crosshair_coords[1] - duck_image.image_rect.y > -25):
-                    duck_image.hp -= player_gun_damage
-                    hit_point_bar.image_rect.centerx = hp_to_bar_x(duck_image.hp, duck_hp_max)
+            if (gun.crosshair_coords[0] - duck_obj.image_rect.x < 150) and (gun.crosshair_coords[0] - duck_obj.image_rect.x > -25):
+                if (gun.crosshair_coords[1] - duck_obj.image_rect.y < 200) and (gun.crosshair_coords[1] - duck_obj.image_rect.y > -25):
+                    duck_obj.hp -= player_gun_damage
+                    hit_tic = 5
+                    hit_image = image_object("Main Game/hit_img.png", 135, 135, gun.crosshair_coords[0], gun.crosshair_coords[1], 4)
 
         if ammo == 0 and reloading == False:
             reloading = True
-            reload_time = 150
+            reload_time = 100
         elif ammo == 0:
             reload_time -= 1
 
@@ -186,14 +173,15 @@ def main(queue):
         ai.duck_rect.x += x_moved_last_tick
         ai.update()
 
-        
+        duck_obj.update()
+        hit_point_bar.image_rect.centerx = hp_to_bar_x(duck_obj.hp, duck_hp_max)
     
         # Draw the image
         i = 6
         while i > 0:
             i -= 1
             if i == 4:
-                screen.blit(duck_image.image, duck_image.image_rect)
+                screen.blit(duck_obj.image, duck_obj.image_rect)
             for image in all_image_objects[i]:
                 screen.blit(image.image, image.image_rect)
         # Update the display
@@ -204,6 +192,10 @@ def main(queue):
         screen.blit(ammo_ui.image, ammo_ui.image_rect)
         screen.blit(hit_point_bar.image, hit_point_bar.image_rect)
         screen.blit(hit_point_ui.image, hit_point_ui.image_rect)
+        
+        if hit_tic > 0:
+            screen.blit(hit_image.image, hit_image.image_rect)
+            hit_tic -= 1
 
         gun.update(queue)
         gun.render(screen)
