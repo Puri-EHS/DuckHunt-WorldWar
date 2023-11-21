@@ -43,6 +43,7 @@ class dude2:
         #40% chance to happen when your crosshair is close proximity to the duck
         self.states = ["STRAFING", "TAKING_COVER", "POP_SHOOTING", "FLYING"]
         self.state = "FLYING"
+        self.prev_state = "FLYING"
         self.lock_state = False
         self.duck_rect = duct_rect
         self.current_cover_point = None
@@ -57,16 +58,17 @@ class dude2:
         self.current_strafe_point = (-1, -1)
 
     def set_state(self):
+        self.prev_state = self.state
         player_cursor_pos = pygame.mouse.get_pos()
         if(distance(player_cursor_pos, (self.duck_rect.x, self.duck_rect.y)) < 100 and not self.lock_state):
-            if(random.randint(0, 100) < 80): #change back to 60
+            if(random.randint(0, 100) < 60):
                 self.lock_state = True
                 self.state = self.states[0]
             else:
                 self.lock_state = True
                 self.state = self.states[1]
             return
-        if(self.state == self.states[1] and self.move_towards((300, 300), 2)):
+        if(self.state == self.states[1] and distance((self.duck_rect.x, self.duck_rect.y), (self.rand_point)) < 5):
             self.lock_state = True
             self.state = self.states[2]
             return
@@ -102,63 +104,18 @@ class dude2:
             is_duck_popped = not is_duck_popped
             last_pop_time = current_time
     
-    def move_towards(self, target, speed):
-        # Check if the duck has reached close enough to the target
-        if abs(target[0] - self.duck_rect.x) <= speed and abs(target[1] - self.duck_rect.y) <= speed:
-            self.duck_rect.topleft = target  # Snap to the exact target to prevent overshooting
-            return True
-
-        # Calculate the difference in x and y directions
-        dx, dy = target[0] - self.duck_rect.x, target[1] - self.duck_rect.y
-        distance = (dx**2 + dy**2)**0.5
-
-        # Normalize the difference
-        if distance == 0:  # Prevent division by zero
-            return True  # The duck has reached the target
-
-        nx, ny = dx / distance, dy / distance
-
-        # Move the duck
-        self.duck_rect.x += nx * speed
-        self.duck_rect.y += ny * speed
-
-        return False
-    
     #taking cover logic
     def get_random_cover_point(self):
         return random.choice(self.possible_cover_points)
     
     def pick_random_point(self):
         while(True):
-            random_radius = random.randint(150, 250)
-            rand_angle = random.uniform(-1 * math.pi/3, math.pi/3) + (math.pi * random.randint(0, 1))
-            
-            self.rand_point = (self.x + (random_radius * math.cos(rand_angle)), self.y + (random_radius * math.sin(rand_angle)))
+            random_radius = random.randint(150, 300)
+            rand_angle = random.randint(0, 360) * math.pi/ 180
+            self.rand_point = (self.duck_rect.x + (random_radius * math.cos(rand_angle)), self.duck_rect.y + (random_radius * math.sin(rand_angle)))
             if(in_bounds(self.rand_point)):
                 break
-    
-    def pick_random_point(self):
-        if(self.state == self.states[3]):
-            self.pick_random_point()
-        elif(self.state == self.states[1]):
-            self.rand_point = self.get_random_cover_point()
-        elif(self.state == self.states[0]):
-            self.pick_random_strafe_point()
-            
-               
-        
-    def flying(self):
-        direction = subtract_vectors(self.rand_point, (self.duck_rect.x, self.duck_rect.y))
-        distance = magnitude(direction)
 
-        if distance < 5 or (self.rand_point[0] < 0 and self.rand_point[1] < 0):
-            self.pick_random_point()
-        else:
-            normalized_direction = normalize(direction)
-            self.duck_rect.x += normalized_direction[0] * self.velocity
-            self.duck_rect.y += normalized_direction[1] * self.velocity
-    
-    
     def shift_angle(self):
         rando = random.randint(1, 100)
         if(self.prev_direction == 0):
@@ -190,33 +147,37 @@ class dude2:
         while(True):
             angle = random.randrange(-30, 30)
             angle_in_radians = angle * 3.1415926535 / 180.0 + self.shift_angle()
-            rand_radius = random.randrange(20, 30)
-            self.current_strafe_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
-            self.current_strafe_point = (self.current_strafe_point[0] + self.x, self.current_strafe_point[1] + self.y)
-            if(in_bounds(self.current_strafe_point)):
+            rand_radius = random.randrange(50, 80)
+            self.rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
+            self.rand_point = (self.rand_point[0] + self.duck_rect.x, self.rand_point[1] + self.duck_rect.y)
+            if(in_bounds(self.rand_point)):
                 break
-            
-    def strafe_flying(self):
-        direction = subtract_vectors(self.current_strafe_point, (self.duck_rect.x, self.duck_rect.y))
+    
+    def pick_random_point_all_states(self):
+        if(self.state == self.states[3]):
+            self.pick_random_point()
+        elif(self.state == self.states[1]):
+            self.rand_point = self.get_random_cover_point()
+        elif(self.state == self.states[0]):
+            self.pick_random_strafe_point()
+              
+    def flying(self):
+        direction = subtract_vectors(self.rand_point, (self.duck_rect.x, self.duck_rect.y))
         distance = magnitude(direction)
 
-        if distance < 5 or (self.current_strafe_point[0] < 0 and self.current_strafe_point[1] < 0):
-            self.pick_random_strafe_point()
+        if distance < 5 or (self.rand_point[0] < 0 and self.rand_point[1] < 0) or not self.prev_state == self.state :
+            self.pick_random_point_all_states()
+            print(self.rand_point)
         else:
             normalized_direction = normalize(direction)
             self.duck_rect.x += normalized_direction[0] * self.velocity
             self.duck_rect.y += normalized_direction[1] * self.velocity
     
-    
+            
     def update(self):
         self.set_state()
-        print(self.lock_state, self.state, (self.duck_rect.x, self.duck_rect.y), pygame.mouse.get_pos(), distance(pygame.mouse.get_pos(), (self.duck_rect.x, self.duck_rect.y)))
-        if(self.state == self.states[0]):
-            self.strafe_flying()
-        elif(self.state == self.states[1]):
-            self.move_towards((300, 300), 6)
-        elif(self.state == self.states[2]):
-            self.pop_behavior(120)
-        else:
-            self.flying()
-            
+        if(self.state == self.states[2]):
+            self.pop_behavior(150)
+            return
+        #print(self.lock_state, self.state, (self.duck_rect.x, self.duck_rect.y), pygame.mouse.get_pos(), distance(pygame.mouse.get_pos(), (self.duck_rect.x, self.duck_rect.y)))
+        self.flying()
