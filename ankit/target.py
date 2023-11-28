@@ -8,5 +8,8 @@ class Target:
         self.height = height
 
     def render(self, screen):
-        screen.blit(self.image, self.x, self.y)
+        screen.blit(self.image, (self.x, self.y))
+
+
+    
     

@@ -3,6 +3,7 @@ import math
 import numpy as np
 from Spritesheet import Spritesheet
 import constants
+import random
 
 class PlayerGun:
     def __init__(self):
@@ -57,35 +58,45 @@ class PlayerGun:
 
         self.size = (128*4, 120*4)
 
-        self.bullets = []
-
         self.fov = 1/(20/180)
 
+        self.gun_angle = 0
+
+        self.prev_angle = 0
         self.angle = 0
 
-
-    def update(self, queue):
+    def update(self, queue, tix, tiy, tiz, nuckz, nucky, enemies):
         self.shoot_frames += 1
+
         if not constants.USE_MOUSE:
             if not queue.empty():
                 tip, nuckle = queue.get() 
+
+                self.prev_angle = self.angle
+                if tiz.value - nuckz.value == 0:
+                    self.angle = math.atan(0)
+                else:
+                    self.angle = math.atan((tiy.value - nucky.value)/ (tiz.value - nuckz.value)) * 180 / math.pi
+                
+                print(self.angle- self.prev_angle)
+
                 # queue system could be the culprit for rare rapid shooting, but either way its kinda bad for this use case
 
                 if tip is not None:
-                    
                     if self.did_just_shoot and self.shoot_frames > self.shoot_frame_time:
-                        self.crosshair_coords = (800 - tip.x * 800, tip.y * 600)
+                        self.crosshair_coords = (800 - tix.value * 800, tiy.value * 600)
                         self.prev_crosshair_coords = self.crosshair_coords
 
-
-                    
                     if not self.did_just_shoot:
-                        if self.crosshair_coords[1] - tip.y * 600 > 100:
-                            self.shoot()
+                        if self.angle - self.prev_angle > 14:
+                            self.shoot(enemies)
                         else:
                             self.prev_crosshair_coords = self.crosshair_coords
-                            self.crosshair_coords = (800 - tip.x * 800, tip.y * 600)
-
+                            self.crosshair_coords = (800 - tix.value * 800, tiy.value * 600)
+                            if tiz.value - nuckz.value == 0:
+                                self.angle = math.atan(0)
+                            else:
+                                self.angle = math.atan((tiy.value - nucky.value)/ (tiz.value - nuckz.value)) * 180 / math.pi
                 
         else:
             self.crosshair_coords = pygame.mouse.get_pos()
@@ -101,7 +112,6 @@ class PlayerGun:
 
         
         if(self.did_just_shoot and self.shoot_frames > self.shoot_frame_time):
-
             self.did_just_shoot = False
         elif not self.did_just_shoot:
             self.cur_image = self.idle_images[self.gun_image_index]
@@ -109,12 +119,8 @@ class PlayerGun:
 
     def render(self, screen):
         screen.blit(self.cur_image, (800/2-self.size[0]/2, 600-self.size[1]))
-        screen.blit(self.cross_surf, self.crosshair_coords)
+        screen.blit(self.cross_surf, (self.crosshair_coords[0]-self.cross_surf.get_width()/2, self.crosshair_coords[1]-self.cross_surf.get_height()/2))
 
-    def update_bullets(self, screen):
-        for bullet in self.bullets:
-            bullet.move()
-            bullet.render(screen)
 
     def shoot(self, enemies):
         self.cur_image = self.shoot_images[self.gun_image_index]
@@ -123,6 +129,14 @@ class PlayerGun:
         pygame.mixer.Sound.play(self.shoot_sound)
 
         # basic collision detection - could use octree system later maybe - space partitioning
+        for enemy in enemies:
+            if enemy.x < self.crosshair_coords[0] < enemy.x + enemy.width:
+                if enemy.y < self.crosshair_coords[1] < enemy.y + enemy.height:
+                    enemy.x = random.randint(0, 800)
+                    enemy.y = random.randint(0, 600)
+
+
+                    
 
 
         

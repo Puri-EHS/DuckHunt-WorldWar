@@ -19,7 +19,7 @@ def depth_movement(obj_depth, move_amount):
         obj_move = 0
     return obj_move
 
-def main(queue):
+def main(queue, tix, tiy, tiz, nuckz, nucky):
     # Initialize Pygame
     pygame.init()
 
@@ -34,23 +34,23 @@ def main(queue):
 
     all_image_objects = []
 
-    back_image = image_object("../Images/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
+    back_image = image_object("../assets/Environments/Duck Hunt Savanna-1.png.png", 1536,790,400,300,5)
     all_image_objects.append(back_image)
 
     ##duck_image = image_object("5a0193067ca233f48ba6272c.png", 300, 300, 400, 250, 4)
     ##all_image_objects.append(duck_image)
 
-    backbush_image = image_object("../Images/Environments/SavannahShrubFront.png", 2100, 500, 400, 200, 4)
+    backbush_image = image_object("../assets/Environments/SavannahShrubFront.png", 2100, 500, 400, 200, 4)
     all_image_objects.append(backbush_image)
 
-    bush_image = image_object("../Images/Environments/SavannahShrubFront.png", 2100, 700, 400, 315, 2)
+    bush_image = image_object("../assets/Environments/SavannahShrubFront.png", 2100, 700, 400, 315, 2)
     all_image_objects.append(bush_image)
 
-    sec_bush_image = image_object("../Images/Environments/SavannahShrubFront.png", 2100, 900, 400, 400, 2)
+    sec_bush_image = image_object("../assets/Environments/SavannahShrubFront.png", 2100, 900, 400, 400, 2)
     all_image_objects.append(sec_bush_image)
 
-    bar_ui = image_object("../bar.png", 0, 25, 750, 160, 0)
-    ammo_ui = image_object("../MainGame/Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+    bar_ui = image_object("../assets/bar.png", 0, 25, 750, 160, 0)
+    ammo_ui = image_object("../assets/Weapons/ammo4.png", 100, 200, 750, 75, 0)
 
     # Main game loop
     running = True
@@ -65,7 +65,7 @@ def main(queue):
 
     gun = PlayerGun()
 
-    targets = [Target(400, 300, 10, 10)]
+    targets = [Target(400, 300, 42, 42)]
 
     shooting = False
 
@@ -92,15 +92,12 @@ def main(queue):
             current_x += depth_movement(5, move_speed)
             for image in all_image_objects:
                 image.image_rect.x += depth_movement(image.depth, move_speed)
-            for bullet in gun.bullets:
-                bullet.posx += depth_movement(3, move_speed)
 
         if keys[pygame.K_RIGHT] and current_x >= -250:
             current_x -= depth_movement(5, move_speed)
             for image in all_image_objects:
                 image.image_rect.x -= depth_movement(image.depth, move_speed)
-            for bullet in gun.bullets:
-                bullet.posx -= depth_movement(3, move_speed)
+
         
         if keys[pygame.K_DOWN] and crouched == False:
             crouched = True
@@ -122,7 +119,7 @@ def main(queue):
             shooting = True
             fired_cd = 50
             ammo -= 1
-            ammo_str = "../Images/Weapons/ammo" + str(ammo) + ".png"
+            ammo_str = "../assets/Weapons/ammo" + str(ammo) + ".png"
             ammo_ui = image_object(ammo_str, 100, 200, 750, 75, 0)
             
     
@@ -135,12 +132,12 @@ def main(queue):
         if ammo == 0 and reloading == True and reload_time == 0:
             reloading = False
             ammo = 4
-            ammo_ui = image_object("../Images/Weapons/ammo4.png", 100, 200, 750, 75, 0)
+            ammo_ui = image_object("../assets/Weapons/ammo4.png", 100, 200, 750, 75, 0)
 
         if reloading:
-            bar_ui = image_object("../bar.png", reload_time/2, 25, 750, 160, 0)
+            bar_ui = image_object("../assets/bar.png", reload_time/2, 25, 750, 160, 0)
         elif fired_cd > 0:
-            bar_ui = image_object("../bar.png", fired_cd, 25, 750, 160, 0)
+            bar_ui = image_object("../assets/bar.png", fired_cd, 25, 750, 160, 0)
 
         # Draw the image
         for image in all_image_objects:
@@ -152,29 +149,34 @@ def main(queue):
         screen.blit(bar_ui.image, bar_ui.image_rect)
         screen.blit(ammo_ui.image, ammo_ui.image_rect)
 
-        gun.update(queue)
-        gun.render(screen)
 
         if shooting:
-            gun.shoot()
+            gun.shoot(targets)
             shooting = False
 
-        gun.update_bullets(screen)
-
         for target in targets:
-            target.render()
+            target.render(screen)
 
+        gun.update(queue, tix, tiy, tiz, nuckz, nucky, targets)
+        gun.render(screen)
+            
         pygame.display.flip()
 
 
 if __name__ == '__main__':
     if not constants.USE_MOUSE:
         q = mp.Queue()
+        nucky = mp.Value('d', 1)
+        nuckz = mp.Value('d', 0)
+        tix = mp.Value('d', 1)
+        tiy = mp.Value('d', 1)
+        tiz = mp.Value('d', 1)
+
         print("starting duck hunt...")
-        p1 = mp.Process(target=get_points, args=(q,))
+        p1 = mp.Process(target=get_points, args=(q,tix,tiy,tiz,nucky,nuckz))
         p1.start()
 
-        main(q)
+        main(q, tix,tiy,tiz,nucky,nuckz)
     else:
         main(None)
 

@@ -1,2 +1,2 @@
-USE_MOUSE = True
+USE_MOUSE = False
 

@@ -1,7 +1,8 @@
 import cv2
 import mediapipe as mp
+import math
 
-def get_points(queue):
+def get_points(queue, tix, tiy, tiz, nucky, nuckz):
     hands = mp.solutions.hands.Hands(max_num_hands=1)
     cap = cv2.VideoCapture(0)
 
@@ -25,10 +26,18 @@ def get_points(queue):
                     if id == 5:
                         nuckle = landmark
         
-        if queue is not None:
+        if queue is not None and tip is not None and nuckle is not None:
             queue.put((tip, nuckle))
+            tix.value = tip.x
+            tiy.value = tip.y
+            tiz.value = tip.z
+            nuckz.value = nuckle.z
+            nucky.value = nuckle.y
+
         
-#        cv2.imshow("frame", frame)
+        # cv2.imshow("frame", frame)
+        # if tip is not None and nuckle is not None:
+        #     print(math.atan((tip.y - nuckle.y)/ (tip.z - nuckle.z)) * 180 / math.pi)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
