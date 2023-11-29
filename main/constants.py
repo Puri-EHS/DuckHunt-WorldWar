@@ -29,3 +29,12 @@ TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
 
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
 
+
+#Environment
+ENVIRONMENT_DIR = os.path.join(ASSETS_DIR, "environment")
+
+SAVANNA = os.path.join(ENVIRONMENT_DIR, "savanna.png")
+SAVANNA_BUSH_BACK = os.path.join(ENVIRONMENT_DIR, "savanna_bush_back.png")
+SAVANNA_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "savanna_bush_front.png")
+
+

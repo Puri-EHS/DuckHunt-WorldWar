@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
 import pygame
-from constants import LOBBY_MUSIC_PATH
+
 
 
 class Level(ABC):
@@ -18,12 +18,20 @@ class Level(ABC):
         self.bg_image = None
         self.bg_image_rect = None
 
+        self.images = [
+            
+        ]
+
         self.is_start_screen = False
 
     @abstractmethod
     def start(self):
         pass
     
+    def depth_render(self, _image_list, _offset):
+        for image_obj in _image_list:
+            self.screen.blit(image_obj.image, (image_obj.image_rect.left - _offset/image_obj.depth, image_obj.image_rect.top))
+
     @abstractmethod
     def render(self):
         pass

@@ -1,8 +1,6 @@
 import pygame
 
 from game import Game
-from player_gun import PlayerGun
-from levels.splash_screen import SplashScreen
 import constants
 
 pygame.init()
@@ -17,7 +15,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 
 game = Game(screen)
 
-game.switch_to_level(_level_index = 0)
+game.switch_to_level(_level_index=game.current_level_index)
 
 is_running = True
 while is_running:
@@ -27,6 +25,7 @@ while is_running:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
                 is_running = False
+            
         
     screen.fill((0, 0, 0))
     
