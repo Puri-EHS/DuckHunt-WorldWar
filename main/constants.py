@@ -23,6 +23,12 @@ FPS = 60
 # Music
 LOBBY_MUSIC_PATH = os.path.join(MUSIC_DIR, "fortnite_lobby.mp3")
 
+# Sound
+SOUND_DIR = os.path.join(ASSETS_DIR, "sounds")
+
+SHOOT_SOUND_PATH = os.path.join(SOUND_DIR, "gun_shoot.mp3")
+
+
 # UI
 SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
@@ -36,5 +42,11 @@ ENVIRONMENT_DIR = os.path.join(ASSETS_DIR, "environment")
 SAVANNA = os.path.join(ENVIRONMENT_DIR, "savanna.png")
 SAVANNA_BUSH_BACK = os.path.join(ENVIRONMENT_DIR, "savanna_bush_back.png")
 SAVANNA_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "savanna_bush_front.png")
+
+#Weapons
+
+WEAPONS_DIR = os.path.join(ASSETS_DIR, "weapons")
+
+GUN = os.path.join(WEAPONS_DIR, "gun.png")
 
 

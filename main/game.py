@@ -32,14 +32,12 @@ class Game:
     def update(self):
 
         #player input
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            self.player.move(-30)
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.player.move(30)
-        if keys[pygame.K_SPACE] or pygame.MOUSEBUTTONDOWN:
-            self.player.shoot()
-        
+        if self.current_level.game_level:
+            self.player.handle_input(self.current_level.level_size)
+
+            self.player.gun.update()
+            self.player.update()
+
 
         # basic level switching
         # we can add transitions later
@@ -48,4 +46,11 @@ class Game:
         else:
             self.current_level_index += 1
             self.switch_to_level(self.current_level_index)
+
+
+        # rendering
+        self.current_level.render()
+        if self.current_level.game_level:
+            self.player.gun.render(self.screen)
+
     

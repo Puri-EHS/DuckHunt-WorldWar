@@ -9,6 +9,7 @@ class SplashScreen(Level):
         self.bg_image = pygame.transform.scale(self.bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         self.frame_counter = 0
+        self.game_level = False
 
     def start(self):
         print(__file__ + " " + self.name + " starting")
@@ -21,7 +22,6 @@ class SplashScreen(Level):
 
     def update(self):
         self.frame_counter += 1
-        self.render() # render should be called at the end
 
     def stop(self):
         pygame.mixer.music.stop()
@@ -29,6 +29,6 @@ class SplashScreen(Level):
         del self
 
     def ended(self):
-        if self.frame_counter >= .5 * FPS:
+        if self.frame_counter >= 2.5 * FPS:
             return True
         return False

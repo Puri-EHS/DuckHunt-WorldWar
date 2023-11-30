@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
-import pygame
-
-
+import pygame 
 
 class Level(ABC):
     
@@ -22,7 +20,7 @@ class Level(ABC):
             
         ]
 
-        self.is_start_screen = False
+        self.game_level = False
 
     @abstractmethod
     def start(self):

@@ -13,17 +13,20 @@ class TitleScreen(Level):
             Button(self.screen, (SCREEN_WIDTH/2, SCREEN_HEIGHT/2), PLAY_BUTTON, None, self.game_instance.switch_to_level, [self.game_instance.current_level_index+1], 3)
         ]
 
+        self.game_level = False
+
     def start(self):
         print(__file__ + " " + self.name + " starting")
 
     def render(self):
         self.screen.blit(self.bg_image, (0, 0))
+        for button in self.buttons:
+            button.draw()
 
     def update(self):
-        self.render()
         for button in self.buttons:
             button.update(pygame.mouse.get_pos())
-            button.draw()
+
 
     def stop(self):
         del self
