@@ -9,7 +9,7 @@ SCREEN_SCALE = 3
 SCREEN_WIDTH = OG_GAME_WIDTH * SCREEN_SCALE
 SCREEN_HEIGHT = OG_GAME_HEIGHT * SCREEN_SCALE
 
-BASE_DIR = "../"
+BASE_DIR = ""
 ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
@@ -34,6 +34,7 @@ SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
 
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
+CROSS_HAIR = os.path.join(ASSETS_DIR, "ui/crosshair.png")
 
 #Enemies
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")

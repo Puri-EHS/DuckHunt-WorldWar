@@ -1,7 +1,8 @@
-from constants import FPS, GUN, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH
+from constants import FPS, GUN, CROSS_HAIR, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH
 
 from sprite_sheet import Spritesheet
-
+from image_object import ImageObj
+from physical_gun_detection import Tracker
 import pygame
 
 class Player:
@@ -34,13 +35,14 @@ class PlayerGun:
     def __init__(self):
         self.max_ammo = 50000
         self.ammo_left = self.max_ammo
+        self.tracker = Tracker()
 
         self.reload_time = 2.5 * FPS
         self.shoot_time = .25 * FPS
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
-
+        self.tracker.track_icons()
 
         self.idle_images = []
         self.shoot_images = []
@@ -63,17 +65,19 @@ class PlayerGun:
 
         self.gun_image_index = 1
 
-        self.crosshair_coords = pygame.mouse.get_pos()
-
-
+        self.crosshair_coords = self.tracker.avg_x, self.tracker.avg_y
+        self.crosshair = ImageObj(CROSS_HAIR, 0, 45, 45, self.tracker.avg_x, self.tracker.avg_y)
+        
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
     
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
+        screen.blit(Spritesheet(CROSS_HAIR).image_at((0, 0, 15, 15)), (self.tracker.avg_x, self.tracker.avg_y))
 
     def update(self):
-        self.crosshair_coords = pygame.mouse.get_pos()
+        self.tracker.track_icons()
+        self.crosshair_coords = self.tracker.avg_x, self.tracker.avg_y
         self.reload_timer += 1
         self.shoot_timer += 1
 
