@@ -55,7 +55,7 @@ class Tracker:
             
             #reverse for camera with 720 by 1080 resolution
             self.avg_x = 1080 - int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))
-            self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]))
+            self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) - 250
             
             print(self.avg_x, self.avg_y)
             self.firing = False
