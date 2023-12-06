@@ -52,7 +52,7 @@ def main(queue):
     all_image_objects[2].append(sec_bush_image)
 
     duck_hp_max = 500
-    duck_obj = bird_object("5a0193067ca233f48ba6272c.png", 200, 200, 600, 200, 4, duck_hp_max, 1)
+    duck_obj = bird_object("Main Game/FinallBossEagleDesignTransparent.png", 200, 200, 600, 200, 4, duck_hp_max, 1)
     ai = dude2(600, 200, 0.1, duck_obj.image_rect)
 
 
