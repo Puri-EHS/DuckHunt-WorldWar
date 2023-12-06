@@ -34,7 +34,7 @@ SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
 
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
-CROSS_HAIR = os.path.join(ASSETS_DIR, "ui/crosshair.png")
+CROSS_HAIR = os.path.join(ASSETS_DIR, "ui/crosshair60by60.png")
 
 #Enemies
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")

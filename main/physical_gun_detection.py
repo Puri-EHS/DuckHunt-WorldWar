@@ -1,3 +1,4 @@
+#Taken over by Alex, bitch
 import cv2
 import numpy as np
 
@@ -8,10 +9,10 @@ class Tracker:
         self.camera_index = 0
 
         # Provide the paths to the icon images
-        self.avg_x = 0
+        self.avg_x = 0  #current detected icon location
         self.avg_y = 0
 
-        self.icon1 = cv2.imread('main/New_fedu.png', cv2.IMREAD_UNCHANGED)
+        self.icon1 = cv2.imread('main/New_fedu.png', cv2.IMREAD_UNCHANGED) #set what icon to track
         self.icon1_gray = cv2.cvtColor(self.icon1, cv2.COLOR_BGR2GRAY)
 
         # Create a SIFT detector
@@ -22,6 +23,7 @@ class Tracker:
 
         # Create a VideoCapture object
         self.cap = cv2.VideoCapture(0)
+        self.firing = False
 
     def track_icons(self, camera_index=0, icon1_path='main/New_fedu.png', icon2_path='main/New_fedu.png'):
         # Load the icon images
@@ -47,30 +49,22 @@ class Tracker:
             if m.distance < 0.75 * n.distance:
                 good_matches_icon1.append(m)
 
-        # Match descriptors for icon 2
-        #matches_icon2 = bf.knnMatch(des_icon2, des_frame, k=2)
-
-        # Apply ratio test to filter good matches for icon 2
-        #good_matches_icon2 = []
-        #for m, n in matches_icon2:
-            #if m.distance < 0.75 * n.distance:
-                #good_matches_icon2.append(m)
-
-        # Draw matches on the frame for icon 1
-        # Draw matches on the frame for icon 2
         #img_matches_icon2 = cv2.drawMatches(icon2, kp_icon2, frame, kp_frame, good_matches_icon2, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
-        if len(good_matches_icon1) >= 2:
+        
+        if len(good_matches_icon1) > 2: #If more than 2 points, assume icon exists and find average to estimate icon center
             
             #reverse for camera with 720 by 1080 resolution
             self.avg_x = 1080 - int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))
             self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]))
+            
             print(self.avg_x, self.avg_y)
+            self.firing = False
         
-        else:
+        else: # if less than 2 points (2, not 0, to account for noise and error), assume play pulled trigger, hiding feducal, and fire
             print("FIRE")
+            self.firing = True
 
         # Display the frames with the tracked icons
         #cv2.imshow('Tracked Icon 1', img_matches_icon1)
         #cv2.imshow('Tracked Icon 2', img_matches_icon2)
 
-        # Release the VideoCapture and close all windows

@@ -65,6 +65,7 @@ class PlayerGun:
 
         self.gun_image_index = 1
 
+        #Hardcoded to work with tracking. WIll make it listen to constants 
         self.crosshair_coords = self.tracker.avg_x, self.tracker.avg_y
         self.crosshair = ImageObj(CROSS_HAIR, 0, 45, 45, self.tracker.avg_x, self.tracker.avg_y)
         
@@ -73,7 +74,7 @@ class PlayerGun:
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
-        screen.blit(Spritesheet(CROSS_HAIR).image_at((0, 0, 15, 15)), (self.tracker.avg_x, self.tracker.avg_y))
+        screen.blit(Spritesheet(CROSS_HAIR).image_at((0, 0, 60, 60)), (self.tracker.avg_x, self.tracker.avg_y))
 
     def update(self):
         self.tracker.track_icons()
@@ -96,7 +97,9 @@ class PlayerGun:
         
         if self.shoot_timer >= self.shoot_time:
             self.cur_image = self.idle_images[self.gun_image_index]
-            
+        
+        if self.tracker.firing and self.can_shoot():
+            self.shoot()
         
 
     def can_shoot(self):
