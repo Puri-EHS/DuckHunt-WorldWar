@@ -30,6 +30,7 @@ class Tracker:
         # Read a frame from the camera
         ret, frame = self.cap.read()
 
+        frame = cv2.resize(frame, None, fx=0.75, fy=0.75)
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
@@ -53,9 +54,10 @@ class Tracker:
         
         if len(good_matches_icon1) > 2: #If more than 2 points, assume icon exists and find average to estimate icon center
             
-            #reverse for camera with 720 by 1080 resolution
-            self.avg_x = 1080 - int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))
-            self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) - 250
+            #reverse for camera with 720 by 1080 resolution, scaled to 540 by 810
+            #Game width 758, half being 379
+            self.avg_x = 540 - int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1])) + 379
+            self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]))
             
             print(self.avg_x, self.avg_y)
             self.firing = False
