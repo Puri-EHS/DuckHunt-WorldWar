@@ -64,7 +64,7 @@ class Tracker:
         z_scores_x = np.abs(stats.zscore(x_values))
         z_scores_y = np.abs(stats.zscore(y_values))
 
-        # Combine Z-scores for x and y dimensions
+        # Combine Z-scores for x and y dimensions2
         z_scores_combined = np.sqrt(z_scores_x**2 + z_scores_y**2)
 
         # Identify outliers based on the threshold
