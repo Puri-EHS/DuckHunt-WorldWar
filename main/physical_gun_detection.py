@@ -23,6 +23,10 @@ class Tracker:
         self.cap = cv2.VideoCapture(0)
         self.avg_x = 0
         self.avg_y = 0
+
+        self.stable_avg_x = 0
+        self.stable_avg_y = 0
+
         self.num_fire = 0
 
     def track_icons(self, camera_index=0, icon1_path='main/New_fedu.png', icon2_path='main/New_fedu.png'):
@@ -53,7 +57,6 @@ class Tracker:
     # Outlier Rejection System (Helps clean up data from random points)
         x_values = [kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]
         y_values = [kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]
-
         z_scores_x = np.abs(stats.zscore(x_values))
         z_scores_y = np.abs(stats.zscore(y_values))
 
@@ -69,21 +72,19 @@ class Tracker:
         
 
 
-        # Match descriptors for icon 2
-        #matches_icon2 = bf.knnMatch(des_icon2, des_frame, k=2)
-
-        # Apply ratio test to filter good matches for icon 2
-        #good_matches_icon2 = []
-        #for m, n in matches_icon2:
-            #if m.distance < 0.75 * n.distance:
-                #good_matches_icon2.append(m)
-
-        # Draw matches on the frame for icon 2
-        #img_matches_icon2 = cv2.drawMatches(icon2, kp_icon2, frame, kp_frame, good_matches_icon2, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+        #Smoothing of stuttery motion
         if len(good_matches_icon1) >= 2:
-            self.avg_x = 1400-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 300
-            print(self.avg_x, self.avg_y)
+            self.avg_x = 1800-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 800
+
+            if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
+                self.stable_avg_x = self.avg_x
+
+            if self.avg_y - self.stable_avg_y > 10 or self.avg_y - self.stable_avg_y < -10:
+                self.stable_avg_y = self.avg_y
+
+
+            print(self.stable_avg_y, self.stable_avg_y)
             self.num_fire = 0
         else:
             print("FIRE")
