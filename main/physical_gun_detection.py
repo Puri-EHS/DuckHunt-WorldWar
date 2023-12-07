@@ -61,7 +61,7 @@ class Tracker:
         z_scores_combined = np.sqrt(z_scores_x**2 + z_scores_y**2)
 
         # Identify outliers based on the threshold
-        outliers = np.where(z_scores_combined > 1)[0]
+        outliers = np.where(z_scores_combined > 2)[0]
 
         # Remove outliers from the original list
         filtered_points = [point for i, point in enumerate(good_matches_icon1) if i not in outliers]
@@ -81,8 +81,8 @@ class Tracker:
         # Draw matches on the frame for icon 2
         #img_matches_icon2 = cv2.drawMatches(icon2, kp_icon2, frame, kp_frame, good_matches_icon2, None, flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
         if len(good_matches_icon1) >= 2:
-            self.avg_x = 720-int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))
-            self.avg_y = int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]))
+            self.avg_x = 1400-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 300
             print(self.avg_x, self.avg_y)
             self.num_fire = 0
         else:
