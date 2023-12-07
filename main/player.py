@@ -38,7 +38,7 @@ class PlayerGun:
         self.tracker = Tracker()
 
         self.reload_time = 2.5 * FPS
-        self.shoot_time = .25 * FPS
+        self.shoot_time = 4
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
@@ -98,7 +98,8 @@ class PlayerGun:
         if self.shoot_timer >= self.shoot_time:
             self.cur_image = self.idle_images[self.gun_image_index]
         
-        if self.tracker.num_fire >= 4 and self.can_shoot():
+
+        if self.tracker.num_fire >= 2 and self.can_shoot():
             self.shoot()
         
 

@@ -4,7 +4,7 @@ import numpy as np
 from scipy import stats
 
 class Tracker:
-    def __init__(self) -> None:
+    def __init__(self):
         # Set the camera index (0 for the default camera)
         self.camera_index = 0
 
@@ -24,6 +24,7 @@ class Tracker:
         self.avg_x = 0
         self.avg_y = 0
 
+        # Points used for stabilizing motion
         self.stable_avg_x = 0
         self.stable_avg_y = 0
 
@@ -33,6 +34,7 @@ class Tracker:
         # Read a frame from the camera
         ret, frame = self.cap.read()
 
+        #Resize frame to improve speed, but reduce accuracy
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -72,11 +74,12 @@ class Tracker:
         
 
 
-        #Smoothing of stuttery motion
+    
         if len(good_matches_icon1) >= 2:
             self.avg_x = 1800-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 800
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 1000
 
+            #Smoothing of stuttery motion
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
                 self.stable_avg_x = self.avg_x
 
@@ -86,6 +89,7 @@ class Tracker:
 
             print(self.stable_avg_y, self.stable_avg_y)
             self.num_fire = 0
+
         else:
             print("FIRE")
             self.num_fire += 1
