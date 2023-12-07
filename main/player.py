@@ -33,9 +33,16 @@ class Player:
 
 class PlayerGun:
     def __init__(self):
+        self.x_offset = 384
+        self.y_offset = 360
         self.max_ammo = 50000
+
         self.ammo_left = self.max_ammo
         self.tracker = Tracker()
+        self.tracker.track_icons()
+
+        self.x_offset = -(self.x_offset - self.tracker.stable_avg_x)
+        self.y_offset = -(self.y_offset - self.tracker.stable_avg_y)
 
         self.reload_time = 2.5 * FPS
         self.shoot_time = 4
@@ -66,19 +73,19 @@ class PlayerGun:
         self.gun_image_index = 1
 
         #Hardcoded to work with tracking. WIll make it listen to constants 
-        self.crosshair_coords = self.tracker.stable_avg_x, self.tracker.stable_avg_y
-        self.crosshair = ImageObj(CROSS_HAIR, 0, 45, 45, self.tracker.stable_avg_x, self.tracker.stable_avg_y)
+        self.crosshair_coords = self.tracker.stable_avg_x - self.x_offset, self.tracker.stable_avg_y - self.y_offset
+        self.crosshair = ImageObj(CROSS_HAIR, 0, 45, 45, self.tracker.stable_avg_x - self.x_offset, self.tracker.stable_avg_y - self.y_offset)
         
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
     
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
-        screen.blit(Spritesheet(CROSS_HAIR).image_at((0, 0, 60, 60)), (self.tracker.stable_avg_x, self.tracker.stable_avg_y))
+        screen.blit(Spritesheet(CROSS_HAIR).image_at((0, 0, 60, 60)), (self.tracker.stable_avg_x - self.x_offset, self.tracker.stable_avg_y - self.y_offset))
 
     def update(self):
         self.tracker.track_icons()
-        self.crosshair_coords = self.tracker.stable_avg_x, self.tracker.stable_avg_y
+        self.crosshair_coords = self.tracker.stable_avg_x - self.x_offset, self.tracker.stable_avg_y - self.y_offset
         self.reload_timer += 1
         self.shoot_timer += 1
 

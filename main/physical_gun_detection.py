@@ -9,8 +9,8 @@ class Tracker:
         self.camera_index = 0
 
         # Provide the paths to the icon images
-        self.icon1_path = '/Users/soarece/Downloads/New_fedu.png'
-        self.icon2_path = '/Users/soarece/Downloads/New_fedu.png'
+        self.icon1_path = 'assets/New_fedu.png'
+        self.icon2_path = 'assets/New_fedu.png'
         # Load the icon images
         self.icon1 = cv2.imread(self.icon1_path, cv2.IMREAD_UNCHANGED)
         self.icon1_gray = cv2.cvtColor(self.icon1, cv2.COLOR_BGR2GRAY)
