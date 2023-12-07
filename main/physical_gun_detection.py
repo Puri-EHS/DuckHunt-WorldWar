@@ -1,4 +1,4 @@
-#Taken over by Alex, bitch
+# Taken over by Alex, bitch
 import cv2
 import numpy as np
 from scipy import stats
@@ -21,20 +21,22 @@ class Tracker:
         self.kp_icon1, self.des_icon1 = self.sift.detectAndCompute(self.icon1_gray, None)
         # Create a VideoCapture object
         self.cap = cv2.VideoCapture(0)
+        # Pre-stabilized coords
         self.avg_x = 0
         self.avg_y = 0
 
-        # Points used for stabilizing motion
+        # Points used for stabilizing motion: [ACCESS THESE POINTS FOR COORDS]
         self.stable_avg_x = 0
         self.stable_avg_y = 0
 
         self.num_fire = 0
 
+
     def track_icons(self, camera_index=0, icon1_path='main/New_fedu.png', icon2_path='main/New_fedu.png'):
         # Read a frame from the camera
         ret, frame = self.cap.read()
 
-        #Resize frame to improve speed, but reduce accuracy
+        # Resize frame to improve speed, but reduce accuracy
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -79,10 +81,9 @@ class Tracker:
             self.avg_x = 1800-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
             self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 1000
 
-            #Smoothing of stuttery motion
+            # Noise elimination sysetem (Smoothing of stuttery motion)
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
                 self.stable_avg_x = self.avg_x
-
             if self.avg_y - self.stable_avg_y > 10 or self.avg_y - self.stable_avg_y < -10:
                 self.stable_avg_y = self.avg_y
 

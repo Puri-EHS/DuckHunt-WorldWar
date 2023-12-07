@@ -9,7 +9,7 @@ import pygame
 class Game:
     def __init__(self, _screen):
         self.current_level = None
-        self.current_level_index = 2 #should be set to zero usually, 1 will skip the splash screen
+        self.current_level_index = 0 #should be set to zero usually, 1 will skip the splash screen
         
         self.screen = _screen
 

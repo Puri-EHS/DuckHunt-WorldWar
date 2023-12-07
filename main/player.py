@@ -98,7 +98,7 @@ class PlayerGun:
         if self.shoot_timer >= self.shoot_time:
             self.cur_image = self.idle_images[self.gun_image_index]
         
-
+        # Set num of frames without controler detection needed to trigger fire
         if self.tracker.num_fire >= 2 and self.can_shoot():
             self.shoot()
         
