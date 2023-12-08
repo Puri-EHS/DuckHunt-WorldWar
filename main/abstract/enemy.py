@@ -33,6 +33,10 @@ class State(ABC):
     def execute(self, ai):
         pass #what should happen now that the AI is in this state
     
+    @abstractmethod
+    def exit_condition(self, ai):
+        pass
+    
     
 class FlyingState(State):
     def __init__(self, probability_range) -> None:
@@ -40,9 +44,11 @@ class FlyingState(State):
         self.probabilty_range = probability_range
         
     def should_enter(self, ai):
-        return ai.probability < self.probabilty_range[1] and ai.probability > self.probabilty_range[0]
-    
+        return True #the reason for this is since this is the default state, so if no other states are valid, then this state always run
+        #its important to put this as the last element in the AI states list, so it is the last state checked 
+        
     def execute(self, ai):
+        ai.velocity = 0.1
         if(ai.pick_new_point):
             while(True):
                 random_radius = random.randint(150, 300)
@@ -51,17 +57,20 @@ class FlyingState(State):
                 if(in_bounds(rand_point)):
                     ai.target_point = rand_point
                     break
-    
+    def exit_condition(self, ai):
+        return True #the reason this is to false is becuase this is the default    
 
 class StrafingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
         self.probabilty_range = probability_range
+        self.prev_direction = 0
         
     def should_enter(self, ai):
-        return ai.probability < self.probabilty_range[1] and ai.probability > self.probabilty_range[0]
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100
     
     def shift_angle(self):
+
         rando = random.randint(1, 100)
         if(self.prev_direction == 0):
             new_rando = random.randint(1, 2)
@@ -87,18 +96,19 @@ class StrafingState(State):
                 return 3.1415926535
             
     def execute(self, ai):
-        #pick random angle
-        #then pick random radius, so like polar coordinates
+        ai.velocity = 0.15
         if(ai.pick_new_point):
             while(True):
-                angle = random.randrange(-30, 30)
+                angle = random.randrange(-70, 70)
                 angle_in_radians = angle * 3.1415926535 / 180.0 + self.shift_angle()
-                rand_radius = random.randrange(50, 80)
+                rand_radius = random.randrange(60, 80)
                 rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
                 rand_point = (rand_point[0] + ai.x, rand_point[1] + ai.y)
                 if(in_bounds(rand_point)):
                     ai.target_point = rand_point
                     break
+    def exit_condition(self, ai):
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) > 100
     
     
 #assumption that no 2 states can be true at the same time
@@ -109,22 +119,71 @@ class AI:
         self.probability: int = random.randint(0, 100)
         self.states : list(State) = [StrafingState((0, 20)), FlyingState((0, 100))]
         self.current_state : State = None
-        self.pick_new_point = True
+        self.pick_new_point = None
         self.x = 500
         self.y = 300
         self.target_point = (-1, -1)
+        self.velocity = 0.1
+        
     def update_state(self):
+        if(self.current_state is not None and self.current_state.exit_condition(self) is not True):
+            return
         for state in self.states:
             if state.should_enter(self):
                 self.current_state = state
                 break
+    def move_to_point(self):
+        direction = subtract_vectors(self.target_point, (self.x, self.y))
+        distance = magnitude(direction)
+
+        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0):
+            self.pick_new_point = True
+        else:
+            self.pick_new_point = False
+            normalized_direction = normalize(direction)
+            self.x += normalized_direction[0] * self.velocity
+            self.y += normalized_direction[1] * self.velocity
     
     def update(self):
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
-        
-        
+        self.move_to_point()
+
+if __name__ == "__main__":
+    # Initialize Pygame
+    pygame.init()
+
+    # Set the size of the window
+    width, height = 800, 600
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Rectangle Display")
+
+    # Define rectangle parameters
+    rect_width = 50
+    rect_height = 50
+    rect_color = (255, 0, 0)  # Red color
+
+    # Main loop
+    running = True
+    AI_test = AI()
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        # Fill the screen with a color (optional)
+        screen.fill((0, 0, 0))  # Black color
+
+        # Draw the rectangle
+        AI_test.update()
+        pygame.draw.rect(screen, rect_color, (AI_test.x, AI_test.y, rect_width, rect_height))
+
+        # Update the display
+        pygame.display.flip()
+
+    # Quit Pygame
+    pygame.quit()        
 
 class Enemy(ABC):
     def __init__(self):
