@@ -13,7 +13,7 @@ class Game:
         
         self.screen = _screen
 
-        self.player = Player()
+        self.player = Player(self)
 
         self.levels = [
             SplashScreen,
@@ -43,14 +43,14 @@ class Game:
         # we can add transitions later
         if not self.current_level.ended():
             self.current_level.update()
+            self.current_level.render()
+            if self.current_level.game_level:
+                self.player.gun.render(self.screen)
         else:
             self.current_level_index += 1
             self.switch_to_level(self.current_level_index)
 
+    
 
-        # rendering
-        self.current_level.render()
-        if self.current_level.game_level:
-            self.player.gun.render(self.screen)
 
     

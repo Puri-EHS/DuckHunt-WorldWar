@@ -24,6 +24,13 @@ class Enemy(ABC):
         _screen.blit(self.animation.frames[self.animation.current_frame], self.rect.topleft)
 
     @abstractmethod
+    def on_shot(self, _damage):
+        pass
+
+    def tryhit(self, _point, _damage):
+        pass
+
+    @abstractmethod
     def render(self, _screen, _camera_offset):
         pass
 

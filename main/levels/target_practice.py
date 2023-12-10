@@ -25,6 +25,16 @@ class TargetPractice(Level):
             Target()
         ]
     
+    def check_enemy_point_collisions(self, _point, _damage):
+        for enemy in self.alive_enemies:
+            if enemy.rect.collidepoint(_point):
+                enemy.on_shot(_damage)
+                if enemy.health <= 0:
+                    self.alive_enemies.remove(enemy)
+                    del enemy
+                break
+
+
     def start(self):
         pass
     
@@ -40,8 +50,9 @@ class TargetPractice(Level):
         self.depth_render(self.images, self.game_instance.player.x)
 
     def update(self):
-        pass
-        # self.render()
+        for enemy in self.alive_enemies:
+            enemy.update()
+
     
     def stop(self):
         del self

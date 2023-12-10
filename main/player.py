@@ -9,9 +9,11 @@ if not USE_MOUSE:
 import pygame
 
 class Player:
-    def __init__(self):
+    def __init__(self, _game_instance):
         self.x = 0
         self.gun = PlayerGun()
+        self.game_instance = _game_instance
+
 
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
@@ -21,6 +23,7 @@ class Player:
             self.move(30, _level_size)
         if keys[pygame.K_SPACE]:
             self.gun.shoot()
+            self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
 
     def move(self, _x, _level_size):
         self.x += _x
@@ -43,6 +46,8 @@ class PlayerGun:
         self.ammo_left = self.max_ammo
 
         self.gun_sprite_sheet = Spritesheet(GUN)
+
+        self.damage = 1
 
         if not USE_MOUSE:
             self.tracker = Tracker()

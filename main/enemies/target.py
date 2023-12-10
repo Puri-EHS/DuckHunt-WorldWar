@@ -5,6 +5,7 @@ from sprite_sheet import Spritesheet
 from sprite_sheet import Animation
 
 import pygame   
+import random
 
 class Target(Enemy):
     def __init__(self):
@@ -16,6 +17,16 @@ class Target(Enemy):
 
         self.rect = pygame.Rect(0, 0, 42, 42)
         self.rect.center = self.world_coordinates
+
+        self.health = 1
+
+    def on_shot(self, _damage):
+        self.health -= 0 # target is invincible
+
+        # new random location
+        self.world_coordinates = (random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
+
+
 
 
     def render(self, _screen, _camera_offset):
