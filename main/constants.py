@@ -1,20 +1,20 @@
 import os
 
 # Initialization
-OG_GAME_WIDTH = 256
-OG_GAME_HEIGHT = 240
+OG_GAME_WIDTH = 256 # 768
+OG_GAME_HEIGHT = 240 # 720
 
 SCREEN_SCALE = 3
 
 SCREEN_WIDTH = OG_GAME_WIDTH * SCREEN_SCALE
 SCREEN_HEIGHT = OG_GAME_HEIGHT * SCREEN_SCALE
 
-BASE_DIR = "../"
+BASE_DIR = ""
 ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = True
+USE_MOUSE = False
 FPS = 60
 
 

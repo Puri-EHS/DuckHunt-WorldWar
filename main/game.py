@@ -1,7 +1,8 @@
 from levels.splash_screen import SplashScreen
 from levels.title_screen import TitleScreen
 from levels.target_practice import TargetPractice
-
+from levels.Controller_img import Cont_img
+from constants import USE_MOUSE
 from player import Player
 
 import pygame
@@ -15,11 +16,19 @@ class Game:
 
         self.player = Player(self)
 
-        self.levels = [
-            SplashScreen,
-            TitleScreen,
-            TargetPractice
-        ]
+        if USE_MOUSE:
+            self.levels = [
+                SplashScreen,
+                TitleScreen,
+                TargetPractice
+            ]
+        else:
+            self.levels = [
+                SplashScreen,
+                TitleScreen,
+                Cont_img,
+                TargetPractice
+            ]
 
     def switch_to_level(self, _level_index):
         if(self.current_level is not None):

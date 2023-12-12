@@ -1,4 +1,4 @@
-from constants import TARGET_PATH, SCREEN_HEIGHT, SCREEN_WIDTH
+from constants import TARGET_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
 
 from abstract.enemy import Enemy
 from sprite_sheet import Spritesheet
@@ -15,7 +15,14 @@ class Target(Enemy):
         self.depth = 4.7
         self.world_coordinates = (SCREEN_WIDTH/2, SCREEN_HEIGHT/2) 
 
-        self.rect = pygame.Rect(0, 0, 42, 42)
+
+        # Increase hit box if using controller: This is hardcoded, but needs to be a system. -AM
+        if USE_MOUSE:
+            self.rect = pygame.Rect(0, 0, 42, 42)
+        else:
+            self.rect = pygame.Rect(-42, -42, 84, 84)
+
+
         self.rect.center = self.world_coordinates
 
         self.health = 1
@@ -24,7 +31,8 @@ class Target(Enemy):
         self.health -= 0 # target is invincible
 
         # new random location
-        self.world_coordinates = (random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT))
+        # Modified to not place below the half way mark or right at the top: -AM
+        self.world_coordinates = (random.randint(50, SCREEN_WIDTH), random.randint(50, SCREEN_HEIGHT/2))
 
 
 

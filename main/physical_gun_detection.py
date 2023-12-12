@@ -77,9 +77,9 @@ class Tracker:
 
 
     
-        if len(good_matches_icon1) >= 2:
-            self.avg_x = 1800-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 1000
+        if len(good_matches_icon1) > 10:
+            self.avg_x = 1350-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 600
 
             # Noise elimination sysetem (Smoothing of stuttery motion)
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
@@ -88,9 +88,13 @@ class Tracker:
                 self.stable_avg_y = self.avg_y
 
 
-            print(self.stable_avg_y, self.stable_avg_y)
+            print(self.stable_avg_y, self.stable_avg_y, len(good_matches_icon1))
             self.num_fire = 0
 
+        # Ignores poor data to make tracking more stable
+        elif len(good_matches_icon1) > 1:
+            print("insuffient tracking points: Data ignored")
+        
         else:
             print("FIRE")
             self.num_fire += 1

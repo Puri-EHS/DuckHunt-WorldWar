@@ -33,4 +33,5 @@ while is_running:
     
     pygame.display.update()
 
-    clock.tick(constants.FPS)
+    # game already runs at seconds per frame, so I disabled this for now
+    # clock.tick(constants.FPS)

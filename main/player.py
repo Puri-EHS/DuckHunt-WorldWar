@@ -17,14 +17,26 @@ class Player:
 
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            self.move(-30, _level_size)
-        if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            self.move(30, _level_size)
-        if keys[pygame.K_SPACE]:
-            self.gun.shoot()
-            self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
-
+        
+        if USE_MOUSE:
+            if keys[pygame.K_a] or keys[pygame.K_LEFT]:
+                self.move(-30, _level_size)
+            if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
+                self.move(30, _level_size)
+            if keys[pygame.K_SPACE]:
+                self.gun.shoot()
+                self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
+        
+        # Allows lateral movement and firing with controler: move crosshairs to one side to move
+        else:
+            if keys[pygame.K_a] or keys[pygame.K_LEFT] or self.gun.crosshair_coords[0] <= 75:
+                self.move(-30, _level_size)
+            if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
+                self.move(30, _level_size)
+            if keys[pygame.K_SPACE] or self.gun.tracker.num_fire >= 2:
+                self.gun.shoot()
+                self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
+    
     def move(self, _x, _level_size):
         self.x += _x
 
@@ -140,7 +152,7 @@ class PlayerGun:
             # update image
             self.cur_image = self.shoot_images[self.gun_image_index]
             
-            pygame.mixer.Sound.play(self.shoot_sound)
+            #pygame.mixer.Sound.play(self.shoot_sound)
         
         if self.ammo_left <= 0:
             self.reload_timer = 0
