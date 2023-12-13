@@ -29,6 +29,6 @@ class SplashScreen(Level):
         del self
 
     def ended(self):
-        if self.frame_counter >= 2.5 * FPS:
+        if self.frame_counter >= 10 * FPS:
             return True
         return False

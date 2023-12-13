@@ -1,4 +1,4 @@
-from constants import FPS, GUN, CROSSHAIR, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH, USE_MOUSE
+from constants import FPS, GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH, USE_MOUSE
 
 from sprite_sheet import Spritesheet
 from image_object import ImageObj
@@ -33,7 +33,7 @@ class Player:
                 self.move(-30, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
                 self.move(30, _level_size)
-            if keys[pygame.K_SPACE] or self.gun.tracker.num_fire >= 2:
+            if keys[pygame.K_SPACE] or (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4):
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
     
@@ -100,13 +100,15 @@ class PlayerGun:
             self.crosshair_coords = pygame.mouse.get_pos()
 
         self.crosshair_img = pygame.image.load(CROSSHAIR)
-
+        self.con_not_found_img = pygame.image.load(CONNOTFOUND)
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
     
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
         screen.blit(self.crosshair_img, (self.crosshair_coords[0]-30, self.crosshair_coords[1]-30))
+        if self.tracker.num_fire > 8:
+            screen.blit(self.con_not_found_img, (0, 0))
 
     def update(self):
         
@@ -137,7 +139,7 @@ class PlayerGun:
             self.cur_image = self.idle_images[self.gun_image_index]
         
         # Set num of frames without controler detection needed to trigger fire
-        if not USE_MOUSE and self.tracker.num_fire >= 2 and self.can_shoot():
+        if not USE_MOUSE and self.tracker.num_fire >= 2 and self.tracker.num_fire < 4 and self.can_shoot():
             self.shoot()
         
 
