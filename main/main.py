@@ -19,6 +19,7 @@ game.switch_to_level(_level_index=game.current_level_index)
 
 is_running = True
 while is_running:
+    clock.tick()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
@@ -30,7 +31,7 @@ while is_running:
     screen.fill((0, 0, 0))
     
     game.update()
-    
+    print(clock.get_fps())
     pygame.display.update()
 
     # game already runs at seconds per frame, so I disabled this for now

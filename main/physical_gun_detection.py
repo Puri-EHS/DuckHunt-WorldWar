@@ -36,7 +36,7 @@ class Tracker:
         # Read a frame from the camera
         ret, frame = self.cap.read()
 
-        # Resize frame to improve speed, but reduce accuracy
+        # Resize frame to improve speed, but reduce accuracy: Keep at 0.5
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -88,14 +88,15 @@ class Tracker:
                 self.stable_avg_y = self.avg_y
 
 
-            print(self.stable_avg_y, self.stable_avg_y, len(good_matches_icon1))
+            #print(self.stable_avg_y, self.stable_avg_y, len(good_matches_icon1))
             self.num_fire = 0
 
         # Ignores poor data to make tracking more stable
         elif len(good_matches_icon1) > 1:
-            print("insuffient tracking points: Data ignored")
+            pass
+            #print("insuffient tracking points: Data ignored")
         
         else:
-            print("FIRE")
+            #print("FIRE")
             self.num_fire += 1
 
