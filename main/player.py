@@ -70,7 +70,10 @@ class PlayerGun:
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
-
+        
+        # Limit how often tracking is called, as to improve fps
+        self.frames_per_track = 2
+        self.current_frames_untracked = 0
 
         self.idle_images = []
         self.shoot_images = []
@@ -107,13 +110,19 @@ class PlayerGun:
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
         screen.blit(self.crosshair_img, (self.crosshair_coords[0]-30, self.crosshair_coords[1]-30))
-        if self.tracker.num_fire > 8:
-            screen.blit(self.con_not_found_img, (0, 0))
+        if not USE_MOUSE:
+            if self.tracker.num_fire > 8:
+                screen.blit(self.con_not_found_img, (0, 0))
 
     def update(self):
         
         if not USE_MOUSE:
-            self.tracker.track_icons()
+            if self.current_frames_untracked < self.frames_per_track:
+                self.current_frames_untracked += 1
+            else:
+                self.tracker.track_icons()
+                self.current_frames_untracked = 0
+
             self.crosshair_coords = self.tracker.stable_avg_x, self.tracker.stable_avg_y
         else:
             self.crosshair_coords = pygame.mouse.get_pos()
