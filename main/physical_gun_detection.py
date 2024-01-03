@@ -1,4 +1,4 @@
-# Taken over by Alex, bitch
+# Taken over by Alex
 import cv2
 import numpy as np
 from scipy import stats
@@ -61,38 +61,33 @@ class Tracker:
         y_values = [kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1]
         z_scores_x = np.abs(stats.zscore(x_values))
         z_scores_y = np.abs(stats.zscore(y_values))
-
         # Combine Z-scores for x and y dimensions2
         z_scores_combined = np.sqrt(z_scores_x**2 + z_scores_y**2)
-
         # Identify outliers based on the threshold
         outliers = np.where(z_scores_combined > 2)[0]
-
         # Remove outliers from the original list
         filtered_points = [point for i, point in enumerate(good_matches_icon1) if i not in outliers]
         good_matches_icon1 = filtered_points
         
 
 
-    
+        # Require atleast 10 detected points to ensure tracking stability
         if len(good_matches_icon1) > 10:
             self.avg_x = 1350-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
             self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 600
-
+            
             # Noise elimination sysetem (Smoothing of stuttery motion)
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
                 self.stable_avg_x = self.avg_x
             if self.avg_y - self.stable_avg_y > 10 or self.avg_y - self.stable_avg_y < -10:
                 self.stable_avg_y = self.avg_y
 
-
-            #print(self.stable_avg_y, self.stable_avg_y, len(good_matches_icon1))
             self.num_fire = 0
 
         # Ignores poor data to make tracking more stable
         elif len(good_matches_icon1) > 1:
             pass
-            #print("insuffient tracking points: Data ignored")
+            # Insuffient tracking points: Data ignored
         
         else:
             #print("FIRE")
