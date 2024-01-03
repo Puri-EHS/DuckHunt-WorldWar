@@ -12,5 +12,7 @@ class ImageObj:
         self.image_rect = self.image.get_rect()
         self.image_rect.center = (x_pos, y_pos)
         self.depth = depth
+        self.x = x_pos
+        self.y = y_pos
 
     

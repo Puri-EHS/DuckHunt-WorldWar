@@ -17,21 +17,19 @@ class VanilaDuck(Enemy):
         self.depth = 4.7
         self.world_coordinates = (self.ai.x, self.ai.y) 
 
+        self.ticks_per_hp_regen = 30
+        self.current_ticks = 0
         
 
-        # Increase hit box if using controller: This is hardcoded, but needs to be a system. -AM
-        if USE_MOUSE:
-            self.rect = pygame.Rect(0, 0, 200, 200)
-        else:
-            self.rect = pygame.Rect(-42, -42, 84, 84)
-
-
+        self.rect = pygame.Rect(0, 0, 200, 200)
+    
         self.rect.center = self.world_coordinates
 
-        self.health = 4
+        self.health = 75
+        self.max_health = self.health
 
     def on_shot(self, _damage):
-        self.health -= 1
+        self.health -= 10
         print(self.health)
 
         # new random location
@@ -46,3 +44,8 @@ class VanilaDuck(Enemy):
     def update(self):
         self.ai.update()
         self.world_coordinates = (self.ai.x, self.ai.y)
+        if self.current_ticks >= self.ticks_per_hp_regen and self.health < self.max_health:
+            self.current_ticks = 0
+            self.health += 1
+        else:
+            self.current_ticks += 1

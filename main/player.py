@@ -53,7 +53,7 @@ class PlayerGun:
     def __init__(self):
         self.x_offset = 384
         self.y_offset = 360
-        self.max_ammo = 50000
+        self.max_ammo = 4
 
         self.ammo_left = self.max_ammo
 

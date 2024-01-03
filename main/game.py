@@ -3,6 +3,7 @@ from levels.title_screen import TitleScreen
 from levels.target_practice import TargetPractice
 from levels.Controller_img import Cont_img
 from levels.level1 import Level1
+from levels.Loading_screen import LoadingScreen
 from constants import USE_MOUSE
 from player import Player
 
@@ -11,7 +12,7 @@ import pygame
 class Game:
     def __init__(self, _screen):
         self.current_level = None
-        self.current_level_index = 2 #should be set to zero usually, 1 will skip the splash screen
+        self.current_level_index = 0 #should be set to zero usually, 1 will skip the splash screen
         
         self.screen = _screen
 
@@ -22,6 +23,7 @@ class Game:
                 SplashScreen,
                 TitleScreen,
                 ##TargetPractice
+                LoadingScreen,
                 Level1
             ]
         else:
@@ -30,6 +32,7 @@ class Game:
                 TitleScreen,
                 Cont_img,
                 ##TargetPractice
+                LoadingScreen,
                 Level1
             ]
 
