@@ -16,7 +16,7 @@ def normalize(v):
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[0] < 800 and v[0] > 0) and (v[1] < 250 and v[1] > 0): #limit the movement to the upper half of the screen
+    if (v[0] < 800 and v[0] > 0) and (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
         return True
     return False
 
@@ -48,7 +48,6 @@ class FlyingState(State):
         #its important to put this as the last element in the AI states list, so it is the last state checked 
         
     def execute(self, ai):
-        ai.velocity = 0.1
         if(ai.pick_new_point):
             while(True):
                 random_radius = random.randint(150, 300)
@@ -96,7 +95,6 @@ class StrafingState(State):
                 return 3.1415926535
             
     def execute(self, ai):
-        ai.velocity = 0.15
         if(ai.pick_new_point):
             while(True):
                 angle = random.randrange(-70, 70)
@@ -121,10 +119,10 @@ class AI:
         self.current_state : State = None
         self.pick_new_point = None
         self.x = 500
-        self.y = 300
+        self.y = 400
         self.target_point = (-1, -1)
         self.velocity = 0.1
-        
+        self.slow = False
     def update_state(self):
         if(self.current_state is not None and self.current_state.exit_condition(self) is not True):
             return
@@ -149,6 +147,12 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
+        if self.probability <= 5 and self.slow == False:
+            self.velocity = self.velocity/4
+            self.slow = True
+        if self.probability >= 95 and self.slow == True:
+            self.velocity = self.velocity * 4
+            self.slow = False
 
 if __name__ == "__main__":
     # Initialize Pygame

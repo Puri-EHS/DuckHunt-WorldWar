@@ -30,7 +30,7 @@ while is_running:
     screen.fill((0, 0, 0))
     
     game.update()
-    print(clock.get_fps())
+    #print(clock.get_fps())
     pygame.display.update()
 
     # game already runs at seconds per frame, so I disabled this for now

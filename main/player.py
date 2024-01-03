@@ -23,7 +23,7 @@ class Player:
                 self.move(-30, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                 self.move(30, _level_size)
-            if keys[pygame.K_SPACE]:
+            if keys[pygame.K_SPACE] and self.gun.can_shoot():
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
         
@@ -65,12 +65,14 @@ class PlayerGun:
             self.tracker = Tracker()
             self.tracker.track_icons()
 
-        self.reload_time = 2.5 * FPS
-        self.shoot_time = 4
+        self.reload_time = 2.5 * 25
+        self.shoot_time = 4 
+        self.cooldown_time = 2 * 25
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
-        
+        self.cooldown_timer = self.cooldown_time
+
         # Limit how often tracking is called, as to improve fps
         self.frames_per_track = 2
         self.current_frames_untracked = 0
@@ -130,7 +132,7 @@ class PlayerGun:
         
         self.reload_timer += 1
         self.shoot_timer += 1
-
+        self.cooldown_timer += 1
 
         if self.crosshair_coords[0] < 800/3:
             self.gun_image_index = 0
@@ -153,12 +155,13 @@ class PlayerGun:
         
 
     def can_shoot(self):
-        return self.shoot_timer >= self.shoot_time and self.reload_timer >= self.reload_time
+        return self.shoot_timer >= self.shoot_time and self.reload_timer >= self.reload_time and self.cooldown_timer > self.cooldown_time
 
     def shoot(self):
         if self.ammo_left > 0 and self.can_shoot():
             self.ammo_left -= 1
             self.shoot_timer = 0
+            self.cooldown_timer = 0
 
             # update image
             self.cur_image = self.shoot_images[self.gun_image_index]

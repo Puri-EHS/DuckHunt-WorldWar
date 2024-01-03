@@ -14,7 +14,7 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = False
+USE_MOUSE = True
 FPS = 60
 
 
@@ -39,6 +39,8 @@ CONNOTFOUND = os.path.join(ASSETS_DIR, "ui/con_not_found.png")
 #Enemies
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")
 TARGET_PATH = os.path.join(ENEMIES_DIR, "target.png")
+VANILA_DUCK_PATH = os.path.join(ENEMIES_DIR, "pigeon_front.png")
+
 
 #Environment
 ENVIRONMENT_DIR = os.path.join(ASSETS_DIR, "environment")
