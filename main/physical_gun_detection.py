@@ -72,7 +72,7 @@ class Tracker:
 
 
         # Require atleast 10 detected points to ensure tracking stability
-        if len(good_matches_icon1) > 10:
+        if len(good_matches_icon1) > 7:
             self.avg_x = 1350-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
             self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 600
             

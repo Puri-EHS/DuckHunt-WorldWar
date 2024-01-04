@@ -147,11 +147,14 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
-        if self.probability <= 5 and self.slow == False:
-            self.velocity = self.velocity/4
+        
+        
+        # Random stuff I added, probably should remove- AM
+        if self.probability <= 2 and self.slow == False:
+            self.velocity = 4
             self.slow = True
         if self.probability >= 95 and self.slow == True:
-            self.velocity = self.velocity * 4
+            self.velocity = 10
             self.slow = False
 
 if __name__ == "__main__":
