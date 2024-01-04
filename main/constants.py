@@ -14,7 +14,7 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = True
+USE_MOUSE = False
 FPS = 60
 
 
@@ -32,7 +32,7 @@ SHOOT_SOUND_PATH = os.path.join(SOUND_DIR, "gun_shoot.mp3")
 # UI
 SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
-LOADING_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/earf.png")
+LOADING_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/earf_load.png")
 
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
 CROSSHAIR = os.path.join(ASSETS_DIR, "ui/crosshair.png")

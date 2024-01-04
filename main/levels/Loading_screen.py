@@ -6,7 +6,7 @@ class LoadingScreen(Level):
     def __init__(self, _name, _screen, _game_instance):
         super().__init__(_name, _screen, _game_instance)
         self.bg_image = pygame.image.load(LOADING_SCREEN_PATH).convert_alpha()
-        self.bg_image = pygame.transform.scale(self.bg_image, (SCREEN_WIDTH*1.5, SCREEN_HEIGHT))
+        self.bg_image = pygame.transform.scale(self.bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         self.frame_counter = 0
         self.game_level = False

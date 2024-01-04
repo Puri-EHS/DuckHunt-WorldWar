@@ -33,9 +33,10 @@ class Player:
                 self.move(-30, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
                 self.move(30, _level_size)
-            if keys[pygame.K_SPACE] or (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4):
+            if (keys[pygame.K_SPACE] or (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4)) and self.gun.can_shoot():
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
+                print("fire")
     
     def move(self, _x, _level_size):
         self.x += _x
@@ -53,7 +54,7 @@ class PlayerGun:
     def __init__(self):
         self.x_offset = 384
         self.y_offset = 360
-        self.max_ammo = 4
+        self.max_ammo = 3000
 
         self.ammo_left = self.max_ammo
 
@@ -65,9 +66,9 @@ class PlayerGun:
             self.tracker = Tracker()
             self.tracker.track_icons()
 
-        self.reload_time = 2.5 * 25
+        self.reload_time = 0
         self.shoot_time = 4 
-        self.cooldown_time = 2 * 25
+        self.cooldown_time = 5
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
@@ -150,8 +151,8 @@ class PlayerGun:
             self.cur_image = self.idle_images[self.gun_image_index]
         
         # Set num of frames without controler detection needed to trigger fire
-        if not USE_MOUSE and self.tracker.num_fire >= 2 and self.tracker.num_fire < 4 and self.can_shoot():
-            self.shoot()
+        #if not USE_MOUSE and self.tracker.num_fire >= 2 and self.tracker.num_fire < 4 and self.can_shoot():
+         #   self.shoot()
         
 
     def can_shoot(self):

@@ -50,6 +50,9 @@ class Level1(Level):
                     self.alive_enemies.remove(enemy)
                     del enemy
                 break
+
+        if len(self.alive_enemies) == 0:
+            self.stop()
     
 
     def start(self):
@@ -66,17 +69,14 @@ class Level1(Level):
         # then foreground images like bushes
         self.depth_render(self.images, self.game_instance.player.x)
 
-        self.screen.blit(self.hp_bar.image, (self.update_bar(self.alive_enemies[0].max_health, self.alive_enemies[0].health), self.hp_bar.y))
-        self.screen.blit(self.hp_bar_frame.image, (self.hp_bar_frame.x, self.hp_bar_frame.y))
-
-     
-
-
-        if self.current_tick > 0 and self.duck_hit:
-            self.current_tick -= 1
-            self.screen.blit(self.hit_effect.image, (enemy.ai.x-25, enemy.ai.y-25))
-        else:
-            self.duck_hit = False
+        if len(self.alive_enemies) > 0:
+            self.screen.blit(self.hp_bar.image, (self.update_bar(self.alive_enemies[0].max_health, self.alive_enemies[0].health), self.hp_bar.y))
+            self.screen.blit(self.hp_bar_frame.image, (self.hp_bar_frame.x, self.hp_bar_frame.y))
+            if self.current_tick > 0 and self.duck_hit:
+                self.current_tick -= 1
+                self.screen.blit(self.hit_effect.image, self.game_instance.player.gun.crosshair_coords)
+            else:
+                self.duck_hit = False
 
     def update(self):
         for enemy in self.alive_enemies:
