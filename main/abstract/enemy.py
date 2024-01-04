@@ -62,14 +62,13 @@ class FlyingState(State):
 class StrafingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
-        self.probabilty_range = probability_range
+        self.probability_range = probability_range
         self.prev_direction = 0
         
     def should_enter(self, ai):
-        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def shift_angle(self):
-
         rando = random.randint(1, 100)
         if(self.prev_direction == 0):
             new_rando = random.randint(1, 2)
@@ -111,21 +110,16 @@ class StrafingState(State):
 class DuckingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
-        self.probabilty_range = probability_range
+        self.probability_range = probability_range
     def should_enter(self, ai):
-        
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def execute(self, ai):
         if(ai.pick_new_point):
-            while(True):
-                random_radius = random.randint(150, 300)
-                rand_angle = random.randint(0, 360) * math.pi/ 180
-                rand_point = (ai.x + (random_radius * math.cos(rand_angle)), ai.y + (random_radius * math.sin(rand_angle)))
-                if(in_bounds(rand_point)):
-                    ai.target_point = rand_point
-                    break
+            self.rand_point = (0, 0)
+            pass
     def exit_condition(self, ai):
-        return True #the reason this is to True is becuase this is the default  
+       return ai.pick_new_point
         
 
     
@@ -135,7 +129,7 @@ class DuckingState(State):
 class AI:
     def __init__(self):
         self.probability: int = random.randint(0, 100)
-        self.states : list(State) = [StrafingState((0, 20)), FlyingState((0, 100))]
+        self.states : list(State) = [DuckingState((0, 100)), StrafingState((0, 0)), FlyingState((0, 100))]
         self.current_state : State = None
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
@@ -175,6 +169,7 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
+        print(self.current_state)
         
         
 
