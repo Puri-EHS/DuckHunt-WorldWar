@@ -94,6 +94,7 @@ class StrafingState(State):
                 return 3.1415926535
             
     def execute(self, ai):
+        ai.velocity = 5
         if(ai.pick_new_point):
             while(True):
                 angle = random.randrange(-70, 70)
@@ -110,16 +111,46 @@ class StrafingState(State):
 class DuckingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
+        self.should_exit = False
         self.probability_range = probability_range
+        self.last_pop_time = 0
+        self.gotten_to_point = False
+        self.is_duck_popped = False
+        self.amount_of_pops = 0
     def should_enter(self, ai):
         return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
+    def pop_behavior(self, ai, pop_distance, pop_interval):
+        current_time = time.time()
+        ai.velocity = 10
+        if current_time - self.last_pop_time > pop_interval:
+            if self.is_duck_popped:
+                # Duck back into cover
+                print("back down")
+                ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
+            else:
+                # Pop out of cover
+                print("going up")
+                # Assuming the cover is vertical, and the duck pops up
+                ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
+                self.amount_of_pops += 1
+            self.is_duck_popped = not self.is_duck_popped
+            self.last_pop_time = current_time
+    
     def execute(self, ai):
-        if(ai.pick_new_point):
-            self.rand_point = (0, 0)
-            pass
+        print(self.gotten_to_point)
+        if(ai.pick_new_point and not self.gotten_to_point):
+            ai.target_point = (300, 400)
+            self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 10
+        if(self.gotten_to_point):
+            self.pop_behavior(ai, 50, 1)
+        
     def exit_condition(self, ai):
-       return ai.pick_new_point
+        if(self.amount_of_pops > 2):
+            self.amount_of_pops = 0
+            self.gotten_to_point = False
+            return True
+        return False
         
 
     
@@ -169,7 +200,7 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
-        print(self.current_state)
+        #print(self.target_point)
         
         
 
