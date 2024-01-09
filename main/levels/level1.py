@@ -92,7 +92,8 @@ class Level1(Level):
         del self
 
     def ended(self) -> bool:
-        return False
+        if len(self.alive_enemies) == 0:
+            return True
 
     
 
