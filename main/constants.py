@@ -65,6 +65,10 @@ SAVANNA = os.path.join(ENVIRONMENT_DIR, "savanna.png")
 SAVANNA_BUSH_BACK = os.path.join(ENVIRONMENT_DIR, "savanna_bush_back.png")
 SAVANNA_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "savanna_bush_front.png")
 
+OUTBACK = os.path.join(ENVIRONMENT_DIR, "DuckHuntOutback.png")
+OUTBACK_BUSH_BACK = os.path.join(ENVIRONMENT_DIR, "OutbackBackShrub.png")
+OUTBACK_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "OutbackFrontShrub.png")
+
 #Weapons
 WEAPONS_DIR = os.path.join(ASSETS_DIR, "weapons")
 HIT_BAR_FRAME = os.path.join(WEAPONS_DIR, "hit_point_ui.png")

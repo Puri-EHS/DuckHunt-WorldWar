@@ -166,6 +166,7 @@ class AI:
         self.probability: int = random.randint(0, 100)
         self.states : list(State) = [DuckingState((0, 20)), StrafingState((20, 100)), FlyingState((0, 100))]
         self.current_state : State = None
+        self.ducking = False
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
         self.pick_new_point = None
