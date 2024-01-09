@@ -37,18 +37,19 @@ class Player:
             if (keys[pygame.K_SPACE] or (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4)) and self.gun.can_shoot():
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
-                print("fire")
+                # print("fire")
     
     def move(self, _x, _level_size):
         self.x += _x
         self.coords[0] += _x
 
-        if self.x >= _level_size/2:
-            self.x = _level_size/2
-            self.coords[0] = _level_size/2
-        elif self.x <= -_level_size/2:
-            self.x = -_level_size/2
-            self.coords[0] = _level_size/2
+        end = (_level_size/2 - SCREEN_WIDTH/2)*5
+        if self.x >= end:
+            self.x = end
+            self.coords[0] = end
+        elif self.x <= -end:
+            self.x = -end
+            self.coords[0] = end
 
     
     def update(self):
