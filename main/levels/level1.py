@@ -31,7 +31,7 @@ class Level1(Level):
         self.game_level = True
 
         self.alive_enemies = [
-            VanilaDuck()
+            VanilaDuck(self.game_instance)
         ]
 
         self.animation_tick = 4

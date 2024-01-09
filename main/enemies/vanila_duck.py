@@ -7,9 +7,11 @@ from sprite_sheet import Animation
 
 import pygame   
 import random
+import numpy as np
 
 class VanilaDuck(Enemy):
-    def __init__(self):
+    def __init__(self, game):
+        super().__init__()
         self.sprite_sheet = Spritesheet(VANILA_DUCK_PATH)
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.ai = AI()
@@ -28,20 +30,22 @@ class VanilaDuck(Enemy):
         self.health = 75
         self.max_health = self.health
 
+        self.player_ref = game.player
+
+        
+        self.random_std = .5
+
     def on_shot(self, _damage):
         self.health -= 10
-        print(self.health)
-
-        # new random location
-        # Modified to not place below the half way mark or right at the top: -AM
-
-
 
 
     def render(self, _screen, _camera_offset):
         self.depth_render(_screen, _camera_offset)
+        self.render_aim_line(_screen, _camera_offset)
 
     def update(self):
+        self.enter_aim()
+        self.aim()
         self.ai.update()
         self.world_coordinates = (self.ai.x, self.ai.y)
         if self.current_ticks >= self.ticks_per_hp_regen and self.health < self.max_health:

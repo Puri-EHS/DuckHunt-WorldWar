@@ -4,6 +4,7 @@ import random
 import time
 import math
 import numpy
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def subtract_vectors(v1, v2):
     return (v1[0] - v2[0], v1[1] - v2[1])
@@ -25,6 +26,9 @@ def distance(p1, p2):
 
 
 class State(ABC):
+    def __init__(self, can_aim=True) -> None:
+        self.can_aim = can_aim
+
     @abstractmethod
     def should_enter(self, ai):
         pass #when should it enter within this state, probability?
@@ -209,8 +213,7 @@ if __name__ == "__main__":
     pygame.init()
 
     # Set the size of the window
-    width, height = 800, 600
-    screen = pygame.display.set_mode((width, height))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Rectangle Display")
 
     # Define rectangle parameters
@@ -242,6 +245,7 @@ if __name__ == "__main__":
 class Enemy(ABC):
     def __init__(self):
         self.depth = 0
+        self.player_ref = None
 
         self.world_coordinates = (0, 0)
         self.screen_coordinates = (0, 0)
@@ -253,8 +257,58 @@ class Enemy(ABC):
 
         self.rect = None
 
+
+
+        #aim parameters
+        self.x_change = 1
+        self.y_change = 1
+        self.p = .01 
+        self.d = .1 
+        self.xlasterror = 0
+        self.ylasterror = 0
+        self.random_multiplier = 4
+        self.random_mean = 0
+        self.random_std = 1.5
+        self.aim_enter_prob = 1/240 #1/120
+        self.aiming = False
+        self.aim_coordinates = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
+
+
+
+    def render_aim_line(self, _screen, _camera_offset):
+        if self.aiming:
+            pygame.draw.line(_screen, (255, 0, 0), self.get_screen_coordinates(_camera_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
+
+    def enter_aim(self):
+        if not self.aiming and random.random() < self.aim_enter_prob:
+            self.aiming = True
+        #elif self.aiming and random.random() < self.aim_enter_prob:
+            
+     
+    def aim(self):
+        if self.aiming:
+
+            xerror = self.player_ref.x - self.aim_coordinates[0]
+            yerror = SCREEN_HEIGHT/2 - self.aim_coordinates[1]
+            xerrorchange = xerror - self.xlasterror
+            yerrorchange = yerror - self.ylasterror
+            self.xlasterror = xerror
+            self.ylasterror = yerror
+
+             
+            self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
+            self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
+
+            # normal distribution random
+
+
+
+            self.aim_coordinates[0] += self.x_change
+            self.aim_coordinates[1] += self.y_change
+            
+
     def get_screen_coordinates(self, _camera_offset):
-        return (self.world_coordinates[0] - _camera_offset/self.depth, self.world_coordinates[1])
+        return (self.world_coordinates[0] - _camera_offset/self.depth, self.world_coordinates[1]) 
 
     def depth_render(self, _screen, _camera_offset):
         self.rect.center = self.get_screen_coordinates(_camera_offset)

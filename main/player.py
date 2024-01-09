@@ -11,6 +11,7 @@ import pygame
 class Player:
     def __init__(self, _game_instance):
         self.x = 0
+        self.coords = [self.x, SCREEN_HEIGHT/2]
         self.gun = PlayerGun()
         self.game_instance = _game_instance
 
@@ -40,11 +41,14 @@ class Player:
     
     def move(self, _x, _level_size):
         self.x += _x
+        self.coords[0] += _x
 
         if self.x >= _level_size/2:
             self.x = _level_size/2
+            self.coords[0] = _level_size/2
         elif self.x <= -_level_size/2:
             self.x = -_level_size/2
+            self.coords[0] = _level_size/2
 
     
     def update(self):
