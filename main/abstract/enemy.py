@@ -37,7 +37,6 @@ class State(ABC):
     def exit_condition(self, ai):
         pass
     
-    
 class FlyingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
@@ -57,19 +56,19 @@ class FlyingState(State):
                     ai.target_point = rand_point
                     break
     def exit_condition(self, ai):
-        return True #the reason this is to false is becuase this is the default    
+        return True #the reason this is to True is becuase this is the default    
+    
 
 class StrafingState(State):
     def __init__(self, probability_range) -> None:
         super().__init__()
-        self.probabilty_range = probability_range
+        self.probability_range = probability_range
         self.prev_direction = 0
         
     def should_enter(self, ai):
-        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def shift_angle(self):
-
         rando = random.randint(1, 100)
         if(self.prev_direction == 0):
             new_rando = random.randint(1, 2)
@@ -95,6 +94,7 @@ class StrafingState(State):
                 return 3.1415926535
             
     def execute(self, ai):
+        ai.velocity = 5
         if(ai.pick_new_point):
             while(True):
                 angle = random.randrange(-70, 70)
@@ -107,7 +107,52 @@ class StrafingState(State):
                     break
     def exit_condition(self, ai):
         return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) > 100
+
+class DuckingState(State):
+    def __init__(self, probability_range) -> None:
+        super().__init__()
+        self.should_exit = False
+        self.probability_range = probability_range
+        self.last_pop_time = 0
+        self.gotten_to_point = False
+        self.is_duck_popped = False
+        self.amount_of_pops = 0
+    def should_enter(self, ai):
+        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
+    def pop_behavior(self, ai, pop_distance, pop_interval):
+        current_time = time.time()
+        ai.velocity = 10
+        if current_time - self.last_pop_time > pop_interval:
+            if self.is_duck_popped:
+                # Duck back into cover
+                print("back down")
+                ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
+            else:
+                # Pop out of cover
+                print("going up")
+                # Assuming the cover is vertical, and the duck pops up
+                ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
+                self.amount_of_pops += 1
+            self.is_duck_popped = not self.is_duck_popped
+            self.last_pop_time = current_time
+    
+    def execute(self, ai):
+        print(self.gotten_to_point)
+        if(ai.pick_new_point and not self.gotten_to_point):
+            ai.target_point = (300, 400)
+            self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 10
+        if(self.gotten_to_point):
+            self.pop_behavior(ai, 50, 1)
+        
+    def exit_condition(self, ai):
+        if(self.amount_of_pops > 2):
+            self.amount_of_pops = 0
+            self.gotten_to_point = False
+            return True
+        return False
+        
+
     
 #assumption that no 2 states can be true at the same time
 #go through every single state and the AI can enter
@@ -115,21 +160,29 @@ class StrafingState(State):
 class AI:
     def __init__(self):
         self.probability: int = random.randint(0, 100)
-        self.states : list(State) = [StrafingState((0, 20)), FlyingState((0, 100))]
+        self.states : list(State) = [DuckingState((0, 100)), StrafingState((0, 0)), FlyingState((0, 100))]
         self.current_state : State = None
+        self.prev_state : State = None
+        self.random_number = random.randint(0, 100)
         self.pick_new_point = None
         self.x = 500
         self.y = 400
         self.target_point = (-1, -1)
         self.velocity = 0.1
         self.slow = False
+    
     def update_state(self):
         if(self.current_state is not None and self.current_state.exit_condition(self) is not True):
             return
+        self.random_number = random.randint(0, 100)
         for state in self.states:
             if state.should_enter(self):
                 self.current_state = state
+                if(self.current_state != self.prev_state):
+                    self.pick_new_point = True
+                self.prev_state = self.current_state
                 break
+        
     def move_to_point(self):
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
@@ -147,15 +200,9 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
+        #print(self.target_point)
         
         
-        # Random stuff I added, probably should remove- AM
-        if self.probability <= 2 and self.slow == False:
-            self.velocity = 4
-            self.slow = True
-        if self.probability >= 95 and self.slow == True:
-            self.velocity = 10
-            self.slow = False
 
 if __name__ == "__main__":
     # Initialize Pygame

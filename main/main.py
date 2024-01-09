@@ -37,6 +37,3 @@ while is_running:
    
     # Game seems to run at 24 fps when using mouse, so that will be my goal for tracking
     clock.tick()
-
-
-
