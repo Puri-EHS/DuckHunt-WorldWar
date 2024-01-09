@@ -29,18 +29,26 @@ SOUND_DIR = os.path.join(ASSETS_DIR, "sounds")
 SHOOT_SOUND_PATH = os.path.join(SOUND_DIR, "gun_shoot.mp3")
 
 
-# UI
+# UI Screens
 SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
+TITLE_SCREEN_LOGO = os.path.join(ASSETS_DIR, "ui/duck_hunt_title.png")
 LOADING_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/earf_load.png")
 VICTORY1 = os.path.join(ASSETS_DIR, "badges_and_other/lev_1_victory.png")
 VICTORY2 = os.path.join(ASSETS_DIR, "badges_and_other/lev_2_victory.png")
 VICTORY3 = os.path.join(ASSETS_DIR, "badges_and_other/lev_3_victory.png")
 
+#UI Buttons
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
+OPTIONS_BUTTON = os.path.join(ASSETS_DIR, "ui/options_button.png")
+BACK_BUTTON = os.path.join(ASSETS_DIR, "ui/back_button.png")
+TOGGLE_ON_BUTTON = os.path.join(ASSETS_DIR, "ui/on_toggle.png")
+TOGGLE_OFF_BUTTON = os.path.join(ASSETS_DIR, "ui/off_toggle.png")
 CROSSHAIR = os.path.join(ASSETS_DIR, "ui/crosshair.png")
 CONNOTFOUND = os.path.join(ASSETS_DIR, "ui/con_not_found.png")
 
+#back_button = image_object()
+        
 DUCKCROSSHAIR = os.path.join(ASSETS_DIR, "ui/duck_target.png")
 HITBOX = os.path.join(ASSETS_DIR, "ui/hit_box.png")
 
