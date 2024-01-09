@@ -3,7 +3,7 @@ import pygame
 import random
 import time
 import math
-import numpy
+import numpy as np
 
 def subtract_vectors(v1, v2):
     return (v1[0] - v2[0], v1[1] - v2[1])
@@ -35,7 +35,7 @@ class State(ABC):
     
     @abstractmethod
     def exit_condition(self, ai):
-        pass
+        pass #how tf do I get out
     
 class FlyingState(State):
     def __init__(self, probability_range) -> None:
@@ -117,6 +117,7 @@ class DuckingState(State):
         self.gotten_to_point = False
         self.is_duck_popped = False
         self.amount_of_pops = 0
+    
     def should_enter(self, ai):
         return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
@@ -126,19 +127,15 @@ class DuckingState(State):
         if current_time - self.last_pop_time > pop_interval:
             if self.is_duck_popped:
                 # Duck back into cover
-                print("back down")
                 ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
             else:
                 # Pop out of cover
-                print("going up")
-                # Assuming the cover is vertical, and the duck pops up
                 ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
                 self.amount_of_pops += 1
             self.is_duck_popped = not self.is_duck_popped
             self.last_pop_time = current_time
     
     def execute(self, ai):
-        print(self.gotten_to_point)
         if(ai.pick_new_point and not self.gotten_to_point):
             ai.target_point = (300, 400)
             self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 10
@@ -156,11 +153,12 @@ class DuckingState(State):
     
 #assumption that no 2 states can be true at the same time
 #go through every single state and the AI can enter
-#when one of the states are true, then go into that state and call its execute function
+#when one of the states are true, then go into that state, lock it, and call the execution function
+#the state is unlocked when the exit function for that particular state returns true
 class AI:
     def __init__(self):
         self.probability: int = random.randint(0, 100)
-        self.states : list(State) = [DuckingState((0, 100)), StrafingState((0, 0)), FlyingState((0, 100))]
+        self.states : list(State) = [DuckingState((0, 20)), StrafingState((20, 80)), FlyingState((0, 100))]
         self.current_state : State = None
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
@@ -169,7 +167,6 @@ class AI:
         self.y = 400
         self.target_point = (-1, -1)
         self.velocity = 0.1
-        self.slow = False
     
     def update_state(self):
         if(self.current_state is not None and self.current_state.exit_condition(self) is not True):
@@ -200,7 +197,6 @@ class AI:
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
-        #print(self.target_point)
         
         
 
@@ -238,6 +234,7 @@ if __name__ == "__main__":
 
     # Quit Pygame
     pygame.quit()        
+
 
 class Enemy(ABC):
     def __init__(self):
