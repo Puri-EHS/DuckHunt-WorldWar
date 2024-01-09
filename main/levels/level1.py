@@ -2,7 +2,7 @@ from abstract.level import Level
 from image_object import ImageObj
 from enemies.vanila_duck import VanilaDuck
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, AMMO_3, AMMO_2,AMMO_0,AMMO_1
+from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
 
 class Level1(Level):
     def __init__(self, _name, _screen, _game_instance):
@@ -22,6 +22,9 @@ class Level1(Level):
         self.hp_bar = ImageObj(HIT_BAR, 0, 290, 90, x_pos=0, y_pos=20)
         self.hp_bar_frame = ImageObj(HIT_BAR_FRAME, 0, 300, 100, x_pos=-10, y_pos=5)
         self.hit_effect = ImageObj(HIT_EFFECT, 0, 100, 100)
+        
+        self.hit_box = ImageObj(HITBOX, 0, 400, 300)
+
 
         self.ammo_4 = ImageObj(AMMO_4, 0, 100, 300, x_pos=600, y_pos=0)
 
@@ -72,6 +75,8 @@ class Level1(Level):
         if len(self.alive_enemies) > 0:
             self.screen.blit(self.hp_bar.image, (self.update_bar(self.alive_enemies[0].max_health, self.alive_enemies[0].health), self.hp_bar.y))
             self.screen.blit(self.hp_bar_frame.image, (self.hp_bar_frame.x, self.hp_bar_frame.y))
+            self.screen.blit(self.hit_box.image, (self.hit_box.x - 200, self.hit_box.y - 150))
+
             if self.current_tick > 0 and self.duck_hit:
                 self.current_tick -= 1
                 self.screen.blit(self.hit_effect.image, self.game_instance.player.gun.crosshair_coords)

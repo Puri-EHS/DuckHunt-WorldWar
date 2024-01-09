@@ -38,6 +38,8 @@ PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
 CROSSHAIR = os.path.join(ASSETS_DIR, "ui/crosshair.png")
 CONNOTFOUND = os.path.join(ASSETS_DIR, "ui/con_not_found.png")
 
+DUCKCROSSHAIR = os.path.join(ASSETS_DIR, "ui/duck_target.png")
+HITBOX = os.path.join(ASSETS_DIR, "ui/hit_box.png")
 
 #Enemies
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")
