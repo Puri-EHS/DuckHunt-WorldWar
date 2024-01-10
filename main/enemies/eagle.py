@@ -1,4 +1,4 @@
-from constants import PARROT_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
+from constants import EAGLE_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
 
 from abstract.enemy import Enemy
 from abstract.enemy import AI
@@ -9,10 +9,10 @@ import pygame
 import random
 import numpy as np
 
-class Parrot(Enemy):
+class Eagle(Enemy):
     def __init__(self, game):
         super().__init__()
-        self.sprite_sheet = Spritesheet(PARROT_PATH)
+        self.sprite_sheet = Spritesheet(EAGLE_PATH)
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.ai = AI()
         self.ai.velocity = 8
@@ -28,7 +28,7 @@ class Parrot(Enemy):
     
         self.rect.center = self.world_coordinates
 
-        self.health = 150
+        self.health = 250
         self.max_health = self.health
 
         self.player_ref = game.player

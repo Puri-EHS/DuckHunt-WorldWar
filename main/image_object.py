@@ -10,9 +10,8 @@ class ImageObj:
         self.image = pygame.transform.scale(self.image, (self.scaled_width, self.scaled_height))
         # Set the initial position of the image
         self.image_rect = self.image.get_rect()
-        self.image_rect.center = (x_pos, y_pos)
         self.depth = depth
         self.x = x_pos
         self.y = y_pos
-
+        self.image_rect.center = (self.x, self.y)
     

@@ -4,6 +4,7 @@ from levels.target_practice import TargetPractice
 from levels.Controller_img import Cont_img
 from levels.level1 import Level1
 from levels.level2 import Level2
+from levels.level3 import Level3
 from levels.Loading_screen import LoadingScreen
 from levels.lev1_victory import lev1_victory
 from levels.lev2_victory import lev2_victory
@@ -16,7 +17,7 @@ import pygame
 class Game:
     def __init__(self, _screen):
         self.current_level = None
-        self.current_level_index = 6 #should be set to zero usually, 1 will skip the splash screen
+        self.current_level_index = 0 #should be set to zero usually, 1 will skip the splash screen
         
         self.screen = _screen
 
@@ -34,8 +35,10 @@ class Game:
                 Level2,
                 lev2_victory,
                 LoadingScreen,
+                Level3,
                 lev3_victory,
-                LoadingScreen
+                LoadingScreen,
+                TitleScreen
             ]
 
         else:
@@ -51,8 +54,10 @@ class Game:
                 Level2,
                 lev2_victory,
                 LoadingScreen,
+                Level3,
                 lev3_victory,
-                LoadingScreen
+                LoadingScreen,
+                TitleScreen
             ]
 
     def switch_to_level(self, _level_index):

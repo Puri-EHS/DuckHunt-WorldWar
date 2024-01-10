@@ -56,8 +56,8 @@ HITBOX = os.path.join(ASSETS_DIR, "ui/hit_box.png")
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")
 TARGET_PATH = os.path.join(ENEMIES_DIR, "target.png")
 VANILA_DUCK_PATH = os.path.join(ENEMIES_DIR, "pigeon_front.png")
-
-
+PARROT_PATH = os.path.join(ENEMIES_DIR, "parrot_placeholder.png")
+EAGLE_PATH = os.path.join(ENEMIES_DIR, "eagle.png")
 #Environment
 ENVIRONMENT_DIR = os.path.join(ASSETS_DIR, "environment")
 
@@ -68,6 +68,10 @@ SAVANNA_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "savanna_bush_front.png")
 OUTBACK = os.path.join(ENVIRONMENT_DIR, "DuckHuntOutback.png")
 OUTBACK_BUSH_BACK = os.path.join(ENVIRONMENT_DIR, "OutbackBackShrub.png")
 OUTBACK_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "OutbackFrontShrub.png")
+
+CITY = os.path.join(ENVIRONMENT_DIR, "DuckHuntCity.png")
+CITYCARBACK = os.path.join(ENVIRONMENT_DIR, "CarBottomRoad.png")
+CITYCARFRONT = os.path.join(ENVIRONMENT_DIR, "CarTopRoad.png")
 
 #Weapons
 WEAPONS_DIR = os.path.join(ASSETS_DIR, "weapons")

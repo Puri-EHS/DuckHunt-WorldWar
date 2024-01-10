@@ -33,7 +33,7 @@ class VanilaDuck(Enemy):
         self.player_ref = game.player
 
         
-        self.random_std = .5
+        self.random_std = 1.5
 
     def on_shot(self, _damage):
         self.health -= 10
