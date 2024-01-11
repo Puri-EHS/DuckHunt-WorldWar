@@ -14,7 +14,7 @@ class Level2(Level):
             ImageObj(OUTBACK, 5, self.level_size, SCREEN_HEIGHT)
         ]
         
-        self.images = [
+        self.foreground_images = [
             ImageObj(SAVANNA_BUSH_BACK, 5, 2100, 700, y_pos=450),
             ImageObj(OUTBACK_BUSH_FRONT, 3, 2000, 1000, y_pos=250)
         ]
@@ -70,7 +70,7 @@ class Level2(Level):
             enemy.render(self.screen, self.game_instance.player.x)
 
         # then foreground images like bushes
-        self.depth_render(self.images, self.game_instance.player.x)
+        self.depth_render(self.foreground_images, self.game_instance.player.x)
 
         if len(self.alive_enemies) > 0:
             self.screen.blit(self.hp_bar.image, (self.update_bar(self.alive_enemies[0].max_health, self.alive_enemies[0].health), self.hp_bar.y))

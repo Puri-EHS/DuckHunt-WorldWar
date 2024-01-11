@@ -25,20 +25,20 @@ class Game:
 
         if USE_MOUSE:
             self.levels = [
-                SplashScreen,
-                TitleScreen,
+                # SplashScreen,
+                # TitleScreen,
                 ##TargetPractice
-                LoadingScreen,
-                Level1,
-                lev1_victory,
-                LoadingScreen,
-                Level2,
-                lev2_victory,
-                LoadingScreen,
+                # LoadingScreen,
+                #Level1,
+                # lev1_victory,
+                # LoadingScreen,
+                #Level2,
+                # lev2_victory,
+                # LoadingScreen,
                 Level3,
-                lev3_victory,
-                LoadingScreen,
-                TitleScreen
+                # lev3_victory,
+                # LoadingScreen,
+                # TitleScreen
             ]
 
         else:
