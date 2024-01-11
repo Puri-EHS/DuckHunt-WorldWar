@@ -1,22 +1,22 @@
 from abstract.level import Level
 from image_object import ImageObj
-from enemies.vanila_duck import VanilaDuck
+from enemies.Parrot import Parrot
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+from constants import OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
 
-class Level1(Level):
+class Level2(Level):
     def __init__(self, _name, _screen, _game_instance):
         super().__init__(_name, _screen, _game_instance)
 
         self.level_size = 1536
 
         self.background_image = [
-            ImageObj(SAVANNA, 5, self.level_size, SCREEN_HEIGHT)
+            ImageObj(OUTBACK, 5, self.level_size, SCREEN_HEIGHT)
         ]
         
         self.images = [
-            ImageObj(SAVANNA_BUSH_BACK, 4, 2100, 700, y_pos=500),
-            ImageObj(SAVANNA_BUSH_FRONT, 3, 2000, 1000, y_pos=300)
+            ImageObj(SAVANNA_BUSH_BACK, 5, 2100, 700, y_pos=450),
+            ImageObj(OUTBACK_BUSH_FRONT, 3, 2000, 1000, y_pos=250)
         ]
 
         self.hp_bar = ImageObj(HIT_BAR, 0, 290, 90, x_pos=0, y_pos=20)
@@ -31,7 +31,7 @@ class Level1(Level):
         self.game_level = True
 
         self.alive_enemies = [
-            VanilaDuck(self.game_instance)
+            Parrot(self.game_instance)
         ]
 
         self.animation_tick = 4

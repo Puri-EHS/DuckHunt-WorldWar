@@ -130,11 +130,11 @@ class DuckingState(State):
         if current_time - self.last_pop_time > pop_interval:
             if self.is_duck_popped:
                 # Duck back into cover
-                print("back down")
+                # print("back down")
                 ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
             else:
                 # Pop out of cover
-                print("going up")
+                # print("going up")
                 # Assuming the cover is vertical, and the duck pops up
                 ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
                 self.amount_of_pops += 1
@@ -142,7 +142,7 @@ class DuckingState(State):
             self.last_pop_time = current_time
     
     def execute(self, ai):
-        print(self.gotten_to_point)
+        # print(self.gotten_to_point)
         if(ai.pick_new_point and not self.gotten_to_point):
             ai.target_point = (300, 400)
             self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 10
@@ -166,6 +166,7 @@ class AI:
         self.probability: int = random.randint(0, 100)
         self.states : list(State) = [DuckingState((0, 20)), StrafingState((20, 100)), FlyingState((0, 100))]
         self.current_state : State = None
+        self.ducking = False
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
         self.pick_new_point = None
