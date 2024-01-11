@@ -14,7 +14,7 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = True
+USE_MOUSE = False
 FPS = 60
 
 
