@@ -64,7 +64,7 @@ class Tracker:
         # Combine Z-scores for x and y dimensions2
         z_scores_combined = np.sqrt(z_scores_x**2 + z_scores_y**2)
         # Identify outliers based on the threshold
-        outliers = np.where(z_scores_combined > 2)[0]
+        outliers = np.where(z_scores_combined > 3)[0]
         # Remove outliers from the original list
         filtered_points = [point for i, point in enumerate(good_matches_icon1) if i not in outliers]
         good_matches_icon1 = filtered_points
