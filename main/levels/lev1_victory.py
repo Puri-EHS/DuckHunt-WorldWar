@@ -29,6 +29,6 @@ class lev1_victory(Level):
         del self
 
     def ended(self):
-        if self.frame_counter >= 15 * FPS:
+        if self.frame_counter >= 100 * FPS:
             return True
         return False
