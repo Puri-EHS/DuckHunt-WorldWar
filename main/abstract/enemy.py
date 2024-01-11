@@ -303,9 +303,6 @@ class Enemy(ABC):
             self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
             self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
 
-            # normal distribution random
-
-
 
             self.aim_coordinates[0] += self.x_change
             self.aim_coordinates[1] += self.y_change

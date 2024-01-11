@@ -1,5 +1,6 @@
 import os
 
+
 # Initialization
 OG_GAME_WIDTH = 256 # 768
 OG_GAME_HEIGHT = 240 # 720
@@ -72,6 +73,7 @@ OUTBACK_BUSH_FRONT = os.path.join(ENVIRONMENT_DIR, "OutbackFrontShrub.png")
 CITY = os.path.join(ENVIRONMENT_DIR, "DuckHuntCity.png")
 CITYCARBACK = os.path.join(ENVIRONMENT_DIR, "CarBottomRoad.png")
 CITYCARFRONT = os.path.join(ENVIRONMENT_DIR, "CarTopRoad.png")
+CITYFRONTFENCE = os.path.join(ENVIRONMENT_DIR, "CityFrontFence.png")
 
 #Weapons
 WEAPONS_DIR = os.path.join(ASSETS_DIR, "weapons")
