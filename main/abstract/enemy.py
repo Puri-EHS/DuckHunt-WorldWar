@@ -17,7 +17,7 @@ def normalize(v):
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[0] < 800 and v[0] > 0) and (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
+    if (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
         return True
     return False
 
@@ -42,15 +42,17 @@ class State(ABC):
         pass
     
 class FlyingState(State):
-    def __init__(self, probability_range) -> None:
+    def __init__(self, probability_range, velocity) -> None:
         super().__init__()
         self.probabilty_range = probability_range
+        self.velocity = velocity
         
     def should_enter(self, ai):
         return True #the reason for this is since this is the default state, so if no other states are valid, then this state always run
         #its important to put this as the last element in the AI states list, so it is the last state checked 
         
     def execute(self, ai):
+        ai.velocity = self.velocity
         if(ai.pick_new_point):
             while(True):
                 random_radius = random.randint(150, 300)
@@ -64,8 +66,9 @@ class FlyingState(State):
     
 
 class StrafingState(State):
-    def __init__(self, probability_range) -> None:
+    def __init__(self, probability_range, velocity) -> None:
         super().__init__()
+        self.velocity = velocity
         self.probability_range = probability_range
         self.prev_direction = 0
         
@@ -98,10 +101,10 @@ class StrafingState(State):
                 return 3.1415926535
             
     def execute(self, ai):
-        ai.velocity = 5
+        ai.velocity = self.velocity
         if(ai.pick_new_point):
             while(True):
-                angle = random.randrange(-70, 70)
+                angle = random.randrange(-200, 200)
                 angle_in_radians = angle * 3.1415926535 / 180.0 + self.shift_angle()
                 rand_radius = random.randrange(60, 80)
                 rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
@@ -113,8 +116,9 @@ class StrafingState(State):
         return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) > 100
 
 class DuckingState(State):
-    def __init__(self, probability_range) -> None:
+    def __init__(self, probability_range, velocity) -> None:
         super().__init__()
+        self.velocity = velocity
         self.should_exit = False
         self.probability_range = probability_range
         self.last_pop_time = 0
@@ -142,6 +146,7 @@ class DuckingState(State):
             self.last_pop_time = current_time
     
     def execute(self, ai):
+        ai.velocity = self.velocity
         # print(self.gotten_to_point)
         if(ai.pick_new_point and not self.gotten_to_point):
             ai.target_point = (300, 400)
@@ -162,19 +167,17 @@ class DuckingState(State):
 #go through every single state and the AI can enter
 #when one of the states are true, then go into that state and call its execute function
 class AI:
-    def __init__(self):
-        self.probability: int = random.randint(0, 100)
-        self.states : list(State) = [DuckingState((0, 20)), StrafingState((20, 100)), FlyingState((0, 100))]
+    def __init__(self, starting_x, starting_y, target_point = (-1, -1)):
+        self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((20, 100), 10), FlyingState((0, 100), 5)]
         self.current_state : State = None
         self.ducking = False
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
-        self.pick_new_point = None
-        self.x = 500
-        self.y = 400
-        self.target_point = (-1, -1)
-        self.velocity = 0.1
-        self.slow = False
+        self.pick_new_point = True
+        self.x = starting_x
+        self.y = starting_y
+        self.target_point = target_point
+        self.velocity = 0
     
     def update_state(self):
         if(self.current_state is not None and self.current_state.exit_condition(self) is not True):

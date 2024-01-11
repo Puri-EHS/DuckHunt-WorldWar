@@ -7,13 +7,12 @@ pygame.mixer.init()
 
 clock = pygame.time.Clock()
 
-#initialize pygame 
+#initialize pygame
 pygame.display.set_caption("Fortnut Chapter 5")
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 
 
 game = Game(screen)
-
 game.switch_to_level(_level_index=game.current_level_index)
 
 is_running = True
