@@ -178,7 +178,10 @@ class AI:
         self.y = starting_y
         self.target_point = target_point
         self.velocity = 0
-    
+        self.normal_velocity = 0
+        self.aiming_multiplier = 0.5
+        self.shooting_multiplier = 0
+
     def update_state(self):
         if(self.current_state is not None and self.current_state.exit_condition(self) is not True):
             return
@@ -273,19 +276,28 @@ class Enemy(ABC):
         self.random_multiplier = 4
         self.random_mean = 0
         self.random_std = 1.5
-        self.aim_enter_prob = 1/240 #1/120
+        self.aim_enter_prob = 1/200 #1/120
         self.aiming = False
         self.aim_coordinates = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
 
 
+        # Alex's way superior code
+        self.shoot_time = 100
+        self.shoot_timer = 0
+        self.firing = False
 
     def render_aim_line(self, _screen, _camera_offset):
         if self.aiming:
             pygame.draw.line(_screen, (255, 0, 0), self.get_screen_coordinates(_camera_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
+        elif self.firing:
+            pygame.draw.line(_screen, (255, 0, 0), self.get_screen_coordinates(_camera_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
+            pygame.draw.circle(_screen, (255, 0, 0), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 200 - (self.shoot_timer*(200/self.shoot_time)), 4)
+
 
     def enter_aim(self):
-        if not self.aiming and random.random() < self.aim_enter_prob:
+        if not self.aiming and random.random() < self.aim_enter_prob and not self.firing:
             self.aiming = True
+      
         #elif self.aiming and random.random() < self.aim_enter_prob:
             
      
@@ -306,7 +318,27 @@ class Enemy(ABC):
 
             self.aim_coordinates[0] += self.x_change
             self.aim_coordinates[1] += self.y_change
+
+            if random.random() < 1/150:
+                self.aiming = False
+                self.firing = True
+        
+        if self.firing:
+            self.shoot_timer += 1
             
+            if self.shoot_timer >= self.shoot_time:
+                self.firing = False
+                self.shoot_timer = 0
+                self.pop_a_cap(self.aim_coordinates)
+            
+
+
+    def pop_a_cap(self, coords):
+        if self.player_ref.coords[0] - coords[0] > -200 and self.player_ref.coords[0] - coords[0] < 200:
+            if self.player_ref.coords[1] - coords[1] > -150 and self.player_ref.coords[1] - coords[1] < 150:
+                if not self.player_ref.ducking and not self.player_ref.gun.pause_no_con:
+                    self.player_ref.hp -= 100
+
 
     def get_screen_coordinates(self, _camera_offset):
         return (self.world_coordinates[0] - _camera_offset/self.depth, self.world_coordinates[1]) 

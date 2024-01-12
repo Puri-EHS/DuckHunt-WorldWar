@@ -15,7 +15,7 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = True
+USE_MOUSE = False
 FPS = 60
 
 
@@ -38,6 +38,7 @@ LOADING_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/earf_load.png")
 VICTORY1 = os.path.join(ASSETS_DIR, "badges_and_other/lev_1_victory.png")
 VICTORY2 = os.path.join(ASSETS_DIR, "badges_and_other/lev_2_victory.png")
 VICTORY3 = os.path.join(ASSETS_DIR, "badges_and_other/lev_3_victory.png")
+DED = os.path.join(ASSETS_DIR, "ui/wasted.png")
 
 #UI Buttons
 PLAY_BUTTON = os.path.join(ASSETS_DIR, "ui/play_button.png")
