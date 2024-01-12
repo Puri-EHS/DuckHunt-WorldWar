@@ -75,16 +75,18 @@ class Level3(Level):
 
     def check_enemy_point_collisions(self, _point, _damage):
         for enemy in self.alive_enemies:
-            if enemy.rect.collidepoint(_point):
-                enemy.on_shot(_damage)
-                self.duck_hit = True
-                self.current_tick = self.animation_tick
-                
+            if self.foreground_images[0].check_tansparancy(_point[0], _point[1]):
+                if enemy.rect.collidepoint(_point):
+                    enemy.on_shot(_damage)
+                    self.duck_hit = True
+                    self.current_tick = self.animation_tick
+                    
 
-                if enemy.health <= 0:
-                    self.alive_enemies.remove(enemy)
-                    del enemy
-                break
+                    if enemy.health <= 0:
+                        self.alive_enemies.remove(enemy)
+                        del enemy
+                    break
+
 
         if len(self.alive_enemies) == 0:
             self.stop()
