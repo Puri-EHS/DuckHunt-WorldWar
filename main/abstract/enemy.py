@@ -197,16 +197,19 @@ class AI:
     def move_to_point(self):
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
-        test_normalized_direction = normalize(direction)
+        if not (distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0)):
+            test_normalized_direction = normalize(direction)
         # modified this code to keep ai from diping. -AM
-        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0) or (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
-            self.pick_new_point = True
+            if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0) or (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
+                self.pick_new_point = True
+            else:
+                self.pick_new_point = False
+                normalized_direction = normalize(direction)
+                self.x += normalized_direction[0] * self.velocity
+                self.y += normalized_direction[1] * self.velocity
         else:
-            self.pick_new_point = False
-            normalized_direction = normalize(direction)
-            self.x += normalized_direction[0] * self.velocity
-            self.y += normalized_direction[1] * self.velocity
-    
+            self.pick_new_point = True
+
     def update(self):
         self.probability = random.randint(0, 100)
         self.update_state()
@@ -281,6 +284,8 @@ class Enemy(ABC):
         self.aiming = False
         self.aim_coordinates = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
 
+        self.aim_line_x_offset = -46
+        self.aim_line_y_offset = 0
 
         # Alex's way superior code
         self.shoot_time = 100
@@ -289,9 +294,9 @@ class Enemy(ABC):
 
     def render_aim_line(self, _screen, _camera_offset):
         if self.aiming:
-            pygame.draw.line(_screen, (255, 0, 0), self.get_screen_coordinates(_camera_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
+            pygame.draw.line(_screen, (255, 0, 0), (self.get_screen_coordinates(_camera_offset)[0] + self.aim_line_x_offset, self.get_screen_coordinates(_camera_offset)[1] + self.aim_line_y_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
         elif self.firing:
-            pygame.draw.line(_screen, (255, 0, 0), self.get_screen_coordinates(_camera_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
+            pygame.draw.line(_screen, (255, 0, 0), (self.get_screen_coordinates(_camera_offset)[0] + self.aim_line_x_offset, self.get_screen_coordinates(_camera_offset)[1] + self.aim_line_y_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
             pygame.draw.circle(_screen, (255, 0, 0), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 200 - (self.shoot_timer*(200/self.shoot_time)), 4)
 
 

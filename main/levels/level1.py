@@ -3,6 +3,7 @@ from image_object import ImageObj
 from enemies.vanila_duck import VanilaDuck
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+import pygame
 
 class Level1(Level):
     def __init__(self, _name, _screen, _game_instance):
@@ -38,21 +39,23 @@ class Level1(Level):
         self.current_tick = 0
         self.duck_hit = False
     
+
     def update_bar(self, max_health, current_health):
         return(0 - 295 + ((current_health/max_health)*290))
 
     def check_enemy_point_collisions(self, _point, _damage):
         for enemy in self.alive_enemies:
-            if enemy.rect.collidepoint(_point):
-                enemy.on_shot(_damage)
-                self.duck_hit = True
-                self.current_tick = self.animation_tick
-                
+            if self.foreground_images[0].check_tansparancy(_point[0], _point[1]):
+                if enemy.rect.collidepoint(_point):
+                    enemy.on_shot(_damage)
+                    self.duck_hit = True
+                    self.current_tick = self.animation_tick
+                    
 
-                if enemy.health <= 0:
-                    self.alive_enemies.remove(enemy)
-                    del enemy
-                break
+                    if enemy.health <= 0:
+                        self.alive_enemies.remove(enemy)
+                        del enemy
+                    break
 
         if len(self.alive_enemies) == 0:
             self.stop()
@@ -82,6 +85,11 @@ class Level1(Level):
                 self.screen.blit(self.hit_effect.image, self.game_instance.player.gun.crosshair_coords)
             else:
                 self.duck_hit = False
+            
+            # this is really fucking janky, need to change if more than one enemy per level -AM
+            if self.alive_enemies[0].firing:
+                pygame.draw.circle(self.screen, (255, 0, 0), (self.alive_enemies[0].aim_coordinates[0] - self.game_instance.player.x + SCREEN_WIDTH/2, self.alive_enemies[0].aim_coordinates[1]), 200 - (self.alive_enemies[0].shoot_timer*(200/self.alive_enemies[0].shoot_time)), 4)
+
 
     def update(self):
         for enemy in self.alive_enemies:

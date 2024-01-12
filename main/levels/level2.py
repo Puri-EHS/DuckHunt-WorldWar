@@ -3,7 +3,7 @@ from image_object import ImageObj
 from enemies.Parrot import Parrot
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from constants import OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
-
+import pygame
 class Level2(Level):
     def __init__(self, _name, _screen, _game_instance):
         super().__init__(_name, _screen, _game_instance)
@@ -82,6 +82,9 @@ class Level2(Level):
                 self.screen.blit(self.hit_effect.image, self.game_instance.player.gun.crosshair_coords)
             else:
                 self.duck_hit = False
+
+        if self.alive_enemies[0].firing:
+                pygame.draw.circle(self.screen, (255, 0, 0), (self.alive_enemies[0].aim_coordinates[0] - self.game_instance.player.x + SCREEN_WIDTH/2, self.alive_enemies[0].aim_coordinates[1]), 200 - (self.alive_enemies[0].shoot_timer*(200/self.alive_enemies[0].shoot_time)), 4)
 
     def update(self):
         for enemy in self.alive_enemies:

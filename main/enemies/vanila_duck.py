@@ -19,7 +19,11 @@ class VanilaDuck(Enemy):
         self.ai.normal_velocity = self.ai.velocity
         self.depth = 4.7
         self.world_coordinates = (self.ai.x, self.ai.y) 
-
+        self.aim_line_x_offset = -33
+       
+        # remove exept for testing
+        self.aim_enter_prob = 1/50
+        
         self.ticks_per_hp_regen = 60
         self.current_ticks = 0
         

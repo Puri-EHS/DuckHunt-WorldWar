@@ -33,13 +33,13 @@ class Game:
                 #TargetPractice,
                 LoadingScreen,
                 Level1,
-                lev1_victory,
+                #lev1_victory,
                 LoadingScreen,
                 Level2,
-                lev2_victory,
+                #lev2_victory,
                 LoadingScreen,
                 Level3,
-                lev3_victory,
+                #lev3_victory,
                 LoadingScreen,
                 Ded
             ]

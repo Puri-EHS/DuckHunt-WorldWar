@@ -18,4 +18,11 @@ class ImageObj:
         #print(self.image_rect, self.image.get_rect())
         self.image_rect = self.image.get_rect()
         self.image_rect.center = (self.x, self.y)
+    
+    def check_tansparancy(self, x, y):
+        print(self.image.get_at((x,y)).a)
+        if self.image.get_at((x,y)).a == 255:
+            return True
+        else:
+            return False
             
