@@ -197,8 +197,9 @@ class AI:
     def move_to_point(self):
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
-
-        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0):
+        test_normalized_direction = normalize(direction)
+        # modified this code to keep ai from diping. -AM
+        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0) or (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
             self.pick_new_point = True
         else:
             self.pick_new_point = False
@@ -334,6 +335,7 @@ class Enemy(ABC):
 
 
     def pop_a_cap(self, coords):
+        print("ai fired")
         if self.player_ref.coords[0] - coords[0] > -200 and self.player_ref.coords[0] - coords[0] < 200:
             if self.player_ref.coords[1] - coords[1] > -150 and self.player_ref.coords[1] - coords[1] < 150:
                 if not self.player_ref.ducking and not self.player_ref.gun.pause_no_con:
