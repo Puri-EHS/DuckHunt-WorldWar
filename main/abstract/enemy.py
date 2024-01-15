@@ -4,6 +4,7 @@ import random
 import time
 import math
 import numpy
+from player import Player
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def subtract_vectors(v1, v2):
@@ -12,12 +13,14 @@ def subtract_vectors(v1, v2):
 def magnitude(v):
     return (v[0]**2 + v[1]**2)**0.5
 
+def translate(old_x, new_x_origin):
+    return ((old_x) - SCREEN_WIDTH / 2) + new_x_origin
 def normalize(v):
     mag = magnitude(v)
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
+    if (v[0] > 0 and v[0] < 800) and (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
         return True
     return False
 
@@ -81,14 +84,14 @@ class StrafingState(State):
             new_rando = random.randint(1, 2)
             if(new_rando == 1):
                 self.prev_direction = -1
-                return 3.1416926535
+                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
             else:
                 self.prev_direction = 0
                 return 0
         if(self.prev_direction == 1):
             if(rando < 100):
                 self.prev_direction = -1
-                return 3.1415926535
+                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
             else:
                 self.prev_direction = 1
                 return 0
@@ -98,7 +101,8 @@ class StrafingState(State):
                 return 0
             else:
                 self.prev_direction = -1
-                return 3.1415926535
+                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
+
             
     def execute(self, ai):
         ai.velocity = self.velocity
@@ -134,11 +138,9 @@ class DuckingState(State):
         if current_time - self.last_pop_time > pop_interval:
             if self.is_duck_popped:
                 # Duck back into cover
-                # print("back down")
                 ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
             else:
                 # Pop out of cover
-                # print("going up")
                 # Assuming the cover is vertical, and the duck pops up
                 ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
                 self.amount_of_pops += 1
@@ -167,9 +169,10 @@ class DuckingState(State):
 #go through every single state and the AI can enter
 #when one of the states are true, then go into that state and call its execute function
 class AI:
-    def __init__(self, starting_x, starting_y, target_point = (-1, -1)):
+    def __init__(self, starting_x, starting_y, player_reference, target_point = (-1, -1)):
         self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((20, 100), 10), FlyingState((0, 100), 5)]
         self.current_state : State = None
+        self.player_reference : Player = player_reference
         self.ducking = False
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
@@ -192,6 +195,7 @@ class AI:
                 break
         
     def move_to_point(self):
+        
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
 
@@ -204,6 +208,7 @@ class AI:
             self.y += normalized_direction[1] * self.velocity
     
     def update(self):
+        print(self.player_reference.coords)
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)

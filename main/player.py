@@ -49,7 +49,7 @@ class Player:
             self.coords[0] = end
         elif self.x <= -end:
             self.x = -end
-            self.coords[0] = end
+            self.coords[0] = -end
 
     
     def update(self):
