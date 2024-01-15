@@ -23,7 +23,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 game = Game(screen)
 game.switch_to_level(_level_index=game.current_level_index)
 
-is_running = True
+is_running = not False
 while is_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
