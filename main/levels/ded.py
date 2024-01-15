@@ -1,11 +1,11 @@
 from abstract.level import Level
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, LOADING_SCREEN_PATH, FPS, VICTORY1
+from constants import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, SPLASH_SCREEN_PATH, FPS, DED
 import pygame
 
-class lev1_victory(Level):
+class Ded(Level):
     def __init__(self, _name, _screen, _game_instance):
         super().__init__(_name, _screen, _game_instance)
-        self.bg_image = pygame.image.load(VICTORY1).convert_alpha()
+        self.bg_image = pygame.image.load(DED).convert_alpha()
         self.bg_image = pygame.transform.scale(self.bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
         self.frame_counter = 0

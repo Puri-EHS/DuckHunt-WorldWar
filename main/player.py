@@ -14,30 +14,46 @@ class Player:
         self.coords = [self.x, SCREEN_HEIGHT/2]
         self.gun = PlayerGun()
         self.game_instance = _game_instance
-
+        self.ducking = False
+        self.ducking_kick_timer = 0
+        self.ducking_kick_max = 10
+        self.hp = 100
 
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
         
         if USE_MOUSE:
             if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-                self.move(-30, _level_size)
+                self.move(-30 if not self.ducking else -10, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                self.move(30, _level_size)
-            if keys[pygame.K_SPACE] and self.gun.can_shoot():
+                self.move(30 if not self.ducking else 10, _level_size)
+            if keys[pygame.K_SPACE] and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
         
         # Allows lateral movement and firing with controler: move crosshairs to one side to move
         else:
             if keys[pygame.K_a] or keys[pygame.K_LEFT] or self.gun.crosshair_coords[0] <= 75:
-                self.move(-30, _level_size)
+                self.move(-30 if not self.ducking else -10, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
-                self.move(30, _level_size)
-            if (keys[pygame.K_SPACE] or (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4)) and self.gun.can_shoot():
+                self.move(30 if not self.ducking else 10, _level_size)
+            if (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4) and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
-                # print("fire")
+        
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not self.ducking:
+            self.ducking = True
+            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
+            self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(3)
+            self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1] - 1050)
+            # print coords
+            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
+        if (keys[pygame.K_w] or keys[pygame.K_UP]) and self.ducking:
+            self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(1/3)
+            #self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1])
+            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center)
+
+            self.ducking = False
     
     def move(self, _x, _level_size):
         self.x += _x
@@ -80,7 +96,7 @@ class PlayerGun:
         self.cooldown_timer = self.cooldown_time
 
         # Limit how often tracking is called, as to improve fps
-        self.frames_per_track = 2
+        self.frames_per_track = 1
         self.current_frames_untracked = 0
 
         self.idle_images = []
@@ -113,7 +129,7 @@ class PlayerGun:
         self.crosshair_img = pygame.image.load(CROSSHAIR)
         self.con_not_found_img = pygame.image.load(CONNOTFOUND)
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
-    
+        self.pause_no_con = False
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
@@ -121,6 +137,10 @@ class PlayerGun:
         if not USE_MOUSE:
             if self.tracker.num_fire > 8:
                 screen.blit(self.con_not_found_img, (0, 0))
+                print("con not found O_o")
+                self.pause_no_con = True
+            else:
+                self.pause_no_con = False
 
     def update(self):
         

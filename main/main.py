@@ -1,13 +1,21 @@
+#
+#
+# [RUN THIS CODE TO PLAY]
+# Fyi, if the game runs slowely, its not because it's mining crypto or anything, it was just written by idiots. -AM
+
 import pygame
 from game import Game
 import constants
+
 
 pygame.init()
 pygame.mixer.init()
 
 clock = pygame.time.Clock()
 
+
 #initialize pygame
+
 pygame.display.set_caption("Fortnut Chapter 5")
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 
@@ -28,7 +36,7 @@ while is_running:
     screen.fill((0, 0, 0))
     
     game.update()
-    #print(clock.get_fps())
+     #print(clock.get_fps())
     pygame.display.update()
 
     # game already runs at seconds per frame, so I disabled this for now

@@ -64,7 +64,7 @@ class Tracker:
         # Combine Z-scores for x and y dimensions2
         z_scores_combined = np.sqrt(z_scores_x**2 + z_scores_y**2)
         # Identify outliers based on the threshold
-        outliers = np.where(z_scores_combined > 2)[0]
+        outliers = np.where(z_scores_combined > 3)[0]
         # Remove outliers from the original list
         filtered_points = [point for i, point in enumerate(good_matches_icon1) if i not in outliers]
         good_matches_icon1 = filtered_points
@@ -73,8 +73,8 @@ class Tracker:
 
         # Require atleast x detected points to ensure tracking stability
         if len(good_matches_icon1) > 7:
-            self.avg_x = 1350-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*3)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 3) - 600
+            self.avg_x = 1700-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 900
             
             # Noise elimination sysetem (Smoothing of stuttery motion)
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:

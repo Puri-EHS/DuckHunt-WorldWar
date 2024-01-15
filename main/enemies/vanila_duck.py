@@ -16,9 +16,14 @@ class VanilaDuck(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.ai = AI(500, 400, game.player)
         self.ai.velocity = 4
+        self.ai.normal_velocity = self.ai.velocity
         self.depth = 4.7
         self.world_coordinates = (self.ai.x, self.ai.y) 
-
+        self.aim_line_x_offset = -33
+       
+        # remove exept for testing
+        self.aim_enter_prob = 1/50
+        
         self.ticks_per_hp_regen = 60
         self.current_ticks = 0
         
@@ -33,7 +38,7 @@ class VanilaDuck(Enemy):
         self.player_ref = game.player
 
         
-        self.random_std = 1.5
+        self.random_std = 1.2
 
     def on_shot(self, _damage):
         self.health -= 10
@@ -44,9 +49,11 @@ class VanilaDuck(Enemy):
         self.render_aim_line(_screen, _camera_offset)
 
     def update(self):
+    
         self.enter_aim()
         self.aim()
         self.ai.update()
+        
         self.world_coordinates = (self.ai.x, self.ai.y)
         if self.current_ticks >= self.ticks_per_hp_regen and self.health < self.max_health:
             self.current_ticks = 0
