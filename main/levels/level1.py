@@ -45,7 +45,7 @@ class Level1(Level):
 
     def check_enemy_point_collisions(self, _point, _damage):
         for enemy in self.alive_enemies:
-            if self.foreground_images[0].check_tansparancy(_point[0], _point[1]):
+            if self.foreground_images[0].check_transparency(self.game_instance.player.x, _point[0], _point[1]):
                 if enemy.rect.collidepoint(_point):
                     enemy.on_shot(_damage)
                     self.duck_hit = True

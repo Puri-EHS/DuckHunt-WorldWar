@@ -19,9 +19,14 @@ class ImageObj:
         self.image_rect = self.image.get_rect()
         self.image_rect.center = (self.x, self.y)
     
-    def check_tansparancy(self, x, y):
+    def check_transparency(self, offset, x, y):
+        
+        x -= int(self.image_rect.left - offset/self.depth)
+        y -= int(self.image_rect.top)
+
         print(self.image.get_at((x,y)).a)
-        if self.image.get_at((x,y)).a == 255:
+
+        if self.image.get_at((x,y)).a == 0.0:
             return True
         else:
             return False

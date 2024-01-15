@@ -18,7 +18,7 @@ import pygame
 class Game:
     def __init__(self, _screen):
         self.current_level = None
-        self.current_level_index = 3 #should be set to zero usually, 1 will skip the splash screen
+        self.current_level_index = 0 #should be set to zero usually, 1 will skip the splash screen
         self.lev_ded_on = 0
         self.screen = _screen
 
@@ -28,20 +28,20 @@ class Game:
 
         if USE_MOUSE:
             self.levels = [
-                SplashScreen,
-                TitleScreen,
+                #SplashScreen,
+                #TitleScreen,
                 #TargetPractice,
-                LoadingScreen,
+                #LoadingScreen,
                 Level1,
                 #lev1_victory,
-                LoadingScreen,
+                #LoadingScreen,
                 Level2,
                 #lev2_victory,
-                LoadingScreen,
+                #LoadingScreen,
                 Level3,
                 #lev3_victory,
-                LoadingScreen,
-                Ded
+                #LoadingScreen,
+                #Ded
             ]
 
         else:
