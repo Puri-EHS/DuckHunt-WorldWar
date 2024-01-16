@@ -10,6 +10,7 @@ from levels.lev1_victory import lev1_victory
 from levels.lev2_victory import lev2_victory
 from levels.lev3_victory import lev3_victory
 from levels.ded import Ded
+from levels.options_screen import OptionScreen
 from constants import USE_MOUSE
 from player import Player
 
@@ -28,27 +29,29 @@ class Game:
 
         if USE_MOUSE:
             self.levels = [
-                #SplashScreen,
-                #TitleScreen,
-                #TargetPractice,
-                #LoadingScreen,
+                SplashScreen,
+                TitleScreen,
+                OptionScreen,
+                ##TargetPractice
+                LoadingScreen,
                 Level1,
-                #lev1_victory,
-                #LoadingScreen,
+                lev1_victory,
+                LoadingScreen,
                 Level2,
-                #lev2_victory,
-                #LoadingScreen,
+                lev2_victory,
+                LoadingScreen,
                 Level3,
-                #lev3_victory,
-                #LoadingScreen,
-                #Ded
+                lev3_victory,
+                LoadingScreen,
+                Ded
             ]
 
         else:
             self.levels = [
                 SplashScreen,
                 TitleScreen,
-                #Cont_img,
+                OptionScreen,
+                Cont_img,
                 ##TargetPractice
                 LoadingScreen,
                 Level1,
