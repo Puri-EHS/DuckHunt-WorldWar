@@ -17,11 +17,12 @@ class Button:
         self.function_to_call = _function_to_call   
         self.function_args = _args 
         
-        self.last_state = pygame.mouse.get_pressed()[0]
+        self.last_state = False
 
     def check_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0] and not self.last_state:
             self.last_state = pygame.mouse.get_pressed()[0]
+            
             return True
         return False    
     
@@ -35,4 +36,4 @@ class Button:
             elif self.current_image == self.clicked_image:
                 self.current_image = self.not_clicked_image
             self.function_to_call(*self.function_args) # * is used to unpack the list of arguments
-        
+        self.last_state = pygame.mouse.get_pressed()[0]
