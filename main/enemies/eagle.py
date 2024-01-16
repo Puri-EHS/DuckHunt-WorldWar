@@ -14,7 +14,7 @@ class Eagle(Enemy):
         super().__init__()
         self.sprite_sheet = Spritesheet(EAGLE_PATH)
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
-        self.ai = AI(500, 400)
+        self.ai = AI(500, 400, game.player)
         self.ai.velocity = 8
         self.depth = 4.7
         self.world_coordinates = (self.ai.x, self.ai.y) 
