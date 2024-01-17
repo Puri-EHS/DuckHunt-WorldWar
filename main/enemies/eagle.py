@@ -34,8 +34,8 @@ class Eagle(Enemy):
         self.player_ref = game.player
 
         
-        self.random_std = 0.5
-        self.aim_enter_prob = 1/125
+        self.random_std = 0.25
+        self.aim_enter_prob = 1/75
         self.shoot_time = 50
 
     def on_shot(self, _damage):

@@ -57,8 +57,8 @@ class Level1(Level):
                         del enemy
                     break
 
-        if len(self.alive_enemies) == 0:
-            self.stop()
+        if len(self.alive_enemies) == 0 and not self.is_over:
+            self.is_over = True
     
 
     def start(self):
@@ -91,6 +91,14 @@ class Level1(Level):
                 pygame.draw.circle(self.screen, (255, 0, 0), (self.alive_enemies[0].aim_coordinates[0] - self.game_instance.player.x + SCREEN_WIDTH/2, self.alive_enemies[0].aim_coordinates[1]), 200 - (self.alive_enemies[0].shoot_timer*(200/self.alive_enemies[0].shoot_time)), 4)
 
 
+            if self.game_instance.player.gun.cooldown_timer < self.game_instance.player.gun.cooldown_time:
+                pygame.draw.circle(self.screen, (0, 255, 0), (self.game_instance.player.gun.crosshair_coords[0], self.game_instance.player.gun.crosshair_coords[1]), 100 - (self.game_instance.player.gun.cooldown_timer*(100/self.game_instance.player.gun.cooldown_time)), 4)
+
+        if self.is_over:
+            self.current_victory_tick += 1
+            if self.current_victory_tick >= self.victory_deley:
+                self.stop()
+
     def update(self):
         for enemy in self.alive_enemies:
             enemy.update()
@@ -100,7 +108,7 @@ class Level1(Level):
         del self
 
     def ended(self) -> bool:
-        if len(self.alive_enemies) == 0:
+        if len(self.alive_enemies) == 0 and self.current_victory_tick >= self.victory_deley:
             return True
 
     

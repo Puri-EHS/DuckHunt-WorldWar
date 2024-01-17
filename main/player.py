@@ -47,11 +47,11 @@ class Player:
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(3)
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1] - 1050)
             # print coords
-            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
+            #print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
         if (keys[pygame.K_w] or keys[pygame.K_UP]) and self.ducking:
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(1/3)
             #self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1])
-            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center)
+            #print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center)
 
             self.ducking = False
     
@@ -69,6 +69,7 @@ class Player:
 
     
     def update(self):
+        #print(self.x)
         pass
 
 class PlayerGun:
@@ -89,14 +90,14 @@ class PlayerGun:
 
         self.reload_time = 0
         self.shoot_time = 4 
-        self.cooldown_time = 5
+        self.cooldown_time = 75
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
         self.cooldown_timer = self.cooldown_time
 
         # Limit how often tracking is called, as to improve fps
-        self.frames_per_track = 1
+        self.frames_per_track = 2
         self.current_frames_untracked = 0
 
         self.idle_images = []

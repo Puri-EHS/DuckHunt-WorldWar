@@ -27,49 +27,29 @@ class Game:
 
         self.ded_screen = Ded
 
-        if USE_MOUSE:
-            self.levels = [
-                SplashScreen,
-                TitleScreen,
-                OptionScreen,
-                ##TargetPractice
-                LoadingScreen,
-                Level1,
-                lev1_victory,
-                LoadingScreen,
-                Level2,
-                lev2_victory,
-                LoadingScreen,
-                Level3,
-                lev3_victory,
-                LoadingScreen,
-                Ded
-            ]
 
-        else:
-            self.levels = [
-                SplashScreen,
-                TitleScreen,
-                OptionScreen,
-                Cont_img,
-                ##TargetPractice
-                LoadingScreen,
-                Level1,
-                lev1_victory,
-                LoadingScreen,
-                Level2,
-                lev2_victory,
-                LoadingScreen,
-                Level3,
-                lev3_victory,
-                LoadingScreen,
-                Ded
-            ]
+        self.levels = [
+            SplashScreen,
+            TitleScreen,
+            OptionScreen,
+            LoadingScreen,
+            Level1,
+            lev1_victory,
+            LoadingScreen,
+            Level2,
+            lev2_victory,
+            LoadingScreen,
+            Level3,
+            lev3_victory,
+            LoadingScreen,
+            Ded
+        ]
+
 
     def switch_to_level(self, _level_index):
         if(self.current_level is not None):
             self.current_level.stop()
-        print(_level_index)
+        #print(_level_index)
         self.current_level_index = _level_index
         self.current_level = self.levels[_level_index]("level " + str(_level_index), self.screen, self)
         self.current_level.start()
@@ -79,7 +59,7 @@ class Game:
         if self.player.hp <= 0:
             self.player.hp = 100
             self.lev_ded_on = self.current_level_index
-            self.current_level_index = 12
+            self.current_level_index = 13
             self.switch_to_level(self.current_level_index)
         
         #player input
@@ -98,11 +78,11 @@ class Game:
             if self.current_level.game_level:
                 self.player.gun.render(self.screen)
         
-        elif self.current_level_index == 12:
+        elif self.current_level_index == 13:
             self.current_level_index = self.lev_ded_on - 1
             self.switch_to_level(self.current_level_index)
         
-        elif self.current_level_index == 11:
+        elif self.current_level_index == 12:
             self.lev_ded_on = 0
             self.current_level_index = 1
             self.switch_to_level(self.current_level_index)

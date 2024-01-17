@@ -1,5 +1,5 @@
 #
-#
+
 # [RUN THIS CODE TO PLAY]
 # Fyi, if the game runs slowely, its not because it's mining crypto or anything, it was just written by idiots. -AM
 

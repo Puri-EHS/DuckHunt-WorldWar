@@ -22,6 +22,10 @@ class Level(ABC):
 
         self.game_level = False
 
+        self.is_over = False
+        self.victory_deley = 50
+        self.current_victory_tick = 0
+
     @abstractmethod
     def start(self):
         pass

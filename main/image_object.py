@@ -24,10 +24,11 @@ class ImageObj:
         x -= int(self.image_rect.left - offset/self.depth)
         y -= int(self.image_rect.top)
 
-        print(self.image.get_at((x,y)).a)
-
-        if self.image.get_at((x,y)).a == 0.0:
-            return True
+        if self.image_rect.collidepoint(x,y):
+            if self.image.get_at((x,y)).a == 0.0:
+                return True
+            else:
+                return False
         else:
-            return False
+            return True
             

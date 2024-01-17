@@ -203,8 +203,11 @@ class AI:
         distance = magnitude(direction)
         if not (distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0)):
             test_normalized_direction = normalize(direction)
+        
         # modified this code to keep ai from diping. -AM
-            if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0) or (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
+            #gonna try to make it so it follows player -AM
+            
+            if (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
                 self.pick_new_point = True
             else:
                 self.pick_new_point = False
@@ -215,7 +218,7 @@ class AI:
             self.pick_new_point = True
 
     def update(self):
-        print(self.player_reference.coords)
+        #print(self.player_reference.coords)
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
@@ -330,7 +333,7 @@ class Enemy(ABC):
             self.aim_coordinates[0] += self.x_change
             self.aim_coordinates[1] += self.y_change
 
-            if random.random() < 1/150:
+            if random.random() < 1/100:
                 self.aiming = False
                 self.firing = True
         

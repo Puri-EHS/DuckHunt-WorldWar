@@ -22,7 +22,7 @@ class VanilaDuck(Enemy):
         self.aim_line_x_offset = -33
        
         # remove exept for testing
-        self.aim_enter_prob = 1/50
+        self.aim_enter_prob = 1/125
         
         self.ticks_per_hp_regen = 60
         self.current_ticks = 0
@@ -38,7 +38,7 @@ class VanilaDuck(Enemy):
         self.player_ref = game.player
 
         
-        self.random_std = 1.2
+        self.random_std = 1
 
     def on_shot(self, _damage):
         self.health -= 10

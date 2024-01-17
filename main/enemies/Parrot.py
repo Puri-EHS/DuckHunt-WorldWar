@@ -35,7 +35,7 @@ class Parrot(Enemy):
 
         
         self.random_std = 0.5
-        self.aim_enter_prob = 1/175
+        self.aim_enter_prob = 1/100
         self.shoot_time = 75
 
     def on_shot(self, _damage):
