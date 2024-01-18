@@ -13,14 +13,12 @@ def subtract_vectors(v1, v2):
 def magnitude(v):
     return (v[0]**2 + v[1]**2)**0.5
 
-def translate(old_x, new_x_origin):
-    return ((old_x) - SCREEN_WIDTH / 2) + new_x_origin
 def normalize(v):
     mag = magnitude(v)
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[0] > 0 and v[0] < 800) and (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
+    if (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
         return True
     return False
 
@@ -57,13 +55,10 @@ class FlyingState(State):
     def execute(self, ai):
         ai.velocity = self.velocity
         if(ai.pick_new_point):
-            while(True):
-                random_radius = random.randint(150, 300)
-                rand_angle = random.randint(0, 360) * math.pi/ 180
-                rand_point = (ai.x + (random_radius * math.cos(rand_angle)), ai.y + (random_radius * math.sin(rand_angle)))
-                if(in_bounds(rand_point)):
-                    ai.target_point = rand_point
-                    break
+            rand_y = random.randint(200, 425)
+            rand_x = random.uniform(ai.player_reference.x * 0.156, ai.player_reference.x * 0.156 + SCREEN_WIDTH)
+            ai.target_point = (rand_x, rand_y)
+    
     def exit_condition(self, ai):
         return True #the reason this is to True is becuase this is the default    
     
@@ -84,14 +79,14 @@ class StrafingState(State):
             new_rando = random.randint(1, 2)
             if(new_rando == 1):
                 self.prev_direction = -1
-                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
+                return math.pi
             else:
                 self.prev_direction = 0
                 return 0
         if(self.prev_direction == 1):
             if(rando < 100):
                 self.prev_direction = -1
-                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
+                return math.pi
             else:
                 self.prev_direction = 1
                 return 0
@@ -101,7 +96,7 @@ class StrafingState(State):
                 return 0
             else:
                 self.prev_direction = -1
-                return 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196
+                return math.pi
 
             
     def execute(self, ai):
@@ -179,7 +174,7 @@ class AI:
         self.pick_new_point = True
         self.x = starting_x
         self.y = starting_y
-        self.target_point = target_point
+        self.target_point = (-1, -1)
         self.velocity = 0
         self.normal_velocity = 0
         self.aiming_multiplier = 0.5
@@ -198,32 +193,24 @@ class AI:
                 break
         
     def move_to_point(self):
-        
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
-        if not (distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0)):
-            test_normalized_direction = normalize(direction)
-        
-        # modified this code to keep ai from diping. -AM
-            #gonna try to make it so it follows player -AM
-            
-            if (self.x + test_normalized_direction[0] * self.velocity < 50 or self.x + test_normalized_direction[0] * self.velocity > 950):
-                self.pick_new_point = True
-            else:
-                self.pick_new_point = False
-                normalized_direction = normalize(direction)
-                self.x += normalized_direction[0] * self.velocity
-                self.y += normalized_direction[1] * self.velocity
-        else:
+
+        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0):
             self.pick_new_point = True
+        else:
+            self.pick_new_point = False
+            normalized_direction = normalize(direction)
+            self.x += normalized_direction[0] * self.velocity
+            self.y += normalized_direction[1] * self.velocity
 
     def update(self):
-        #print(self.player_reference.coords)
+        #print(self.player_reference.x, (self.player_reference.x, self.player_reference.x + SCREEN_WIDTH), self.target_point, (self.x, self.y))
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
         self.move_to_point()
-        #print(self.target_point)
+
         
         
 
