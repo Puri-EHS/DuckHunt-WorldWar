@@ -56,7 +56,7 @@ class FlyingState(State):
         ai.velocity = self.velocity
         if(ai.pick_new_point):
             rand_y = random.randint(200, 425)
-            rand_x = random.uniform(ai.player_reference.x * 0.156, ai.player_reference.x * 0.156 + SCREEN_WIDTH)
+            rand_x = random.uniform(ai.player_reference.x * 0.18229, ai.player_reference.x * 0.18229 + SCREEN_WIDTH)
             ai.target_point = (rand_x, rand_y)
     
     def exit_condition(self, ai):
@@ -71,7 +71,14 @@ class StrafingState(State):
         self.prev_direction = 0
         
     def should_enter(self, ai):
-        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
+        #coordinate shift moment
+        shifted_x = 0
+        if(ai.player_reference.x * 0.18229) >= 0:
+            shifted_x = (ai.x - ai.player_reference.x * 0.18229)
+        else:
+            shifted_x = (ai.x + math.fabs(ai.player_reference.x) * 0.18229)
+            
+        return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 200 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def shift_angle(self):
         rando = random.randint(1, 100)
@@ -165,7 +172,7 @@ class DuckingState(State):
 #when one of the states are true, then go into that state and call its execute function
 class AI:
     def __init__(self, starting_x, starting_y, player_reference, target_point = (-1, -1)):
-        self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((20, 100), 10), FlyingState((0, 100), 5)]
+        self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((0, 100), 10), FlyingState((0, 100), 5)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
@@ -174,7 +181,7 @@ class AI:
         self.pick_new_point = True
         self.x = starting_x
         self.y = starting_y
-        self.target_point = (-1, -1)
+        self.target_point = target_point
         self.velocity = 0
         self.normal_velocity = 0
         self.aiming_multiplier = 0.5
@@ -205,7 +212,12 @@ class AI:
             self.y += normalized_direction[1] * self.velocity
 
     def update(self):
-        #print(self.player_reference.x, (self.player_reference.x, self.player_reference.x + SCREEN_WIDTH), self.target_point, (self.x, self.y))
+        shifted_x = 0
+        if(self.player_reference.x * 0.18229) >= 0:
+            shifted_x = (self.x - self.player_reference.x * 0.18229)
+        else:
+            shifted_x = (self.x + math.fabs(self.player_reference.x) * 0.18229)
+        print(self.current_state, distance(pygame.mouse.get_pos(), (shifted_x, self.y)))
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
