@@ -13,7 +13,7 @@ class Parrot(Enemy):
     def __init__(self, game):
         super().__init__()
         self.sprite_sheet = Spritesheet(PARROT_PATH)
-        self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
+        self.animation = Animation(self.sprite_sheet, 0, 0, 150, 150)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
         self.ai.velocity = 8
@@ -22,9 +22,10 @@ class Parrot(Enemy):
 
         self.ticks_per_hp_regen = 30
         self.current_ticks = 0
-        
+         
 
-        self.rect = pygame.Rect(0, 0, 200, 200)
+        self.rect = pygame.Rect(0, 0, 150, 150)
+        self.aim_line_x_offset = 33
     
         self.rect.center = self.world_coordinates
 
@@ -37,6 +38,13 @@ class Parrot(Enemy):
         self.random_std = 0.5
         self.aim_enter_prob = 1/100
         self.shoot_time = 75
+
+        if not USE_MOUSE:
+            self.aim_enter_prob = 1/100
+            self.ticks_per_hp_regen = 50
+            self.current_ticks = 0
+            self.health = 120
+            self.max_health = self.health
 
     def on_shot(self, _damage):
         self.health -= 10

@@ -90,7 +90,7 @@ class PlayerGun:
 
         self.reload_time = 0
         self.shoot_time = 4 
-        self.cooldown_time = 75
+        self.cooldown_time = 5
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time

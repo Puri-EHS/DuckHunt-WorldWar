@@ -97,6 +97,8 @@ class Level3(Level):
     
     def render(self):
         # render background first
+        pygame.draw.line(self.screen, (17, 54, 90), (0, 45), (900, 45), 130)
+
         self.depth_render(self.background_image, self.game_instance.player.x)
 
         # then enemies

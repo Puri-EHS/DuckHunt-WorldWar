@@ -58,7 +58,7 @@ HITBOX = os.path.join(ASSETS_DIR, "ui/hit_box.png")
 ENEMIES_DIR = os.path.join(ASSETS_DIR, "enemies")
 TARGET_PATH = os.path.join(ENEMIES_DIR, "target.png")
 VANILA_DUCK_PATH = os.path.join(ENEMIES_DIR, "pigeon_front.png")
-PARROT_PATH = os.path.join(ENEMIES_DIR, "parrot_placeholder.png")
+PARROT_PATH = os.path.join(ENEMIES_DIR, "ParrotSpriteUpscaled.png")
 EAGLE_PATH = os.path.join(ENEMIES_DIR, "eagle.png")
 #Environment
 ENVIRONMENT_DIR = os.path.join(ASSETS_DIR, "environment")

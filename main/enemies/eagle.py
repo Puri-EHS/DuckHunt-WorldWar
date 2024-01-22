@@ -38,6 +38,14 @@ class Eagle(Enemy):
         self.aim_enter_prob = 1/75
         self.shoot_time = 50
 
+
+        if not USE_MOUSE:
+            self.aim_enter_prob = 1/75
+            self.ticks_per_hp_regen = 45
+            self.current_ticks = 0
+            self.health = 200
+            self.max_health = self.health
+
     def on_shot(self, _damage):
         self.health -= 10
 

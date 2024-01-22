@@ -24,22 +24,29 @@ class VanilaDuck(Enemy):
        
         # remove exept for testing
         self.aim_enter_prob = 1/125
-        
         self.ticks_per_hp_regen = 60
         self.current_ticks = 0
-        
+        self.health = 75
+        self.max_health = self.health
 
         self.rect = pygame.Rect(0, 0, 200, 200)
     
         self.rect.center = self.world_coordinates
 
-        self.health = 75
-        self.max_health = self.health
+        
 
         self.player_ref = game.player
 
         
         self.random_std = 1
+
+        # weaken if using controler
+        if not USE_MOUSE:
+            self.aim_enter_prob = 1/125
+            self.ticks_per_hp_regen = 80
+            self.current_ticks = 0
+            self.health = 50
+            self.max_health = self.health
 
     def on_shot(self, _damage):
         self.health -= 10
