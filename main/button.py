@@ -21,6 +21,8 @@ class Button:
         
         self.bool_value = bool_value
     
+        self.check_boolean()
+        
     def check_boolean(self):
         #assume not_clicked is ALWAYS ON_TOGGLE and clicked is ALWAYS OFF TOGGLE
         if len(self.bool_value) == 0:
@@ -36,7 +38,7 @@ class Button:
     def check_click(self, mouse_pos):
         if self.rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0] and not self.last_state:
             self.last_state = pygame.mouse.get_pressed()[0]
-            self.check_boolean()
+            #self.check_boolean()
             return True
         return False    
     
@@ -46,4 +48,6 @@ class Button:
     def update(self, mouse_pos):
         if self.check_click(mouse_pos):
             self.function_to_call(*self.function_args) # * is used to unpack the list of arguments
+            self.check_boolean()
+        
         self.last_state = pygame.mouse.get_pressed()[0]

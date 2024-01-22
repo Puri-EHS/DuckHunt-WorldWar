@@ -14,7 +14,7 @@ class OptionScreen(Level):
         self.buttons = [
             Button(self.screen, ((SCREEN_WIDTH/2) - 210, (SCREEN_HEIGHT/2) +290), BACK_BUTTON, BACK_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index - 1], [], 2.5)
             #Use Mouse Toggles
-            ,Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +130 ), TOGGLE_ON_BUTTON, TOGGLE_OFF_BUTTON, self.toggle_mouse,[], constants.USE_MOUSE ,2.5)
+            ,Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +50 ), TOGGLE_ON_BUTTON, TOGGLE_OFF_BUTTON, self.toggle_mouse,[], constants.USE_MOUSE ,2.5)
             #Hardcore mode toggles
             #,Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +150 ), TOGGLE_OFF_BUTTON, None, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 1], 2.5)
         ]
@@ -41,8 +41,8 @@ class OptionScreen(Level):
     def toggle_mouse(self):
         #this function changes the state of mouse:
         #this means when it is FALSE (OFF) it uses the tracker and TRUE (ON) to use the mouse
-        constants.USE_MOUSE = not constants.USE_MOUSE
-        print(constants.USE_MOUSE)
+        constants.USE_MOUSE[0] = not constants.USE_MOUSE[0]
+        print(constants.USE_MOUSE[0])
     
     def toggle_hardcore(self):
         pass
