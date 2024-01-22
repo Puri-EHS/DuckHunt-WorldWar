@@ -14,10 +14,11 @@ class VanilaDuck(Enemy):
         super().__init__()
         self.sprite_sheet = Spritesheet(VANILA_DUCK_PATH)
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
-        self.ai = AI(500, 400, game.player)
+        self.depth = 4.7
+        self.ai = AI(500, 400, game.player, self.depth)
         self.ai.velocity = 4
         self.ai.normal_velocity = self.ai.velocity
-        self.depth = 4.7
+        
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.aim_line_x_offset = -33
        

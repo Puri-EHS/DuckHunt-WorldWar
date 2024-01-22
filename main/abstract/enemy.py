@@ -26,6 +26,7 @@ def distance(p1, p2):
     return math.sqrt(math.pow(p1[0]-p2[0], 2) + math.pow(p1[1]-p2[1], 2))
 
 
+
 class State(ABC):
     def __init__(self, can_aim=True) -> None:
         self.can_aim = can_aim
@@ -56,7 +57,7 @@ class FlyingState(State):
         ai.velocity = self.velocity
         if(ai.pick_new_point):
             rand_y = random.randint(200, 425)
-            rand_x = random.uniform(ai.player_reference.x * 0.18229, ai.player_reference.x * 0.18229 + SCREEN_WIDTH)
+            rand_x = random.uniform(ai.player_reference.x / ai.depth, ai.player_reference.x / ai.depth + SCREEN_WIDTH)
             ai.target_point = (rand_x, rand_y)
     
     def exit_condition(self, ai):
@@ -74,9 +75,9 @@ class StrafingState(State):
         #coordinate shift moment
         shifted_x = 0
         if(ai.player_reference.x * 0.18229) >= 0:
-            shifted_x = (ai.x - ai.player_reference.x * 0.18229)
+            shifted_x = (ai.x - ai.player_reference.x / ai.depth)
         else:
-            shifted_x = (ai.x + math.fabs(ai.player_reference.x) * 0.18229)
+            shifted_x = (ai.x + math.fabs(ai.player_reference.x) / ai.depth)
             
         return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 200 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
@@ -171,11 +172,12 @@ class DuckingState(State):
 #go through every single state and the AI can enter
 #when one of the states are true, then go into that state and call its execute function
 class AI:
-    def __init__(self, starting_x, starting_y, player_reference, target_point = (-1, -1)):
+    def __init__(self, starting_x, starting_y, player_reference, depth, target_point = (-1, -1)):
         self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((0, 100), 10), FlyingState((0, 100), 5)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
+        self.depth = depth
         self.prev_state : State = None
         self.random_number = random.randint(0, 100)
         self.pick_new_point = True
@@ -223,42 +225,6 @@ class AI:
         self.current_state.execute(self)
         self.move_to_point()
 
-        
-        
-
-if __name__ == "__main__":
-    # Initialize Pygame
-    pygame.init()
-
-    # Set the size of the window
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Rectangle Display")
-
-    # Define rectangle parameters
-    rect_width = 50
-    rect_height = 50
-    rect_color = (255, 0, 0)  # Red color
-
-    # Main loop
-    running = True
-    AI_test = AI()
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-
-        # Fill the screen with a color (optional)
-        screen.fill((0, 0, 0))  # Black color
-
-        # Draw the rectangle
-        AI_test.update()
-        pygame.draw.rect(screen, rect_color, (AI_test.x, AI_test.y, rect_width, rect_height))
-
-        # Update the display
-        pygame.display.flip()
-
-    # Quit Pygame
-    pygame.quit()        
 
 class Enemy(ABC):
     def __init__(self):
