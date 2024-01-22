@@ -25,6 +25,13 @@ def in_bounds(v):
 def distance(p1, p2):
     return math.sqrt(math.pow(p1[0]-p2[0], 2) + math.pow(p1[1]-p2[1], 2))
 
+def convert_global_x_coordinate(ai_x, player_x, depth):
+    shifted_x = 0
+    if(player_x / depth) >= 0:
+        shifted_x = (ai_x - player_x / depth)
+    else:
+        shifted_x = (ai_x + math.fabs(player_x) / depth)
+    return shifted_x
 
 
 class State(ABC):
@@ -73,12 +80,7 @@ class StrafingState(State):
         
     def should_enter(self, ai):
         #coordinate shift moment
-        shifted_x = 0
-        if(ai.player_reference.x * 0.18229) >= 0:
-            shifted_x = (ai.x - ai.player_reference.x / ai.depth)
-        else:
-            shifted_x = (ai.x + math.fabs(ai.player_reference.x) / ai.depth)
-            
+        shifted_x = convert_global_x_coordinate(ai.x, ai.player_reference.x, ai.depth)
         return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 200 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def shift_angle(self):
@@ -111,16 +113,18 @@ class StrafingState(State):
         ai.velocity = self.velocity
         if(ai.pick_new_point):
             while(True):
-                angle = random.randrange(-200, 200)
-                angle_in_radians = angle * 3.1415926535 / 180.0 + self.shift_angle()
+                angle = random.randrange(-180, 180)
+                angle_in_radians = angle * math.pi / 180.0 + self.shift_angle()
                 rand_radius = random.randrange(60, 80)
                 rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
                 rand_point = (rand_point[0] + ai.x, rand_point[1] + ai.y)
                 if(in_bounds(rand_point)):
                     ai.target_point = rand_point
                     break
+    
     def exit_condition(self, ai):
-        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) > 100
+        shifted_x = convert_global_x_coordinate(ai.x, ai.player_reference.x, ai.depth)
+        return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) > 100
 
 class DuckingState(State):
     def __init__(self, probability_range, velocity) -> None:
@@ -137,7 +141,7 @@ class DuckingState(State):
     
     def pop_behavior(self, ai, pop_distance, pop_interval):
         current_time = time.time()
-        ai.velocity = 10
+        ai.velocity = 30
         if current_time - self.last_pop_time > pop_interval:
             if self.is_duck_popped:
                 # Duck back into cover
@@ -214,11 +218,7 @@ class AI:
             self.y += normalized_direction[1] * self.velocity
 
     def update(self):
-        shifted_x = 0
-        if(self.player_reference.x * 0.18229) >= 0:
-            shifted_x = (self.x - self.player_reference.x * 0.18229)
-        else:
-            shifted_x = (self.x + math.fabs(self.player_reference.x) * 0.18229)
+        shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
         print(self.current_state, distance(pygame.mouse.get_pos(), (shifted_x, self.y)))
         self.probability = random.randint(0, 100)
         self.update_state()
