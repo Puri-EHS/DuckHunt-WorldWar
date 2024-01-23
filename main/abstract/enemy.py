@@ -18,7 +18,7 @@ def normalize(v):
     return (v[0]/mag, v[1]/mag)
 
 def in_bounds(v):
-    if (v[1] < 425 and v[1] > 200): #limit the movement to the upper half of the screen
+    if (v[1] < 425 and v[1] > 260): #limit the movement to the upper half of the screen
         return True
     return False
 
@@ -81,7 +81,7 @@ class StrafingState(State):
     def should_enter(self, ai):
         #coordinate shift moment
         shifted_x = convert_global_x_coordinate(ai.x, ai.player_reference.x, ai.depth)
-        return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 200 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
+        return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
     
     def shift_angle(self):
         rando = random.randint(1, 100)
@@ -113,7 +113,7 @@ class StrafingState(State):
         ai.velocity = self.velocity
         if(ai.pick_new_point):
             while(True):
-                angle = random.randrange(-180, 180)
+                angle = random.randrange(-60, 60)
                 angle_in_radians = angle * math.pi / 180.0 + self.shift_angle()
                 rand_radius = random.randrange(60, 80)
                 rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
@@ -219,7 +219,7 @@ class AI:
 
     def update(self):
         shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
-        print(self.current_state, distance(pygame.mouse.get_pos(), (shifted_x, self.y)))
+        print(self.current_state, self.target_point, (self.x, self.y))
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
