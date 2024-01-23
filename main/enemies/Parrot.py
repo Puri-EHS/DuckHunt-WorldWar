@@ -39,12 +39,13 @@ class Parrot(Enemy):
         self.aim_enter_prob = 1/100
         self.shoot_time = 75
 
-        if not USE_MOUSE:
+        if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/100
             self.ticks_per_hp_regen = 50
             self.current_ticks = 0
             self.health = 120
             self.max_health = self.health
+            self.shoot_time = 100
 
     def on_shot(self, _damage):
         self.health -= 10

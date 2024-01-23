@@ -28,6 +28,7 @@ class VanilaDuck(Enemy):
         self.current_ticks = 0
         self.health = 75
         self.max_health = self.health
+        self.shoot_time = 100
 
         self.rect = pygame.Rect(0, 0, 200, 200)
     
@@ -41,12 +42,13 @@ class VanilaDuck(Enemy):
         self.random_std = 1
 
         # weaken if using controler
-        if not USE_MOUSE:
+        if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/125
             self.ticks_per_hp_regen = 80
             self.current_ticks = 0
             self.health = 50
             self.max_health = self.health
+            self.shoot_time = 125
 
     def on_shot(self, _damage):
         self.health -= 10
