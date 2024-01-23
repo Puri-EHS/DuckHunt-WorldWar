@@ -5,7 +5,9 @@ import time
 import math
 import numpy
 from player import Player
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+import globals
+from globals import SCREEN_HEIGHT, SCREEN_WIDTH
+
 
 def subtract_vectors(v1, v2):
     return (v1[0] - v2[0], v1[1] - v2[1])
@@ -177,7 +179,7 @@ class DuckingState(State):
 #when one of the states are true, then go into that state and call its execute function
 class AI:
     def __init__(self, starting_x, starting_y, player_reference, depth, target_point = (-1, -1)):
-        self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((0, 100), 10), FlyingState((0, 100), 5)]
+        self.states : list(State) = [DuckingState((0, 0), 0), StrafingState((0, 100), 400), FlyingState((0, 100), 200)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
@@ -214,8 +216,8 @@ class AI:
         else:
             self.pick_new_point = False
             normalized_direction = normalize(direction)
-            self.x += normalized_direction[0] * self.velocity
-            self.y += normalized_direction[1] * self.velocity
+            self.x += normalized_direction[0] * self.velocity * globals.DELTA_TIME
+            self.y += normalized_direction[1] * self.velocity * globals.DELTA_TIME
 
     def update(self):
         shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
@@ -246,8 +248,8 @@ class Enemy(ABC):
         #aim parameters
         self.x_change = 1
         self.y_change = 1
-        self.p = .01 
-        self.d = .1 
+        self.p = .4 
+        self.d = 4.0 
         self.xlasterror = 0
         self.ylasterror = 0
         self.random_multiplier = 4
@@ -260,8 +262,8 @@ class Enemy(ABC):
         self.aim_line_x_offset = -46
         self.aim_line_y_offset = 0
 
-        # Alex's way superior code
-        self.shoot_time = 100
+        # Alex's way inferior code
+        self.shoot_time = .5
         self.shoot_timer = 0
         self.firing = False
 
@@ -276,8 +278,6 @@ class Enemy(ABC):
     def enter_aim(self):
         if not self.aiming and random.random() < self.aim_enter_prob and not self.firing:
             self.aiming = True
-      
-        #elif self.aiming and random.random() < self.aim_enter_prob:
             
      
     def aim(self):
@@ -291,19 +291,19 @@ class Enemy(ABC):
             self.ylasterror = yerror
 
              
-            self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
-            self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std)
+            self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
+            self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
 
 
-            self.aim_coordinates[0] += self.x_change
-            self.aim_coordinates[1] += self.y_change
+            self.aim_coordinates[0] += self.x_change * globals.DELTA_TIME
+            self.aim_coordinates[1] += self.y_change * globals.DELTA_TIME
 
             if random.random() < 1/100:
                 self.aiming = False
                 self.firing = True
         
         if self.firing:
-            self.shoot_timer += 1
+            self.shoot_timer += globals.DELTA_TIME
             
             if self.shoot_timer >= self.shoot_time:
                 self.firing = False
@@ -313,7 +313,6 @@ class Enemy(ABC):
 
 
     def pop_a_cap(self, coords):
-        print("ai fired")
         if self.player_ref.coords[0] - coords[0] > -200 and self.player_ref.coords[0] - coords[0] < 200:
             if self.player_ref.coords[1] - coords[1] > -150 and self.player_ref.coords[1] - coords[1] < 150:
                 if not self.player_ref.ducking and not self.player_ref.gun.pause_no_con:

@@ -1,4 +1,5 @@
-from constants import PARROT_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
+import globals
+from globals import PARROT_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
 
 from abstract.enemy import Enemy
 from abstract.enemy import AI
@@ -16,12 +17,12 @@ class Parrot(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 150, 150)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.velocity = 8
+        self.ai.velocity = 320
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.phase_2 = False
 
-        self.ticks_per_hp_regen = 30
-        self.current_ticks = 0
+        self.time_per_hp_regen = 1 # in seconds
+        self.current_time = 0
          
 
         self.rect = pygame.Rect(0, 0, 150, 150)
@@ -37,14 +38,15 @@ class Parrot(Enemy):
         
         self.random_std = 0.5
         self.aim_enter_prob = 1/100
-        self.shoot_time = 75
+        self.shoot_time = 1.5 # in seconds
 
-        if not USE_MOUSE:
+        if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/100
-            self.ticks_per_hp_regen = 50
-            self.current_ticks = 0
+            self.time_per_hp_regen = 1
+            self.current_time = 0
             self.health = 120
             self.max_health = self.health
+            self.shoot_time = 1.5
 
     def on_shot(self, _damage):
         self.health -= 10
@@ -60,11 +62,11 @@ class Parrot(Enemy):
         self.aim()
         self.ai.update()
         self.world_coordinates = (self.ai.x, self.ai.y)
-        if self.current_ticks >= self.ticks_per_hp_regen and self.health < self.max_health:
-            self.current_ticks = 0
+        if self.current_time >= self.time_per_hp_regen and self.health < self.max_health:
+            self.current_time = 0
             self.health += 1
         else:
-            self.current_ticks += 1
+            self.current_time += globals.DELTA_TIME
 
         ## Second stage triggers at hp < 30%
         if self.health < 50 and self.phase_2 != True:

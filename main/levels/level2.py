@@ -1,8 +1,8 @@
 from abstract.level import Level
 from image_object import ImageObj
 from enemies.Parrot import Parrot
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+import globals
+from globals import SCREEN_WIDTH, SCREEN_HEIGHT, OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
 import pygame
 class Level2(Level):
     def __init__(self, _name, _screen, _game_instance):
@@ -88,25 +88,22 @@ class Level2(Level):
             if self.alive_enemies[0].firing:
                     pygame.draw.circle(self.screen, (255, 0, 0), (self.alive_enemies[0].aim_coordinates[0] - self.game_instance.player.x + SCREEN_WIDTH/2, self.alive_enemies[0].aim_coordinates[1]), 200 - (self.alive_enemies[0].shoot_timer*(200/self.alive_enemies[0].shoot_time)), 4)
 
-            if self.game_instance.player.gun.cooldown_timer < self.game_instance.player.gun.cooldown_time:
-                pygame.draw.circle(self.screen, (0, 255, 0), (self.game_instance.player.gun.crosshair_coords[0], self.game_instance.player.gun.crosshair_coords[1]), 100 - (self.game_instance.player.gun.cooldown_timer*(100/self.game_instance.player.gun.cooldown_time)), 4)
 
 
-        if self.is_over:
-            self.current_victory_tick += 1
-            if self.current_victory_tick >= self.victory_deley:
-                self.stop()
 
     def update(self):
+
+        if self.is_over:
+            self.current_victory_timer += globals.DELTA_TIME
+            if self.current_victory_timer >= self.victory_deley:
+                self.stop()
+
         for enemy in self.alive_enemies:
             enemy.update()
 
-    
-    def stop(self):
-        del self
 
     def ended(self) -> bool:
-        if len(self.alive_enemies) == 0 and self.current_victory_tick >= self.victory_deley:
+        if len(self.alive_enemies) == 0 and self.current_victory_timer >= self.victory_deley:
             return True
 
     

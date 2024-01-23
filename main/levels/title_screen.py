@@ -1,5 +1,5 @@
 from abstract.level import Level
-from constants import TITLE_SCREEN_PATH, TITLE_SCREEN_LOGO, SCREEN_HEIGHT, SCREEN_WIDTH, PLAY_BUTTON, OPTIONS_BUTTON, TOGGLE_OFF_BUTTON, TOGGLE_ON_BUTTON
+from globals import TITLE_SCREEN_PATH, TITLE_SCREEN_LOGO, SCREEN_HEIGHT, SCREEN_WIDTH, PLAY_BUTTON, OPTIONS_BUTTON, TOGGLE_OFF_BUTTON, TOGGLE_ON_BUTTON
 from button import Button
 import pygame
 
@@ -13,8 +13,8 @@ class TitleScreen(Level):
         self.game_logo = pygame.transform.scale(self.game_logo, (self.game_logo.get_rect().width*2.5, self.game_logo.get_rect().height*2.5))
         
         self.buttons = [
-            Button(self.screen, ((SCREEN_WIDTH/2) - 150, (SCREEN_HEIGHT/2) +150), PLAY_BUTTON, PLAY_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 2], 2.5),
-            Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +150 ), OPTIONS_BUTTON, OPTIONS_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 1], 2.5)
+            Button(self.screen, ((SCREEN_WIDTH/2) - 150, (SCREEN_HEIGHT/2) +150), PLAY_BUTTON, PLAY_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 2], [], 2.5),
+            Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +150 ), OPTIONS_BUTTON, OPTIONS_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 1], [], 2.5)
         ]
 
         self.game_level = False
@@ -32,9 +32,3 @@ class TitleScreen(Level):
         for button in self.buttons:
             button.update(pygame.mouse.get_pos())
 
-
-    def stop(self):
-        del self
-
-    def ended(self):
-        pass    

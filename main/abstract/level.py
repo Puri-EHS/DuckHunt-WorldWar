@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod, abstractproperty
 import pygame 
+import globals
 
 class Level(ABC):
     
@@ -23,10 +24,11 @@ class Level(ABC):
         self.game_level = False
 
         self.is_over = False
-        self.victory_deley = 50
-        self.current_victory_tick = 0
+        self.victory_deley = 1.5
+        self.current_victory_timer = 0
+        
+        self.frame_counter = 0
 
-    @abstractmethod
     def start(self):
         pass
     
@@ -34,19 +36,19 @@ class Level(ABC):
         for image_obj in _image_list:
             self.screen.blit(image_obj.image, (image_obj.image_rect.left - _offset/image_obj.depth, image_obj.image_rect.top))
 
-    @abstractmethod
+
     def render(self):
-        pass
-
-    @abstractmethod
+        self.screen.blit(self.bg_image, (0, 0))
+        
     def update(self):
-        pass
+        self.frame_counter += globals.DELTA_TIME
     
-    @abstractmethod
+
     def stop(self):
+        # del didn't do anything because python doesn't immediately GC anyways
+        # use this method to stop music if there is any
         pass
 
-    @abstractmethod
     def ended(self) -> bool:
         pass
     

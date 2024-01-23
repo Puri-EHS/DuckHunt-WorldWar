@@ -1,5 +1,6 @@
 import os
 
+DELTA_TIME = 1
 
 # Initialization
 OG_GAME_WIDTH = 256 # 768
@@ -15,7 +16,7 @@ ASSETS_DIR = os.path.join(BASE_DIR, "assets")
 MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
-USE_MOUSE = True
+USE_MOUSE = [True]
 FPS = 60
 
 

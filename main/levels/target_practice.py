@@ -1,8 +1,7 @@
 from abstract.level import Level
 from image_object import ImageObj
 from enemies.target import Target
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA
+from globals import SCREEN_WIDTH, SCREEN_HEIGHT, SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA
 
 class TargetPractice(Level):
     def __init__(self, _name, _screen, _game_instance):
@@ -34,9 +33,6 @@ class TargetPractice(Level):
                     del enemy
                 break
 
-
-    def start(self):
-        pass
     
     def render(self):
         # render background first
@@ -52,10 +48,6 @@ class TargetPractice(Level):
     def update(self):
         for enemy in self.alive_enemies:
             enemy.update()
-
-    
-    def stop(self):
-        del self
 
     def ended(self) -> bool:
         return False

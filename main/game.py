@@ -11,7 +11,6 @@ from levels.lev2_victory import lev2_victory
 from levels.lev3_victory import lev3_victory
 from levels.ded import Ded
 from levels.options_screen import OptionScreen
-from constants import USE_MOUSE
 from player import Player
 
 import pygame
@@ -26,7 +25,6 @@ class Game:
         self.player = Player(self)
 
         self.ded_screen = Ded
-
 
         self.levels = [
             SplashScreen,
@@ -49,7 +47,7 @@ class Game:
     def switch_to_level(self, _level_index):
         if(self.current_level is not None):
             self.current_level.stop()
-        #print(_level_index)
+        
         self.current_level_index = _level_index
         self.current_level = self.levels[_level_index]("level " + str(_level_index), self.screen, self)
         self.current_level.start()
@@ -66,7 +64,6 @@ class Game:
         if self.current_level.game_level:
             self.player.handle_input(self.current_level.level_size)
 
-            self.player.gun.update()
             self.player.update()
 
 
