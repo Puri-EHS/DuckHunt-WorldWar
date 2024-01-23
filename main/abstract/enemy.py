@@ -18,6 +18,14 @@ def normalize(v):
     mag = magnitude(v)
     return (v[0]/mag, v[1]/mag)
 
+def sgn(v):
+    if(v > 0):
+        return 1
+    
+    elif(v < 0):
+        return -1
+    return 0
+
 def angle(v1, v2):
     deltaX = v1[0] - v2[0]
     deltaY = v1[1] - v2[1]
@@ -155,10 +163,14 @@ class DuckingState(State):
             if self.is_duck_popped:
                 # Duck back into cover
                 ai.target_point = (ai.target_point[0], ai.target_point[1] - pop_distance)
+                ai.x = ai.target_point[0]
+                ai.y = ai.target_point[1]
             else:
                 # Pop out of cover
                 # Assuming the cover is vertical, and the duck pops up
                 ai.target_point = (ai.target_point[0], ai.target_point[1] + pop_distance)
+                ai.x = ai.target_point[0]
+                ai.y = ai.target_point[1]
                 self.amount_of_pops += 1
             self.is_duck_popped = not self.is_duck_popped
             self.last_pop_time = current_time
@@ -185,7 +197,7 @@ class DuckingState(State):
 #when one of the states are true, then go into that state and call its execute function
 class AI:
     def __init__(self, starting_x, starting_y, player_reference, depth, target_point = (-1, -1)):
-        self.states : list(State) = [DuckingState((0, 5), 800), StrafingState((6, 100), 400), FlyingState((0, 100), 200)]
+        self.states : list(State) = [StrafingState((0, 100), 600), DuckingState((0, 0), 800), FlyingState((0, 100), 200)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
@@ -198,6 +210,7 @@ class AI:
         self.target_point = target_point
         self.velocity = 0
         self.normal_velocity = 0
+        self.prev_direction = None
         self.aiming_multiplier = 0.5
         self.shooting_multiplier = 0
 
@@ -217,17 +230,23 @@ class AI:
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
         
-        if distance < 20 or (self.target_point[0] < 0 and self.target_point[1] < 0):
+        
+        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0) or (self.prev_direction is not None and sgn(self.prev_direction[0]) * -1 == sgn(direction[0]) and sgn(self.prev_direction[1]) * -1 == sgn(direction[1])):
             self.pick_new_point = True
         else:
             self.pick_new_point = False
             normalized_direction = normalize(direction)
             self.x += normalized_direction[0] * self.velocity * globals.DELTA_TIME
             self.y += normalized_direction[1] * self.velocity * globals.DELTA_TIME
+        
+        if(self.prev_direction is not None and sgn(self.prev_direction[0]) * -1 == sgn(direction[0]) and sgn(self.prev_direction[1]) * -1 == sgn(direction[1])):
+            self.prev_direction = None
+        else:
+            self.prev_direction = direction
 
     def update(self):
         shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
-        print(self.current_state)
+       #print(self.current_state)
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
