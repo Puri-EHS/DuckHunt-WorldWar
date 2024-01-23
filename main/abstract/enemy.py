@@ -179,7 +179,7 @@ class DuckingState(State):
 #when one of the states are true, then go into that state and call its execute function
 class AI:
     def __init__(self, starting_x, starting_y, player_reference, depth, target_point = (-1, -1)):
-        self.states : list(State) = [DuckingState((0, 0), 20), StrafingState((0, 100), 10), FlyingState((0, 100), 5)]
+        self.states : list(State) = [DuckingState((0, 0), 0), StrafingState((0, 100), 400), FlyingState((0, 100), 200)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
@@ -248,8 +248,8 @@ class Enemy(ABC):
         #aim parameters
         self.x_change = 1
         self.y_change = 1
-        self.p = .01 
-        self.d = .1 
+        self.p = .4 
+        self.d = 4.0 
         self.xlasterror = 0
         self.ylasterror = 0
         self.random_multiplier = 4
@@ -263,7 +263,7 @@ class Enemy(ABC):
         self.aim_line_y_offset = 0
 
         # Alex's way inferior code
-        self.shoot_time = 4
+        self.shoot_time = .5
         self.shoot_timer = 0
         self.firing = False
 
@@ -278,8 +278,6 @@ class Enemy(ABC):
     def enter_aim(self):
         if not self.aiming and random.random() < self.aim_enter_prob and not self.firing:
             self.aiming = True
-      
-        #elif self.aiming and random.random() < self.aim_enter_prob:
             
      
     def aim(self):

@@ -24,6 +24,6 @@ class SplashScreen(Level):
         pygame.mixer.music.unload()
 
     def ended(self):
-        if self.frame_counter >= 5:
+        if self.frame_counter >= 2:
             return True
         return False

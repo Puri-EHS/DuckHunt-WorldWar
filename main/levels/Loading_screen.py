@@ -24,6 +24,6 @@ class LoadingScreen(Level):
 
 
     def ended(self):
-        if self.frame_counter >= 5:
+        if self.frame_counter >= 1:
             return True
         return False

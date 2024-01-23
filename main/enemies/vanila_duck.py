@@ -17,19 +17,19 @@ class VanilaDuck(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.velocity = 4
+        self.ai.velocity = 320
         self.ai.normal_velocity = self.ai.velocity
         
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.aim_line_x_offset = -33
        
         # remove exept for testing
-        self.aim_enter_prob = 1/125
-        self.time_per_hp_regen = 60
+        self.aim_enter_prob = 1/2 #1/125
+        self.time_per_hp_regen = 2.5
         self.current_time = 0
         self.health = 75
         self.max_health = self.health
-        self.shoot_time = 100
+        self.shoot_time = 1.5
 
         self.rect = pygame.Rect(0, 0, 200, 200)
     
@@ -42,11 +42,11 @@ class VanilaDuck(Enemy):
         # weaken if using controler
         if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/125
-            self.time_per_hp_regen = 80
+            self.time_per_hp_regen = 1.3
             self.current_time = 0
             self.health = 50
             self.max_health = self.health
-            self.shoot_time = 125
+            self.shoot_time = 1.5
 
     def on_shot(self, _damage):
         self.health -= 10

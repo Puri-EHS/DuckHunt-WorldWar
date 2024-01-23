@@ -19,14 +19,17 @@ class Player:
         self.ducking_kick_max = 10
         self.hp = 100
 
+        self.move_speed = 1200 # pixels per second
+
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
         
         if globals.USE_MOUSE[0]:
             if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-                self.move(-30 * globals.DELTA_TIME if not self.ducking else -10 * globals.DELTA_TIME, _level_size)
+                # move in pixels per second 
+                self.move(-self.move_speed * globals.DELTA_TIME if not self.ducking else -self.move_speed / 3 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                self.move(30 * globals.DELTA_TIME if not self.ducking else 10 * globals.DELTA_TIME, _level_size)
+                self.move(self.move_speed * globals.DELTA_TIME if not self.ducking else self.move_speed / 3 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_SPACE] and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
@@ -34,9 +37,9 @@ class Player:
         # Allows lateral movement and firing with controler: move crosshairs to one side to move
         else:
             if keys[pygame.K_a] or keys[pygame.K_LEFT] or self.gun.crosshair_coords[0] <= 75:
-                self.move(-30 * globals.DELTA_TIME if not self.ducking else -10 * globals.DELTA_TIME, _level_size)
+                self.move(-self.move_speed * globals.DELTA_TIME if not self.ducking else -self.move_speed * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
-                self.move(30 * globals.DELTA_TIME if not self.ducking else 10 * globals.DELTA_TIME, _level_size)
+                self.move(self.move_speed * globals.DELTA_TIME if not self.ducking else self.move_speed * globals.DELTA_TIME, _level_size)
             if (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4) and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
@@ -84,8 +87,8 @@ class PlayerGun:
             self.tracker.track_icons()
 
         self.reload_time = 0
-        self.shoot_time = 4 
-        self.cooldown_time = 5
+        self.shoot_time = 1 
+        self.cooldown_time = 1
 
         self.reload_timer = self.reload_time
         self.shoot_timer = self.shoot_time
@@ -131,6 +134,9 @@ class PlayerGun:
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
         screen.blit(self.crosshair_img, (self.crosshair_coords[0]-30, self.crosshair_coords[1]-30))
         
+        if self.cooldown_timer < self.cooldown_time:
+            pygame.draw.circle(screen, (0, 255, 0), (self.crosshair_coords[0], self.crosshair_coords[1]), 100 - (self.cooldown_timer*(100/self.cooldown_time)), 4)
+
         if not globals.USE_MOUSE[0]:
             if self.tracker.num_fire > 8:
                 screen.blit(self.con_not_found_img, (0, 0))

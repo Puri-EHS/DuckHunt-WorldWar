@@ -124,9 +124,6 @@ class Level3(Level):
             if self.alive_enemies[0].firing:
                 pygame.draw.circle(self.screen, (255, 0, 0), (self.alive_enemies[0].aim_coordinates[0] - self.game_instance.player.x + SCREEN_WIDTH/2, self.alive_enemies[0].aim_coordinates[1]), 200 - (self.alive_enemies[0].shoot_timer*(200/self.alive_enemies[0].shoot_time)), 4)
 
-            if self.game_instance.player.gun.cooldown_timer < self.game_instance.player.gun.cooldown_time:
-                pygame.draw.circle(self.screen, (0, 255, 0), (self.game_instance.player.gun.crosshair_coords[0], self.game_instance.player.gun.crosshair_coords[1]), 100 - (self.game_instance.player.gun.cooldown_timer*(100/self.game_instance.player.gun.cooldown_time)), 4)
-
 
     def update(self):
 
