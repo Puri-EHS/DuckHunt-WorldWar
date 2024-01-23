@@ -8,7 +8,6 @@ from player import Player
 import globals
 from globals import SCREEN_HEIGHT, SCREEN_WIDTH
 
-
 def subtract_vectors(v1, v2):
     return (v1[0] - v2[0], v1[1] - v2[1])
 
@@ -18,6 +17,11 @@ def magnitude(v):
 def normalize(v):
     mag = magnitude(v)
     return (v[0]/mag, v[1]/mag)
+
+def angle(v1, v2):
+    deltaX = v1[0] - v2[0]
+    deltaY = v1[1] - v2[1]
+    return math.atan2(deltaY, deltaX)
 
 def in_bounds(v):
     if (v[1] < 425 and v[1] > 260): #limit the movement to the upper half of the screen
@@ -131,6 +135,7 @@ class StrafingState(State):
 class DuckingState(State):
     def __init__(self, probability_range, velocity) -> None:
         super().__init__()
+        
         self.velocity = velocity
         self.should_exit = False
         self.probability_range = probability_range
@@ -138,12 +143,14 @@ class DuckingState(State):
         self.gotten_to_point = False
         self.is_duck_popped = False
         self.amount_of_pops = 0
+        self.maximum_pops = random.randint(1, 2)
     def should_enter(self, ai):
-        return distance(pygame.mouse.get_pos(), (ai.x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and  ai.random_number > self.probability_range[0])
+        shifted_x = convert_global_x_coordinate(ai.x, ai.player_reference.x, ai.depth)
+        #also want to add a condition that this only happens when the health is below a certain amount
+        return distance(pygame.mouse.get_pos(), (shifted_x, ai.y)) < 100 and (ai.random_number < self.probability_range[1] and ai.random_number > self.probability_range[0])
     
     def pop_behavior(self, ai, pop_distance, pop_interval):
         current_time = time.time()
-        ai.velocity = 30
         if current_time - self.last_pop_time > pop_interval:
             if self.is_duck_popped:
                 # Duck back into cover
@@ -158,15 +165,14 @@ class DuckingState(State):
     
     def execute(self, ai):
         ai.velocity = self.velocity
-        # print(self.gotten_to_point)
         if(ai.pick_new_point and not self.gotten_to_point):
             ai.target_point = (300, 400)
-            self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 10
+            self.gotten_to_point = distance(ai.target_point, (ai.x, ai.y)) < 20
         if(self.gotten_to_point):
-            self.pop_behavior(ai, 50, 1)
+            self.pop_behavior(ai, 90, 1)
         
     def exit_condition(self, ai):
-        if(self.amount_of_pops > 2):
+        if(self.amount_of_pops > self.maximum_pops):
             self.amount_of_pops = 0
             self.gotten_to_point = False
             return True
@@ -179,7 +185,7 @@ class DuckingState(State):
 #when one of the states are true, then go into that state and call its execute function
 class AI:
     def __init__(self, starting_x, starting_y, player_reference, depth, target_point = (-1, -1)):
-        self.states : list(State) = [DuckingState((0, 0), 0), StrafingState((0, 100), 400), FlyingState((0, 100), 200)]
+        self.states : list(State) = [DuckingState((0, 5), 800), StrafingState((6, 100), 400), FlyingState((0, 100), 200)]
         self.current_state : State = None
         self.player_reference : Player = player_reference
         self.ducking = False
@@ -206,11 +212,11 @@ class AI:
                     self.pick_new_point = True
                 self.prev_state = self.current_state
                 break
-        
+                
     def move_to_point(self):
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
-
+        
         if distance < 20 or (self.target_point[0] < 0 and self.target_point[1] < 0):
             self.pick_new_point = True
         else:
@@ -221,7 +227,7 @@ class AI:
 
     def update(self):
         shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
-        print(self.target_point, (self.x, self.y))
+        print(self.current_state)
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)
