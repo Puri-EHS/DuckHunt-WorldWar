@@ -16,6 +16,7 @@ to add some sense of difficulty, we added a reload time, shown by the green circ
 down on its target over time.
 
 Instructions for running the game:
+
 In VS Code, go into the terminal and pip install the following: pygame, numpy, opencv, cypy
 
 Make sure the user has a camera and it is not covered or in a badly lit area as that is how the game tracks the controller. 
