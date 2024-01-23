@@ -117,7 +117,7 @@ class StrafingState(State):
             while(True):
                 angle = random.randrange(-60, 60)
                 angle_in_radians = angle * math.pi / 180.0 + self.shift_angle()
-                rand_radius = random.randrange(60, 80)
+                rand_radius = random.randrange(100, 120)
                 rand_point = (rand_radius * math.cos(angle_in_radians), rand_radius * math.sin(angle_in_radians))
                 rand_point = (rand_point[0] + ai.x, rand_point[1] + ai.y)
                 if(in_bounds(rand_point)):
@@ -211,7 +211,7 @@ class AI:
         direction = subtract_vectors(self.target_point, (self.x, self.y))
         distance = magnitude(direction)
 
-        if distance < 5 or (self.target_point[0] < 0 and self.target_point[1] < 0):
+        if distance < 20 or (self.target_point[0] < 0 and self.target_point[1] < 0):
             self.pick_new_point = True
         else:
             self.pick_new_point = False
@@ -221,7 +221,7 @@ class AI:
 
     def update(self):
         shifted_x = convert_global_x_coordinate(self.x, self.player_reference.x, self.depth)
-        print(self.current_state, self.target_point, (self.x, self.y))
+        print(self.target_point, (self.x, self.y))
         self.probability = random.randint(0, 100)
         self.update_state()
         self.current_state.execute(self)

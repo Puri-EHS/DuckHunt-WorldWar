@@ -58,4 +58,3 @@ while is_running:
     # Game seems to run at 24 fps when using mouse, so that will be my goal for tracking
     delta_time = clock.tick()/1000
     globals.DELTA_TIME = delta_time
-    print(globals.DELTA_TIME)

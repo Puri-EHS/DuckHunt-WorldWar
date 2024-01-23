@@ -29,7 +29,7 @@ class VanilaDuck(Enemy):
         self.current_time = 0
         self.health = 75
         self.max_health = self.health
-        self.shoot_time = 1.5
+        self.shoot_time =  1.5
 
         self.rect = pygame.Rect(0, 0, 200, 200)
     
