@@ -1,8 +1,8 @@
 from abstract.level import Level
 from image_object import ImageObj
 from enemies.vanila_duck import VanilaDuck
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from constants import SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+import globals
+from globals import SCREEN_WIDTH, SCREEN_HEIGHT, SAVANNA_BUSH_FRONT, SAVANNA_BUSH_BACK, SAVANNA, HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
 import pygame
 
 class Level1(Level):
@@ -60,10 +60,6 @@ class Level1(Level):
         if len(self.alive_enemies) == 0 and not self.is_over:
             self.is_over = True
     
-
-    def start(self):
-        pass
-    
     def render(self):
         # render background first
         self.depth_render(self.background_image, self.game_instance.player.x)
@@ -94,21 +90,21 @@ class Level1(Level):
             if self.game_instance.player.gun.cooldown_timer < self.game_instance.player.gun.cooldown_time:
                 pygame.draw.circle(self.screen, (0, 255, 0), (self.game_instance.player.gun.crosshair_coords[0], self.game_instance.player.gun.crosshair_coords[1]), 100 - (self.game_instance.player.gun.cooldown_timer*(100/self.game_instance.player.gun.cooldown_time)), 4)
 
-        if self.is_over:
-            self.current_victory_tick += 1
-            if self.current_victory_tick >= self.victory_deley:
-                self.stop()
+
 
     def update(self):
+
+        if self.is_over:
+            self.current_victory_timer += globals.DELTA_TIME
+            if self.current_victory_timer >= self.victory_deley:
+                self.stop()
+            
         for enemy in self.alive_enemies:
             enemy.update()
-
     
-    def stop(self):
-        del self
 
     def ended(self) -> bool:
-        if len(self.alive_enemies) == 0 and self.current_victory_tick >= self.victory_deley:
+        if len(self.alive_enemies) == 0 and self.current_victory_timer >= self.victory_deley:
             return True
 
     

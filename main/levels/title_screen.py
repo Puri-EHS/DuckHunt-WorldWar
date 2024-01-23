@@ -1,5 +1,5 @@
 from abstract.level import Level
-from constants import TITLE_SCREEN_PATH, TITLE_SCREEN_LOGO, SCREEN_HEIGHT, SCREEN_WIDTH, PLAY_BUTTON, OPTIONS_BUTTON, TOGGLE_OFF_BUTTON, TOGGLE_ON_BUTTON
+from globals import TITLE_SCREEN_PATH, TITLE_SCREEN_LOGO, SCREEN_HEIGHT, SCREEN_WIDTH, PLAY_BUTTON, OPTIONS_BUTTON, TOGGLE_OFF_BUTTON, TOGGLE_ON_BUTTON
 from button import Button
 import pygame
 
@@ -32,9 +32,3 @@ class TitleScreen(Level):
         for button in self.buttons:
             button.update(pygame.mouse.get_pos())
 
-
-    def stop(self):
-        del self
-
-    def ended(self):
-        pass    

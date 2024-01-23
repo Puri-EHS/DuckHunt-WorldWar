@@ -1,4 +1,5 @@
-from constants import VANILA_DUCK_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
+import globals
+from globals import VANILA_DUCK_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
 
 from abstract.enemy import Enemy
 from abstract.enemy import AI
@@ -24,8 +25,8 @@ class VanilaDuck(Enemy):
        
         # remove exept for testing
         self.aim_enter_prob = 1/125
-        self.ticks_per_hp_regen = 60
-        self.current_ticks = 0
+        self.time_per_hp_regen = 60
+        self.current_time = 0
         self.health = 75
         self.max_health = self.health
         self.shoot_time = 100
@@ -34,18 +35,15 @@ class VanilaDuck(Enemy):
     
         self.rect.center = self.world_coordinates
 
-        
-
         self.player_ref = game.player
 
-        
         self.random_std = 1
 
         # weaken if using controler
         if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/125
-            self.ticks_per_hp_regen = 80
-            self.current_ticks = 0
+            self.time_per_hp_regen = 80
+            self.current_time = 0
             self.health = 50
             self.max_health = self.health
             self.shoot_time = 125
@@ -65,8 +63,8 @@ class VanilaDuck(Enemy):
         self.ai.update()
         
         self.world_coordinates = (self.ai.x, self.ai.y)
-        if self.current_ticks >= self.ticks_per_hp_regen and self.health < self.max_health:
-            self.current_ticks = 0
+        if self.current_time >= self.time_per_hp_regen and self.health < self.max_health:
+            self.current_time = 0
             self.health += 1
         else:
-            self.current_ticks += 1
+            self.current_time += globals.DELTA_TIME

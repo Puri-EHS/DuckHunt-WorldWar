@@ -1,5 +1,5 @@
 from abstract.level import Level
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, SPLASH_SCREEN_PATH, FPS
+from globals import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, SPLASH_SCREEN_PATH, FPS
 import pygame
 
 class Cont_img(Level):
@@ -13,18 +13,8 @@ class Cont_img(Level):
 
     def start(self):
         print(__file__ + " " + self.name + " starting")
-    
-
-    def render(self):
-        self.screen.blit(self.bg_image, (0, 0))
-
-    def update(self):
-        self.frame_counter += 1
-
-    def stop(self):
-        del self
 
     def ended(self):
-        if self.frame_counter >= 10 * FPS:
+        if self.frame_counter >= 5:
             return True
         return False

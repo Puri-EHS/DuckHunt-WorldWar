@@ -1,5 +1,5 @@
 import pygame
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH
+from globals import SCREEN_HEIGHT, SCREEN_WIDTH
 
 class ImageObj:
     def __init__(self, path, depth, x_size, y_size, x_pos=SCREEN_WIDTH/2, y_pos=SCREEN_HEIGHT/2) -> None:

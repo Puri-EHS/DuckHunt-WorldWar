@@ -1,10 +1,10 @@
-from constants import FPS, GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH, USE_MOUSE
-import constants
+from globals import FPS, GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH
+import globals
 from sprite_sheet import Spritesheet
 from image_object import ImageObj
 
-
-from physical_gun_detection import Tracker
+if not globals.USE_MOUSE[0]:
+    from physical_gun_detection import Tracker
 
 import pygame
 
@@ -22,11 +22,11 @@ class Player:
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
         
-        if constants.USE_MOUSE[0]:
+        if globals.USE_MOUSE[0]:
             if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-                self.move(-30 if not self.ducking else -10, _level_size)
+                self.move(-30 * globals.DELTA_TIME if not self.ducking else -10 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-                self.move(30 if not self.ducking else 10, _level_size)
+                self.move(30 * globals.DELTA_TIME if not self.ducking else 10 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_SPACE] and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
@@ -34,25 +34,20 @@ class Player:
         # Allows lateral movement and firing with controler: move crosshairs to one side to move
         else:
             if keys[pygame.K_a] or keys[pygame.K_LEFT] or self.gun.crosshair_coords[0] <= 75:
-                self.move(-30 if not self.ducking else -10, _level_size)
+                self.move(-30 * globals.DELTA_TIME if not self.ducking else -10 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT] or self.gun.crosshair_coords[0] >= 700:
-                self.move(30 if not self.ducking else 10, _level_size)
+                self.move(30 * globals.DELTA_TIME if not self.ducking else 10 * globals.DELTA_TIME, _level_size)
             if (self.gun.tracker.num_fire >= 2 and self.gun.tracker.num_fire < 4) and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
         
         if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not self.ducking:
             self.ducking = True
-            print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(3)
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1] - 1050)
-            # print coords
-            #print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.y)
+
         if (keys[pygame.K_w] or keys[pygame.K_UP]) and self.ducking:
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(1/3)
-            #self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1])
-            #print(self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center)
-
             self.ducking = False
     
     def move(self, _x, _level_size):
@@ -70,7 +65,7 @@ class Player:
     
     def update(self):
         #print(self.x)
-        pass
+        self.gun.update()
 
 class PlayerGun:
     def __init__(self):
@@ -84,9 +79,9 @@ class PlayerGun:
 
         self.damage = 1
 
-
-        self.tracker = Tracker()
-        self.tracker.track_icons()
+        if not globals.USE_MOUSE[0]:
+            self.tracker = Tracker()
+            self.tracker.track_icons()
 
         self.reload_time = 0
         self.shoot_time = 4 
@@ -122,7 +117,7 @@ class PlayerGun:
         self.gun_image_index = 1
 
         #Hardcoded to work with tracking. WIll make it listen to constants 
-        if not constants.USE_MOUSE[0]:
+        if not globals.USE_MOUSE[0]:
             self.crosshair_coords = self.tracker.stable_avg_x, self.tracker.stable_avg_y
         else:
             self.crosshair_coords = pygame.mouse.get_pos()
@@ -135,7 +130,8 @@ class PlayerGun:
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))
         screen.blit(self.crosshair_img, (self.crosshair_coords[0]-30, self.crosshair_coords[1]-30))
-        if not constants.USE_MOUSE[0]:
+        
+        if not globals.USE_MOUSE[0]:
             if self.tracker.num_fire > 8:
                 screen.blit(self.con_not_found_img, (0, 0))
                 print("con not found O_o")
@@ -145,7 +141,7 @@ class PlayerGun:
 
     def update(self):
         
-        if not constants.USE_MOUSE[0]:
+        if not globals.USE_MOUSE[0]:
             if self.current_frames_untracked < self.frames_per_track:
                 self.current_frames_untracked += 1
             else:
@@ -157,9 +153,9 @@ class PlayerGun:
             self.crosshair_coords = pygame.mouse.get_pos()
         
         
-        self.reload_timer += 1
-        self.shoot_timer += 1
-        self.cooldown_timer += 1
+        self.reload_timer += globals.DELTA_TIME
+        self.shoot_timer += globals.DELTA_TIME
+        self.cooldown_timer += globals.DELTA_TIME
 
         if self.crosshair_coords[0] < 800/3:
             self.gun_image_index = 0

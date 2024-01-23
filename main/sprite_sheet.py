@@ -1,6 +1,6 @@
 import pygame
 
-from constants import FPS
+from globals import FPS
 
 class Spritesheet:
     def __init__(self, path):

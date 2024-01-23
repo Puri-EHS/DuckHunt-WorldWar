@@ -1,4 +1,5 @@
-from constants import TARGET_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
+import globals
+from globals import TARGET_PATH, SCREEN_HEIGHT, SCREEN_WIDTH, USE_MOUSE
 
 from abstract.enemy import Enemy
 from sprite_sheet import Spritesheet

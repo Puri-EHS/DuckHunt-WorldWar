@@ -1,5 +1,5 @@
 from abstract.level import Level
-from constants import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, LOADING_SCREEN_PATH, FPS, VICTORY1
+from globals import SCREEN_HEIGHT, SCREEN_WIDTH, LOBBY_MUSIC_PATH, LOADING_SCREEN_PATH, FPS, VICTORY1
 import pygame
 
 class lev1_victory(Level):
@@ -17,18 +17,12 @@ class lev1_victory(Level):
         pygame.mixer.music.set_volume(0.25)
         pygame.mixer.music.play(-1)
 
-    def render(self):
-        self.screen.blit(self.bg_image, (0, 0))
-
-    def update(self):
-        self.frame_counter += 1
 
     def stop(self):
         pygame.mixer.music.stop()
         pygame.mixer.music.unload()
-        del self
 
     def ended(self):
-        if self.frame_counter >= 10 * FPS:
+        if self.frame_counter >= 5:
             return True
         return False
