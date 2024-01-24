@@ -1,5 +1,5 @@
 # DuckHunt-WorldWar 
-by Ankit, Nathan, Michael and Robert
+by Ankit, Nathan, Alex and Robert
 
 Overview of the project:
 
