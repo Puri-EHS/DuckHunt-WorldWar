@@ -29,6 +29,7 @@ class OptionScreen(Level):
     def render(self):
         self.screen.blit(self.bg_image, (0, 0))
         
+        pygame.draw.line(self.screen, (100,100,100), (0, SCREEN_HEIGHT/2), (SCREEN_WIDTH, SCREEN_HEIGHT/2), 400)
         for button in self.buttons:
             button.draw()
         font = pygame.font.Font(None, 75)  # None uses the default font, 36 is the font size

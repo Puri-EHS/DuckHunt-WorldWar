@@ -54,9 +54,12 @@ class ControllerTrackDemo:
 
             # Apply ratio test to filter good matches for icon 1
             good_matches_icon1 = []
-            for m, n in matches_icon1:
-                if m.distance < 0.70 * n.distance:
-                    good_matches_icon1.append(m)
+
+            if len(matches_icon1) >0:
+                if len(matches_icon1[0]) > 1:
+                    for m, n in matches_icon1:
+                        if m.distance < 0.70 * n.distance:
+                            good_matches_icon1.append(m)
 
             
 
@@ -103,10 +106,11 @@ class ControllerTrackDemo:
             else:
                 print("FIRE")
 
+            
             # Display the frames with the tracked icons
             cv2.imshow('Track Demo: [PRESS Q to exit]', img_matches_icon1)
             #cv2.imshow('Tracked Icon 2', img_matches_icon2)
-
+            
             # Break the loop if 'q' key is pressed
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
