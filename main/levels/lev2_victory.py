@@ -23,6 +23,6 @@ class lev2_victory(Level):
         super().stop()
 
     def ended(self):
-        if self.frame_counter >= 5 * FPS:
+        if self.frame_counter >= 5:
             return True
         return False
