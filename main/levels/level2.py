@@ -2,7 +2,7 @@ from abstract.level import Level
 from image_object import ImageObj
 from enemies.Parrot import Parrot
 import globals
-from globals import SCREEN_WIDTH, SCREEN_HEIGHT, OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+from globals import SCREEN_WIDTH, SCREEN_HEIGHT, OUTBACK, OUTBACK_BUSH_BACK, OUTBACK_BUSH_FRONT, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX, MUSIC_2
 import pygame
 class Level2(Level):
     def __init__(self, _name, _screen, _game_instance):
@@ -61,7 +61,9 @@ class Level2(Level):
     
 
     def start(self):
-        pass
+        pygame.mixer.music.load(MUSIC_2)
+        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.play(-1)
     
     def render(self):
         # render background first
