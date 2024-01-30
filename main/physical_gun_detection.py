@@ -37,7 +37,7 @@ class Tracker:
         ret, frame = self.cap.read()
 
         # Resize frame to improve speed, but reduce accuracy: Keep at 0.5
-        frame = cv2.resize(frame, None, fx=0.3, fy=0.3)
+        frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
         
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
