@@ -24,6 +24,6 @@ class KeyBinds(Level):
         pygame.mixer.music.unload()
 
     def ended(self):
-        if self.frame_counter >= 9:
+        if self.frame_counter >= 5:
             return True
         return False

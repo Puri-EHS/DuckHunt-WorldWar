@@ -62,7 +62,7 @@ class Game:
         if self.player.hp <= 0:
             self.player.hp = 100
             self.lev_ded_on = self.current_level_index
-            self.current_level_index = 13
+            self.current_level_index = 14
             self.switch_to_level(self.current_level_index)
         
         #player input
@@ -80,11 +80,11 @@ class Game:
             if self.current_level.game_level:
                 self.player.gun.render(self.screen)
         
-        elif self.current_level_index == 13:
+        elif self.current_level_index == 14:
             self.current_level_index = self.lev_ded_on - 1
             self.switch_to_level(self.current_level_index)
         
-        elif self.current_level_index == 12:
+        elif self.current_level_index == 13:
             self.lev_ded_on = 0
             self.current_level_index = 1
             self.switch_to_level(self.current_level_index)

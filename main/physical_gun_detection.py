@@ -36,11 +36,8 @@ class Tracker:
         # Read a frame from the camera
         ret, frame = self.cap.read()
 
-        height, width = frame.shape[:2]
-        
-        if height >= 720:
         # Resize frame to improve speed, but reduce accuracy: Keep at 0.5
-            frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
+        frame = cv2.resize(frame, None, fx=0.3, fy=0.3)
         
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
