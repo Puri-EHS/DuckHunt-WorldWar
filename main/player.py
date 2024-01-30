@@ -196,7 +196,8 @@ class PlayerGun:
             # update image
             self.cur_image = self.shoot_images[self.gun_image_index]
             
-            #pygame.mixer.Sound.play(self.shoot_sound)
+            self.shoot_sound.set_volume(0.5)
+            pygame.mixer.Sound.play(self.shoot_sound)
         
         if self.ammo_left <= 0:
             self.reload_timer = 0

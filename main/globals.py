@@ -1,6 +1,6 @@
 import os
 
-DELTA_TIME = 1
+DELTA_TIME = 1.5
 
 # Initialization
 OG_GAME_WIDTH = 256 # 768
