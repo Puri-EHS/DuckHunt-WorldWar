@@ -10,8 +10,8 @@ class ControllerTrackDemo:
         camera_index = 0
 
         # Provide the paths to the icon images
-        icon1_path = '/Users/soarece/Downloads/New_fedu.png'
-        icon2_path = '/Users/soarece/Downloads/New_fedu.png'
+        icon1_path = 'assets/New_fedu.png'
+        icon2_path = 'assets/New_fedu.png'
 
         # Load the icon images
         icon1 = cv2.imread(icon1_path, cv2.IMREAD_UNCHANGED)
