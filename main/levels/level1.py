@@ -51,7 +51,7 @@ class Level1(Level):
         for enemy in self.alive_enemies:
             if self.foreground_images[0].check_transparency(self.game_instance.player.x, _point[0], _point[1]):
                 if enemy.rect.collidepoint(_point):
-                    enemy.on_shot(_damage)
+                    enemy.on_shot(_damage, _point)
                     self.duck_hit = True
                     self.current_tick = self.animation_tick
                     
