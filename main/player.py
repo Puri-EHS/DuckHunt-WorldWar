@@ -3,9 +3,7 @@ import globals
 from sprite_sheet import Spritesheet
 from image_object import ImageObj
 import platform
-
-if platform.system() != 'Windows':
-    from physical_gun_detection import Tracker
+from physical_gun_detection import Tracker
 
 import pygame
 
@@ -83,9 +81,8 @@ class PlayerGun:
 
         self.damage = 1
 
-        if platform.system() != 'Windows':
-            self.tracker = Tracker()
-            self.tracker.track_icons()
+        self.tracker = Tracker()
+        self.tracker.track_icons()
 
         self.reload_time = 0
         self.shoot_time = 1 
