@@ -38,6 +38,7 @@ class Tracker:
 
         # Resize frame to improve speed, but reduce accuracy: Keep at 0.5
         frame = cv2.resize(frame, None, fx=0.5, fy=0.5)
+        
         # Convert the frame to grayscale
         frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         
@@ -53,7 +54,7 @@ class Tracker:
         # Apply ratio test to filter good matches for icon 1
         good_matches_icon1 = [m for m, n in matches_icon1 if m.distance < 0.70 * n.distance]
         
-
+        height, width = frame.shape[:2]
         
 
     # Outlier Rejection System (Helps clean up data from random points)
@@ -69,12 +70,11 @@ class Tracker:
         filtered_points = [point for i, point in enumerate(good_matches_icon1) if i not in outliers]
         good_matches_icon1 = filtered_points
         
-
-
+#2.6
         # Require atleast x detected points to ensure tracking stability
         if len(good_matches_icon1) > 7:
-            self.avg_x = 1700-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - 900
+            self.avg_x = (width*2.6)-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - height*2.5
             
             # Noise elimination sysetem (Smoothing of stuttery motion)
             if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
