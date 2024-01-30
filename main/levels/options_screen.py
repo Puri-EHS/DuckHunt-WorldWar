@@ -19,7 +19,7 @@ class OptionScreen(Level):
         self.bg_image = pygame.image.load(TITLE_SCREEN_PATH).convert_alpha()
         self.bg_image = pygame.transform.scale(self.bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
         
-        if check_operating_system:
+        if check_operating_system():
             self.buttons = [
                 Button(self.screen, ((SCREEN_WIDTH/2) - 210, (SCREEN_HEIGHT/2) +290), BACK_BUTTON, BACK_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index - 1], [], 2.5)
                 #Use Mouse Toggles
@@ -30,6 +30,7 @@ class OptionScreen(Level):
                 #Hardcore mode toggles
                 #,Button(self.screen, ((SCREEN_WIDTH/2) + 150, (SCREEN_HEIGHT/2) +150 ), TOGGLE_OFF_BUTTON, None, self.game_instance.switch_to_level, [self.game_instance.current_level_index + 1], 2.5)
             ]
+        
         else:
             self.buttons = [
                 Button(self.screen, ((SCREEN_WIDTH/2) - 210, (SCREEN_HEIGHT/2) +290), BACK_BUTTON, BACK_BUTTON, self.game_instance.switch_to_level, [self.game_instance.current_level_index - 1], [], 2.5)

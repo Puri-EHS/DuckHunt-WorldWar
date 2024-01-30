@@ -83,9 +83,9 @@ class PlayerGun:
 
         self.damage = 1
 
-        
-        self.tracker = Tracker()
-        self.tracker.track_icons()
+        if platform.system() != 'Windows':
+            self.tracker = Tracker()
+            self.tracker.track_icons()
 
         self.reload_time = 0
         self.shoot_time = 1 
@@ -196,7 +196,7 @@ class PlayerGun:
             # update image
             self.cur_image = self.shoot_images[self.gun_image_index]
             
-            self.shoot_sound.set_volume(0.5)
+            self.shoot_sound.set_volume(0.05)
             pygame.mixer.Sound.play(self.shoot_sound)
         
         if self.ammo_left <= 0:
