@@ -6,12 +6,7 @@ import pygame
 import platform
 
 def check_operating_system():
-    system_info = platform.system()
-
-    if system_info == 'Windows':
-        return False
-    else:
-        return True
+    return True
 
 class OptionScreen(Level):
     def __init__(self, _name, _screen, _game_instance):
