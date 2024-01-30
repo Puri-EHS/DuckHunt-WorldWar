@@ -2,8 +2,9 @@ from globals import FPS, GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDT
 import globals
 from sprite_sheet import Spritesheet
 from image_object import ImageObj
+import platform
 
-if not globals.USE_MOUSE[0]:
+if platform.system() != 'Windows':
     from physical_gun_detection import Tracker
 
 import pygame
@@ -30,7 +31,7 @@ class Player:
                 self.move(-self.move_speed * globals.DELTA_TIME if not self.ducking else -self.move_speed / 3 * globals.DELTA_TIME, _level_size)
             if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
                 self.move(self.move_speed * globals.DELTA_TIME if not self.ducking else self.move_speed / 3 * globals.DELTA_TIME, _level_size)
-            if keys[pygame.K_SPACE] and self.gun.can_shoot() and not self.ducking:
+            if (keys[pygame.K_SPACE] or pygame.mouse.get_pressed()[0]) and self.gun.can_shoot() and not self.ducking:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
         
@@ -82,7 +83,7 @@ class PlayerGun:
 
         self.damage = 1
 
-        if not globals.USE_MOUSE[0]:
+        if platform.system() != 'Windows':
             self.tracker = Tracker()
             self.tracker.track_icons()
 

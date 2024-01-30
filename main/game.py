@@ -12,13 +12,16 @@ from levels.lev3_victory import lev3_victory
 from levels.ded import Ded
 from levels.options_screen import OptionScreen
 from player import Player
-from controller_demo import ControllerTrackDemo
 import pygame
+import platform
+
+if platform.system() != 'Windows':
+    from controller_demo import ControllerTrackDemo
 
 class Game:
     def __init__(self, _screen):
         self.current_level = None
-        self.current_level_index = 1 #should be set to zero usually, 1 will skip the splash screen
+        self.current_level_index = 0 #should be set to zero usually, 1 will skip the splash screen
         self.lev_ded_on = 0
         self.screen = _screen
 
@@ -53,7 +56,7 @@ class Game:
         self.current_level.start()
 
     def update(self, demo=False):
-        if demo:
+        if False:
             self.demo = ControllerTrackDemo()
 
         if self.player.hp <= 0:

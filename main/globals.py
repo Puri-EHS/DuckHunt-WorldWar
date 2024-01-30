@@ -1,7 +1,7 @@
 import os
 import pygame
 
-DELTA_TIME = 1
+DELTA_TIME = 1.5
 
 # Initialization
 OG_GAME_WIDTH = 256 # 768
@@ -24,7 +24,8 @@ FPS = 10000000000000000000000000
 
 # Music
 LOBBY_MUSIC_PATH = os.path.join(MUSIC_DIR, "fortnite_lobby.mp3")
-
+MUSIC_1 = os.path.join(MUSIC_DIR, "HOTS_Music_Space_Ambient.mp3")
+MUSIC_2 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
 # Sound
 SOUND_DIR = os.path.join(ASSETS_DIR, "sounds")
 
