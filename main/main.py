@@ -1,17 +1,17 @@
-#
-#
 # [RUN THIS CODE TO PLAY]
-# Fyi, if the game runs slowely, its not because it's mining crypto or anything, it was just written by idiots. -AM
+# Fyi, if the game runs slowely, its not because it's mining crypto or anything, it was just written by idiots. -Alex M
 import globals
 import pygame
 from game import Game
-
-
+import os
 
 pygame.init()
 pygame.mixer.init()
 
 globals.init_fonts()
+
+monitor_info = pygame.display.Info()
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (monitor_info.current_w//2 - globals.SCREEN_WIDTH//2, 0)
 
 clock = pygame.time.Clock()
 
