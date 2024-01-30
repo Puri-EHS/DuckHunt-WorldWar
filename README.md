@@ -26,11 +26,15 @@ To run the game, run the "main.py" file in the "main" folder
 Architecture:
 
 For the interactions, the biggest ones can be seen in the image below; that shows how all the major classes and abstract classes interact in the tightly wound system. 
+
 ![Image](StructureDiagram.png)
+
 For the smaller interactions, they'll be described here: to start, the main.py calls game.py which is the whole management system of the game. For that, each level is made into its own class, which is then imported and put into a list which the game moves through. For the levels that have buttons, each button is a piece of the button.py class. Each button is designed with a function, some of which actually have the ability to +1 or -1 in the level list. Every single image you see in the game, is a child of the ImageObject class, which takes the image and gives it certain attributes that we can work with and manipulate. 
 
 For the gun tracking, the system scans a QR code on the gun through the camera. From there, the relative location of the gun is mirrored onto the screen and acts as a cursor. 
+
 ![Controller Schematic](https://github.com/bredisrising/DuckHunt-WorldWar/assets/90003108/ddfb6980-b368-4aaf-b1db-426ff7c3f37b)
+
 The gun is tracked in the PhysicalGunDetection.py file, and it distributes information to the rest of the game through it, since it is running the whole time. In the levels with enemies, the level itself handles the tracking of the enemy, the cursor and the health of the enemy. 
 
 For the majority of the Modules, we made an abstract class that outlined the basic form. For example, the level.py and enemy.py file are abstract classes that are implemented into each level or enemy respectively. We did this to reduce the redundancy of coding and make the coding process as a whole more efficient. Another choice made was the game management system. There is a main.py class that is the main game and the game.py class that allows us to easily manage the game and the levels in a simple way. Finally, in our globals.py class, we made all the "things" we would need to use multiple times, such as images and variables in one class. This allowed for ease of importing when creating new levels and enemies.
