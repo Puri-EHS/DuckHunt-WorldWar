@@ -32,8 +32,14 @@ Below is a sturcture diagram of the code:
 ![Image](StructureDiagram.png)
 
 The APIs of the system:
+As mentioned above, we have several different module and classes in our game, each having a plethora of different features, methods, and attributes. Since these modules are each very complex, understanding each and every module would be too hard for each group member to accomplish, so we ended up abstracting all the useful features and the main "job" of the module into a single function called update(each major module like the enemy, player, and game class has this function). When the update method of a module is called, like the update method on the enemy, it does the main job of the module (for example with the enemy, it moves the enemy around and shoots the player) without the user having to understand what is happening in the background. This is the main API method that is used throughout our program, which is used a lot when we are integrating together several modules. For example, in our game class, where we integrate several major modules like the enemy, player, level, and button modules together, we are able to do so by just calling the respective update methods of these external modules, which gets them to do their main task job within the game task, smoothly integrating all these together. Below is a description of the update class for each major module. 
 
-
+AI class update(): moves the enemy to a given point based on its current state
+Enemy class update(): tracks enemy health, interactions with player, and shoots the player
+Button class update(): handles mouse clicks, toggles, and events after the mouse is clicked/toggled
+Player + Player Gun class update(): fires the weapon and handles reloading
+Game class update(): pretty much calls the update to each and every major module, and handles moving from level to level. 
+In conclusion, using these different update method of these major modules, we abstract the main tasks of each module of this function, which we can then call in other modules to integrate them together. 
 
 Retrospective:
 
