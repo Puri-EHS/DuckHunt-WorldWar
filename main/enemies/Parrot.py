@@ -48,9 +48,6 @@ class Parrot(Enemy):
             self.max_health = self.health
             self.shoot_time = 1.5
 
-    def on_shot(self, _damage):
-        super().on_shot(_damage)
-        self.health -= 10
 
 
     def render(self, _screen, _camera_offset):

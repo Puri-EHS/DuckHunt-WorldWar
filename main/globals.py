@@ -99,4 +99,4 @@ HITMARKER_FONT = None
 
 def init_fonts():
     global HITMARKER_FONT
-    HITMARKER_FONT = pygame.font.Font(os.path.join(ASSETS_DIR, "fonts/HitmarkerText-Medium.ttf"), 36)
+    HITMARKER_FONT = pygame.font.Font(os.path.join(ASSETS_DIR, "fonts/HitmarkerText-Medium.ttf"), 42)

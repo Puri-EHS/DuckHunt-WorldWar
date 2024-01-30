@@ -354,8 +354,16 @@ class Enemy(ABC):
         self.rect.center = self.get_screen_coordinates(_camera_offset)
         _screen.blit(self.animation.frames[self.animation.current_frame], self.rect.topleft)
 
-    def on_shot(self, _damage):
-        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), _damage))
+    def on_shot(self, _damage, _point):
+        damage = 10
+        color = (255, 255, 255)
+        if _point[1] < self.rect.center[1]-25:
+            damage = 20
+            color = (255, 25, 25)
+
+        self.health -= damage
+
+        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), damage, color))
 
 
     def render(self, _screen, _camera_offset):
@@ -365,32 +373,48 @@ class Enemy(ABC):
      
     def update(self):
         # AI.update() to figure out the position of the AI, and then set the rectangle of the enemy to that position
-        for hitmarker in self.hit_markers:
-            hitmarker.update()    
+        i = 0
+        while i < len(self.hit_markers):
+            self.hit_markers[i].update()
+            if self.hit_markers[i].dead():
+                self.hit_markers.pop(i)
+                i -= 1
+            
+            i+=1
+
 
 
 class HitMarker:
-    def __init__(self, hitmarkers_list, id, position, damage):
+    def __init__(self, hitmarkers_list, id, position, damage, color):
         self.hitmarkers = hitmarkers_list
         self.index = id
         self.position = position
         self.timer = 0
-        self.stay_time = 1.0
+        self.stay_time = 2.0
 
         self.damage = damage
         self.opacity = 1.0
         self.depth = 4.9
+        self.color = color
 
     def render(self, _screen, _camera_offset):
-        rendered_text = globals.HITMARKER_FONT.render(str(self.damage), True, (255, 255, 255, int(self.opacity*255)))
+        opac = int(self.opacity*255)
+        if opac > 255:
+            opac = 255
+
+        if opac < 0:
+            opac = 0
+        rendered_text = globals.HITMARKER_FONT.render(str(self.damage), True, self.color)
+        rendered_text.set_alpha(opac)
         _screen.blit(rendered_text, (self.position[0] - _camera_offset/self.depth, self.position[1]))
 
     def update(self):
         self.timer += globals.DELTA_TIME
         self.opacity = 1.0 - self.timer / self.stay_time
-        if self.timer > self.stay_time:
-            self.hitmarkers.pop(self.index)
-            del self
+
+
+    def dead(self):
+        return self.timer > self.stay_time
         
 
     
