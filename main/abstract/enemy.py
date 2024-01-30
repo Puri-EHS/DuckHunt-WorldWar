@@ -6,6 +6,7 @@ import math
 import numpy
 from player import Player
 import globals
+from dataclasses import dataclass
 from globals import SCREEN_HEIGHT, SCREEN_WIDTH
 
 def subtract_vectors(v1, v2):
@@ -382,7 +383,16 @@ class Enemy(ABC):
             
             i+=1
 
+@dataclass
+class AimParameters:
+    pass
 
+class EnemyGun:
+    def __init__(self):
+        self.origin_position = (0, 0)
+
+    def render(self):
+        pass
 
 class HitMarker:
     def __init__(self, hitmarkers_list, id, position, damage, color):
