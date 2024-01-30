@@ -10,6 +10,7 @@ from levels.lev1_victory import lev1_victory
 from levels.lev2_victory import lev2_victory
 from levels.lev3_victory import lev3_victory
 from levels.ded import Ded
+from levels.key_binds import KeyBinds
 from levels.options_screen import OptionScreen
 from player import Player
 import pygame
@@ -32,6 +33,7 @@ class Game:
             TitleScreen,
             OptionScreen,
             LoadingScreen,
+            KeyBinds,
             Level1,
             lev1_victory,
             LoadingScreen,
