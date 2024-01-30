@@ -23,6 +23,10 @@ Make sure the user has a camera and it is not covered or in a badly lit area as 
 Make sure there is a functional mouse, whether that be a physical mouse or a track pad.
 To run the game, run the "main.py" file in the "main" folder 
 
+Architecture:
+
+![Image](StructureDiagram.png)
+
 
 Retrospective:
 
