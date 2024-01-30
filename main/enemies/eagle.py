@@ -17,7 +17,7 @@ class Eagle(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.velocity = 320
+        self.ai.velocity = 450
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.phase_2 = False
 

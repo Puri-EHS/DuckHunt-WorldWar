@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod, abstractproperty
 import pygame 
 import globals
+from globals import MUSIC_1
 
 class Level(ABC):
     
@@ -30,7 +31,9 @@ class Level(ABC):
         self.frame_counter = 0
 
     def start(self):
-        pass
+        pygame.mixer.music.load(MUSIC_1)
+        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.play(-1)
     
     def depth_render(self, _image_list, _offset):
         for image_obj in _image_list:
@@ -47,7 +50,8 @@ class Level(ABC):
     def stop(self):
         # del didn't do anything because python doesn't immediately GC anyways
         # use this method to stop music if there is any
-        pass
+        pygame.mixer.music.stop()
+        pygame.mixer.music.unload()
 
     def ended(self) -> bool:
         pass

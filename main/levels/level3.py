@@ -2,7 +2,7 @@ from abstract.level import Level
 from image_object import ImageObj
 from enemies.eagle import Eagle
 import globals
-from globals import SCREEN_WIDTH, SCREEN_HEIGHT, CITY, CITYCARBACK, CITYCARFRONT, CITYFRONTFENCE, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX
+from globals import SCREEN_WIDTH, SCREEN_HEIGHT, CITY, CITYCARBACK, CITYCARFRONT, CITYFRONTFENCE, SAVANNA_BUSH_BACK,HIT_BAR_FRAME, HIT_BAR, HIT_EFFECT, AMMO_4, DUCKCROSSHAIR, HITBOX, MUSIC_3
 import pygame
 
 class Level3(Level):
@@ -47,7 +47,12 @@ class Level3(Level):
         self.animation_tick = 4
         self.current_tick = 0
         self.duck_hit = False
-    
+
+    def start(self):
+        pygame.mixer.music.load(MUSIC_3)
+        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.play(-1)
+
     def update_bar(self, max_health, current_health):
         return(0 - 295 + ((current_health/max_health)*290))
 

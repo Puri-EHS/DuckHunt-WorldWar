@@ -10,14 +10,14 @@ import pygame
 import random
 import numpy as np
 
-class VanilaDuck(Enemy):
+class Goose(Enemy):
     def __init__(self, game):
         super().__init__()
-        self.sprite_sheet = Spritesheet(VANILA_DUCK_PATH)
+        self.sprite_sheet = Spritesheet(GOOSE_PATH)
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.velocity = 200
+        self.ai.velocity = 320
         self.ai.normal_velocity = self.ai.velocity
         
         self.world_coordinates = (self.ai.x, self.ai.y) 
@@ -39,8 +39,6 @@ class VanilaDuck(Enemy):
 
         self.random_std = 1
 
-        self.relative_hitmarker_position = (50, -75)
-
         # weaken if using controler
         if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/125
@@ -51,20 +49,15 @@ class VanilaDuck(Enemy):
             self.shoot_time = 1.5
 
     def on_shot(self, _damage):
-        super().on_shot(10)
         self.health -= 10
 
 
     def render(self, _screen, _camera_offset):
-       
         self.depth_render(_screen, _camera_offset)
         self.render_aim_line(_screen, _camera_offset)
 
-        super().render(_screen, _camera_offset)
-
     def update(self):
-        super().update()
-
+    
         self.enter_aim()
         self.aim()
         self.ai.update()

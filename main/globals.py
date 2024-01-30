@@ -24,8 +24,9 @@ FPS = 10000000000000000000000000
 
 # Music
 LOBBY_MUSIC_PATH = os.path.join(MUSIC_DIR, "fortnite_lobby.mp3")
-MUSIC_1 = os.path.join(MUSIC_DIR, "HOTS_Music_Space_Ambient.mp3")
-MUSIC_2 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
+MUSIC_1 = os.path.join(MUSIC_DIR, "nDLC02_Music_Cue07.mp3")
+MUSIC_2 = os.path.join(MUSIC_DIR, "HOTS_Music_Space_Ambient.mp3")
+MUSIC_3 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
 # Sound
 SOUND_DIR = os.path.join(ASSETS_DIR, "sounds")
 
@@ -37,6 +38,7 @@ SPLASH_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/splash_screen.png")
 TITLE_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/duck_hunt_menu_bg.png")
 TITLE_SCREEN_LOGO = os.path.join(ASSETS_DIR, "ui/duck_hunt_title.png")
 LOADING_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/earf_load.png")
+KEY_BIND_SCREEN_PATH = os.path.join(ASSETS_DIR, "ui/key_binds_screen.png")
 VICTORY1 = os.path.join(ASSETS_DIR, "badges_and_other/lev_1_victory.png")
 VICTORY2 = os.path.join(ASSETS_DIR, "badges_and_other/lev_2_victory.png")
 VICTORY3 = os.path.join(ASSETS_DIR, "badges_and_other/lev_3_victory.png")

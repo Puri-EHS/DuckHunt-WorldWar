@@ -15,7 +15,7 @@ class LoadingScreen(Level):
     def start(self):
         print(__file__ + " " + self.name + " starting")
         pygame.mixer.music.load(LOBBY_MUSIC_PATH)
-        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.set_volume(0.1)
         pygame.mixer.music.play(-1)
 
     def stop(self):
