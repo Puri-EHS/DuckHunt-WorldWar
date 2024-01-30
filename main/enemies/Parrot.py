@@ -49,15 +49,20 @@ class Parrot(Enemy):
             self.shoot_time = 1.5
 
     def on_shot(self, _damage):
+        super().on_shot(_damage)
         self.health -= 10
 
 
     def render(self, _screen, _camera_offset):
+       
+
         self.depth_render(_screen, _camera_offset)
         self.render_aim_line(_screen, _camera_offset)
+        super().render(_screen, _camera_offset)
 
     def update(self):
-        
+        super().update()
+
         self.enter_aim()
         self.aim()
         self.ai.update()
