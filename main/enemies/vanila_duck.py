@@ -17,7 +17,7 @@ class VanilaDuck(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.velocity = 320
+        self.ai.velocity = 200
         self.ai.normal_velocity = self.ai.velocity
         
         self.world_coordinates = (self.ai.x, self.ai.y) 

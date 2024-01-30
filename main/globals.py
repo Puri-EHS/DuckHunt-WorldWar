@@ -24,7 +24,7 @@ FPS = 10000000000000000000000000
 
 # Music
 LOBBY_MUSIC_PATH = os.path.join(MUSIC_DIR, "fortnite_lobby.mp3")
-MUSIC_1 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
+MUSIC_1 = os.path.join(MUSIC_DIR, "nDLC02_Music_Cue07.mp3")
 MUSIC_2 = os.path.join(MUSIC_DIR, "HOTS_Music_Space_Ambient.mp3")
 MUSIC_3 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
 # Sound

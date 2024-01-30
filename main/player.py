@@ -130,7 +130,7 @@ class PlayerGun:
         self.con_not_found_img = pygame.image.load(CONNOTFOUND)
 
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
-        self.shoot_sound.set_volume(0.10)
+        self.shoot_sound.set_volume(0.05)
         
         self.pause_no_con = False
 

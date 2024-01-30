@@ -14,7 +14,7 @@ class lev1_victory(Level):
     def start(self):
         print(__file__ + " " + self.name + " starting")
         pygame.mixer.music.load(LOBBY_MUSIC_PATH)
-        pygame.mixer.music.set_volume(0.25)
+        pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(-1)
 
 
