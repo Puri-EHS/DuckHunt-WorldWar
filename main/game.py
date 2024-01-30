@@ -12,8 +12,11 @@ from levels.lev3_victory import lev3_victory
 from levels.ded import Ded
 from levels.options_screen import OptionScreen
 from player import Player
-#from controller_demo import ControllerTrackDemo
 import pygame
+import platform
+
+if platform.system() != 'Windows':
+    from controller_demo import ControllerTrackDemo
 
 class Game:
     def __init__(self, _screen):
