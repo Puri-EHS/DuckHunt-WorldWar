@@ -11,6 +11,8 @@ from game import Game
 pygame.init()
 pygame.mixer.init()
 
+globals.init_fonts()
+
 clock = pygame.time.Clock()
 
 

@@ -1,4 +1,5 @@
 import os
+import pygame
 
 DELTA_TIME = 1.5
 
@@ -17,8 +18,7 @@ MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
 USE_MOUSE = [True]
-FPS = 60
-
+FPS = 10000000000000000000000000
 
 # Asset Paths
 
@@ -93,3 +93,8 @@ AMMO_0 = os.path.join(WEAPONS_DIR, "ammo_level_0.png")
 GUN = os.path.join(WEAPONS_DIR, "gun.png")
 
 
+HITMARKER_FONT = None
+
+def init_fonts():
+    global HITMARKER_FONT
+    HITMARKER_FONT = pygame.font.Font(os.path.join(ASSETS_DIR, "fonts/HitmarkerText-Medium.ttf"), 36)

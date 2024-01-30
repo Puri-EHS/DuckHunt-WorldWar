@@ -292,6 +292,9 @@ class Enemy(ABC):
         self.shoot_timer = 0
         self.firing = False
 
+        self.hit_markers = []
+        self.relative_hitmarker_position = (50, -50)
+
     def render_aim_line(self, _screen, _camera_offset):
         if self.aiming:
             pygame.draw.line(_screen, (255, 0, 0), (self.get_screen_coordinates(_camera_offset)[0] + self.aim_line_x_offset, self.get_screen_coordinates(_camera_offset)[1] + self.aim_line_y_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
@@ -326,7 +329,7 @@ class Enemy(ABC):
             if random.random() < 1/100:
                 self.aiming = False
                 self.firing = True
-        
+
         if self.firing:
             self.shoot_timer += globals.DELTA_TIME
             
@@ -351,15 +354,45 @@ class Enemy(ABC):
         self.rect.center = self.get_screen_coordinates(_camera_offset)
         _screen.blit(self.animation.frames[self.animation.current_frame], self.rect.topleft)
 
-    @abstractmethod
     def on_shot(self, _damage):
-        pass
+        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), _damage))
 
-    @abstractmethod
+
     def render(self, _screen, _camera_offset):
-        pass
+        for hitmarker in self.hit_markers:
+            hitmarker.render(_screen, _camera_offset)    
 
-    @abstractmethod 
+     
     def update(self):
         # AI.update() to figure out the position of the AI, and then set the rectangle of the enemy to that position
-        pass
+        for hitmarker in self.hit_markers:
+            hitmarker.update()    
+
+
+class HitMarker:
+    def __init__(self, hitmarkers_list, id, position, damage):
+        self.hitmarkers = hitmarkers_list
+        self.index = id
+        self.position = position
+        self.timer = 0
+        self.stay_time = 1.0
+
+        self.damage = damage
+        self.opacity = 1.0
+        self.depth = 4.9
+
+    def render(self, _screen, _camera_offset):
+        rendered_text = globals.HITMARKER_FONT.render(str(self.damage), True, (255, 255, 255, int(self.opacity*255)))
+        _screen.blit(rendered_text, (self.position[0] - _camera_offset/self.depth, self.position[1]))
+
+    def update(self):
+        self.timer += globals.DELTA_TIME
+        self.opacity = 1.0 - self.timer / self.stay_time
+        if self.timer > self.stay_time:
+            self.hitmarkers.pop(self.index)
+            del self
+        
+
+    
+    
+    

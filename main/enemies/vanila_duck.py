@@ -39,6 +39,8 @@ class VanilaDuck(Enemy):
 
         self.random_std = 1
 
+        self.relative_hitmarker_position = (50, -75)
+
         # weaken if using controler
         if not USE_MOUSE[0]:
             self.aim_enter_prob = 1/125
@@ -49,15 +51,20 @@ class VanilaDuck(Enemy):
             self.shoot_time = 1.5
 
     def on_shot(self, _damage):
+        super().on_shot(10)
         self.health -= 10
 
 
     def render(self, _screen, _camera_offset):
+       
         self.depth_render(_screen, _camera_offset)
         self.render_aim_line(_screen, _camera_offset)
 
+        super().render(_screen, _camera_offset)
+
     def update(self):
-    
+        super().update()
+
         self.enter_aim()
         self.aim()
         self.ai.update()

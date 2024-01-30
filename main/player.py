@@ -128,7 +128,10 @@ class PlayerGun:
 
         self.crosshair_img = pygame.image.load(CROSSHAIR)
         self.con_not_found_img = pygame.image.load(CONNOTFOUND)
+
         self.shoot_sound = pygame.mixer.Sound(SHOOT_SOUND_PATH)
+        self.shoot_sound.set_volume(0.25)
+        
         self.pause_no_con = False
 
     def render(self, screen):
@@ -196,7 +199,6 @@ class PlayerGun:
             # update image
             self.cur_image = self.shoot_images[self.gun_image_index]
             
-            self.shoot_sound.set_volume(0.05)
             pygame.mixer.Sound.play(self.shoot_sound)
         
         if self.ammo_left <= 0:

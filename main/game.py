@@ -14,9 +14,7 @@ from levels.options_screen import OptionScreen
 from player import Player
 import pygame
 import platform
-
-if platform.system() != 'Windows':
-    from controller_demo import ControllerTrackDemo
+from controller_demo import ControllerTrackDemo
 
 class Game:
     def __init__(self, _screen):
@@ -56,7 +54,7 @@ class Game:
         self.current_level.start()
 
     def update(self, demo=False):
-        if False:
+        if demo:
             self.demo = ControllerTrackDemo()
 
         if self.player.hp <= 0:
