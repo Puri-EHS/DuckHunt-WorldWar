@@ -275,18 +275,28 @@ class Enemy(ABC):
         self.x_change = 1
         self.y_change = 1
         self.p = .4 
-        self.d = 4.0 
+        self.d = 3.0 
         self.xlasterror = 0
         self.ylasterror = 0
-        self.random_multiplier = 4
+        self.random_multiplier = 8
         self.random_mean = 0
-        self.random_std = 1.5
-        self.aim_enter_prob = 1/200 #1/120
+        self.random_std = 2
         self.aiming = False
+        
         self.aim_coordinates = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
+        
+        self.x_change_2 = 1
+        self.y_change_2 = 1
+        self.xlasterror_2 = 0
+        self.ylasterror_2 = 0
+        
+        self.aim_coordinates_2 = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
+
 
         self.aim_line_x_offset = -46
         self.aim_line_y_offset = 0
+
+        self.aim_line_x_offset_2 = 46
 
         # Alex's way inferior code
         self.shoot_time = .5
@@ -303,7 +313,6 @@ class Enemy(ABC):
             pygame.draw.line(_screen, (255, 0, 0), (self.get_screen_coordinates(_camera_offset)[0] + self.aim_line_x_offset, self.get_screen_coordinates(_camera_offset)[1] + self.aim_line_y_offset), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 4)
             pygame.draw.circle(_screen, (255, 0, 0), (self.aim_coordinates[0] - self.player_ref.x + SCREEN_WIDTH/2, self.aim_coordinates[1]), 200 - (self.shoot_timer*(200/self.shoot_time)), 4)
 
-
     def enter_aim(self):
         if not self.aiming and random.random() < self.aim_enter_prob and not self.firing:
             self.aiming = True
@@ -318,11 +327,9 @@ class Enemy(ABC):
             yerrorchange = yerror - self.ylasterror
             self.xlasterror = xerror
             self.ylasterror = yerror
-
              
             self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
             self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
-
 
             self.aim_coordinates[0] += self.x_change * globals.DELTA_TIME
             self.aim_coordinates[1] += self.y_change * globals.DELTA_TIME
@@ -338,6 +345,7 @@ class Enemy(ABC):
                 self.firing = False
                 self.shoot_timer = 0
                 self.pop_a_cap(self.aim_coordinates)
+                self.pop_a_cap(self.aim_coordinates_2)
             
 
 
@@ -387,7 +395,7 @@ class Enemy(ABC):
 class AimParameters:
     pass
 
-class EnemyGun:
+class TheAimer:
     def __init__(self):
         self.origin_position = (0, 0)
 
