@@ -24,7 +24,7 @@ class VanilaDuck(Enemy):
         self.aim_line_x_offset = -33
        
         # remove exept for testing
-        self.aim_enter_prob = 1/2 #1/125
+        self.aim_enter_prob = 1/150 #1/125
         self.time_per_hp_regen = 2.5
         self.current_time = 0
         self.health = 75

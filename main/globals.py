@@ -26,7 +26,7 @@ FPS = 1000000000.0
 LOBBY_MUSIC_PATH = os.path.join(MUSIC_DIR, "fortnite_lobby.mp3")
 MUSIC_1 = os.path.join(MUSIC_DIR, "nDLC02_Music_Cue07.mp3")
 MUSIC_2 = os.path.join(MUSIC_DIR, "HOTS_Music_Space_Ambient.mp3")
-MUSIC_3 = os.path.join(MUSIC_DIR, "nDLC03_Music_Cue05.mp3")
+MUSIC_3 = os.path.join(MUSIC_DIR, "Ndlc03 Music Cue06.mp3")
 # Sound
 SOUND_DIR = os.path.join(ASSETS_DIR, "sounds")
 
@@ -106,3 +106,6 @@ def init_fonts_and_sounds():
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/heheheha.mp3")), "heheheha!"))
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/stoopid.mp3")), "stoopid!"))
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/yousuck.mp3")), "you suck!"))
+    
+    PARROT_INSULTS[1][0].set_volume(0.2)
+    PARROT_INSULTS[0][0].set_volume(0.2)

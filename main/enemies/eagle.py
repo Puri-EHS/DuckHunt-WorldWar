@@ -21,7 +21,7 @@ class Eagle(Enemy):
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.phase_2 = False
 
-        self.time_per_hp_regen = 1 # in seconds
+        self.time_per_hp_regen = 0.5 # in seconds
         self.current_time = 0
         
 
@@ -29,7 +29,7 @@ class Eagle(Enemy):
     
         self.rect.center = self.world_coordinates
 
-        self.health = 250
+        self.health = 300
         self.max_health = self.health
 
         self.player_ref = game.player

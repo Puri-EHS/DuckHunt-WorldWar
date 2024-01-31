@@ -51,7 +51,8 @@ class Level3(Level):
     def start(self):
         pygame.mixer.music.load(MUSIC_3)
         pygame.mixer.music.set_volume(0.25)
-        pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(-1, 26)
+
 
     def update_bar(self, max_health, current_health):
         return(0 - 295 + ((current_health/max_health)*290))

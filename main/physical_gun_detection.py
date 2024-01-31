@@ -83,9 +83,9 @@ class Tracker:
             self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 5) - height*3
             
             # Noise elimination sysetem (Smoothing of stuttery motion)
-            if self.avg_x - self.stable_avg_x > 5 or self.avg_x - self.stable_avg_x < -5:
+            if self.avg_x - self.stable_avg_x > 2 or self.avg_x - self.stable_avg_x < -2:
                 self.stable_avg_x = self.avg_x
-            if self.avg_y - self.stable_avg_y > 5 or self.avg_y - self.stable_avg_y < -5:
+            if self.avg_y - self.stable_avg_y > 2 or self.avg_y - self.stable_avg_y < -2:
                 self.stable_avg_y = self.avg_y
 
             self.num_fire = 0
