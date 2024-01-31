@@ -52,7 +52,13 @@ class Tracker:
         matches_icon1 = bf.knnMatch(self.des_icon1, des_frame, k=2)
 
         # Apply ratio test to filter good matches for icon 1
-        good_matches_icon1 = [m for m, n in matches_icon1 if m.distance < 0.70 * n.distance]
+        good_matches_icon1 = []
+        for match in matches_icon1:
+            if len(match) == 2:
+                if match[0].distance < 0.70 * match[1].distance:
+                    good_matches_icon1.append(match[0])
+        
+        #good_matches_icon1 = [m for m, n in matches_icon1 if m.distance < 0.70 * n.distance]
         
         height, width = frame.shape[:2]
         
