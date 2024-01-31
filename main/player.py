@@ -96,7 +96,7 @@ class PlayerGun:
         self.cooldown_timer = self.cooldown_time
 
         # Limit how often tracking is called, as to improve fps
-        self.frames_per_track = 2
+        self.frames_per_track = 1
         self.current_frames_untracked = 0
 
         self.idle_images = []

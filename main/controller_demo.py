@@ -118,5 +118,3 @@ class ControllerTrackDemo:
         # Release the VideoCapture and close all windows
         cap.release()
         cv2.destroyAllWindows()
-
-

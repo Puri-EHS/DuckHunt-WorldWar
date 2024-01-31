@@ -79,13 +79,13 @@ class Tracker:
 #2.6
         # Require atleast x detected points to ensure tracking stability
         if len(good_matches_icon1) > 7:
-            self.avg_x = (width*2.6)-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*4)
-            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 4) - height*2.5
+            self.avg_x = (width*3.25)-(int(np.mean([kp_frame[m.trainIdx].pt[0] for m in good_matches_icon1]))*5)
+            self.avg_y = (int(np.mean([kp_frame[m.trainIdx].pt[1] for m in good_matches_icon1])) * 5) - height*3
             
             # Noise elimination sysetem (Smoothing of stuttery motion)
-            if self.avg_x - self.stable_avg_x > 10 or self.avg_x - self.stable_avg_x < -10:
+            if self.avg_x - self.stable_avg_x > 5 or self.avg_x - self.stable_avg_x < -5:
                 self.stable_avg_x = self.avg_x
-            if self.avg_y - self.stable_avg_y > 10 or self.avg_y - self.stable_avg_y < -10:
+            if self.avg_y - self.stable_avg_y > 5 or self.avg_y - self.stable_avg_y < -5:
                 self.stable_avg_y = self.avg_y
 
             self.num_fire = 0
