@@ -18,7 +18,7 @@ MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
 USE_MOUSE = [True]
-FPS = 10000000000000000000000000
+FPS = 1000000000.0
 
 # Asset Paths
 
