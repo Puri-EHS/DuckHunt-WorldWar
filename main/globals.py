@@ -18,7 +18,7 @@ MUSIC_DIR = os.path.join(ASSETS_DIR, "music")
 
 # Game
 USE_MOUSE = [True]
-FPS = 10000000000000000000000000
+FPS = 1000000000.0
 
 # Asset Paths
 
@@ -94,9 +94,15 @@ AMMO_0 = os.path.join(WEAPONS_DIR, "ammo_level_0.png")
 
 GUN = os.path.join(WEAPONS_DIR, "gun.png")
 
+PARROT_INSULTS = []
+
+
 
 HITMARKER_FONT = None
 
-def init_fonts():
+def init_fonts_and_sounds():
     global HITMARKER_FONT
     HITMARKER_FONT = pygame.font.Font(os.path.join(ASSETS_DIR, "fonts/HitmarkerText-Medium.ttf"), 42)
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/heheheha.mp3")), "heheheha!"))
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/stoopid.mp3")), "stoopid!"))
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/yousuck.mp3")), "you suck!"))

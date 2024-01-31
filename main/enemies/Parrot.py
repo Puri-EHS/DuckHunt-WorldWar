@@ -5,6 +5,8 @@ from abstract.enemy import Enemy
 from abstract.enemy import AI
 from sprite_sheet import Spritesheet
 from sprite_sheet import Animation
+from abstract.enemy import HitMarker
+
 
 import pygame   
 import random
@@ -48,11 +50,15 @@ class Parrot(Enemy):
             self.max_health = self.health
             self.shoot_time = 1.5
 
+        self.insults = []
+
+    def insult(self):
+        insult = random.choice(globals.PARROT_INSULTS)
+        pygame.mixer.Sound.play(insult[0])
+        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), insult[1], (100, 100, 200)))
 
 
     def render(self, _screen, _camera_offset):
-       
-
         self.depth_render(_screen, _camera_offset)
         self.render_aim_line(_screen, _camera_offset)
         super().render(_screen, _camera_offset)

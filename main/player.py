@@ -1,9 +1,9 @@
-from globals import FPS, GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH
+from globals import GUN, CROSSHAIR, CONNOTFOUND, SCREEN_HEIGHT, SCREEN_WIDTH, SHOOT_SOUND_PATH
 import globals
 from sprite_sheet import Spritesheet
-from image_object import ImageObj
-import platform
+
 from physical_gun_detection import Tracker
+
 
 import pygame
 
@@ -19,6 +19,8 @@ class Player:
         self.hp = 100
 
         self.move_speed = 1200 # pixels per second
+
+
 
     def handle_input(self, _level_size):
         keys = pygame.key.get_pressed()
@@ -82,7 +84,8 @@ class PlayerGun:
         self.damage = 1
 
         self.tracker = Tracker()
-        self.tracker.track_icons()
+        if not globals.USE_MOUSE[0]:
+            self.tracker.track_icons()
 
         self.reload_time = 0
         self.shoot_time = 1 
@@ -130,6 +133,7 @@ class PlayerGun:
         self.shoot_sound.set_volume(0.05)
         
         self.pause_no_con = False
+
 
     def render(self, screen):
         screen.blit(self.cur_image, (SCREEN_WIDTH/2-self.image_size[0]/2, SCREEN_HEIGHT-self.image_size[1]))

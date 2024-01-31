@@ -54,7 +54,11 @@ class Level2(Level):
                         self.alive_enemies.remove(enemy)
                         del enemy
                     break
-
+                
+                else:
+                    # miss
+                    if isinstance(enemy, Parrot):
+                        enemy.insult()
 
         if len(self.alive_enemies) == 0 and not self.is_over:
             self.is_over = True

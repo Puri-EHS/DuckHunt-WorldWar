@@ -1,7 +1,5 @@
 from levels.splash_screen import SplashScreen
 from levels.title_screen import TitleScreen
-from levels.target_practice import TargetPractice
-from levels.Controller_img import Cont_img
 from levels.level1 import Level1
 from levels.level2 import Level2
 from levels.level3 import Level3
@@ -13,9 +11,8 @@ from levels.ded import Ded
 from levels.key_binds import KeyBinds
 from levels.options_screen import OptionScreen
 from player import Player
-import pygame
-import platform
 from controller_demo import ControllerTrackDemo
+import globals
 
 class Game:
     def __init__(self, _screen):
@@ -51,6 +48,9 @@ class Game:
         if(self.current_level is not None):
             self.current_level.stop()
         
+        if self.levels[_level_index] == KeyBinds and globals.USE_MOUSE[0] != True:
+            _level_index += 1
+
         self.current_level_index = _level_index
         self.current_level = self.levels[_level_index]("level " + str(_level_index), self.screen, self)
         self.current_level.start()
@@ -68,12 +68,10 @@ class Game:
         #player input
         if self.current_level.game_level:
             self.player.handle_input(self.current_level.level_size)
-
             self.player.update()
 
 
-        # basic level switching
-        # we can add transitions later
+
         if not self.current_level.ended():
             self.current_level.update()
             self.current_level.render()
