@@ -107,5 +107,3 @@ def init_fonts_and_sounds():
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/stoopid.mp3")), "stoopid!"))
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/yousuck.mp3")), "you suck!"))
     
-    PARROT_INSULTS[1][0].set_volume(0.2)
-    PARROT_INSULTS[0][0].set_volume(0.2)
