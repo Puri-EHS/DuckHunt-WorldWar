@@ -282,6 +282,8 @@ class Enemy(ABC):
         self.random_mean = 0
         self.random_std = 2
         self.aiming = False
+
+        self.fire_enter_prob = 1/100
         
         self.aim_coordinates = numpy.array([random.randrange(0, 1000), random.randrange(0, SCREEN_HEIGHT)])
         
@@ -334,7 +336,7 @@ class Enemy(ABC):
             self.aim_coordinates[0] += self.x_change * globals.DELTA_TIME
             self.aim_coordinates[1] += self.y_change * globals.DELTA_TIME
 
-            if random.random() < 1/100:
+            if random.random() < self.fire_enter_prob:
                 self.aiming = False
                 self.firing = True
 

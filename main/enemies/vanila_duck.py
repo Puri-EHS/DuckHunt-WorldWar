@@ -24,12 +24,15 @@ class VanilaDuck(Enemy):
         self.aim_line_x_offset = -33
        
         # remove exept for testing
-        self.aim_enter_prob = 1/150 #1/125
+        self.aim_enter_prob = 1/90 #1/125
         self.time_per_hp_regen = 2.5
         self.current_time = 0
-        self.health = 75
+        self.health = 120
         self.max_health = self.health
-        self.shoot_time =  1.5
+        self.shoot_time =  1
+        self.fire_enter_prob = 1/60
+
+        self.p = .8
 
         self.rect = pygame.Rect(0, 0, 200, 200)
     
@@ -43,12 +46,13 @@ class VanilaDuck(Enemy):
 
         # weaken if using controler
         if not USE_MOUSE[0]:
-            self.aim_enter_prob = 1/125
+            self.aim_enter_prob = 1/90
             self.time_per_hp_regen = 1.3
             self.current_time = 0
-            self.health = 50
+            self.health = 100
             self.max_health = self.health
-            self.shoot_time = 1.5
+            self.shoot_time = 1
+            
 
 
     def render(self, _screen, _camera_offset):

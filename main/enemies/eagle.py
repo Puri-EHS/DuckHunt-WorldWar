@@ -19,9 +19,10 @@ class Eagle(Enemy):
         self.animation = Animation(self.sprite_sheet, 0, 0, 200, 200)
         self.depth = 4.7
         self.ai = AI(500, 400, game.player, self.depth)
-        self.ai.states[2].velocity = 400
-        self.ai.states[0].velocity = 900
-        self.ai.velocity = 800
+        self.ai.states[2].velocity = 200 * 2.5
+        self.ai.states[1].velocity = 800 * 2.5
+        self.ai.states[0].velocity = 600 * 2.5
+        self.ai.velocity = 800*2 #useless
         self.world_coordinates = (self.ai.x, self.ai.y) 
         self.phase_2 = False
 
@@ -81,6 +82,9 @@ class Eagle(Enemy):
 
 
         if not USE_MOUSE[0]:
+            self.ai.states[2].velocity = 200 * 1.75
+            self.ai.states[1].velocity = 800 * 1.75
+            self.ai.states[0].velocity = 600 * 1.75
             self.aim_enter_prob = 1/30
             self.time_per_hp_regen = .5
             self.current_time = 0
@@ -124,13 +128,13 @@ class Eagle(Enemy):
             self.xlasterror_2 = xerror_2
             self.ylasterror_2 = yerror_2
              
-            self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(-.75, self.random_std) * globals.DELTA_TIME
-            self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
+            self.x_change += self.p * xerror + self.d * xerrorchange + self.random_multiplier * random.gauss(-.85, self.random_std) * globals.DELTA_TIME
+            self.y_change += self.p * yerror + self.d * yerrorchange + self.random_multiplier*3 * random.gauss(self.random_mean*3, self.random_std) * globals.DELTA_TIME
 
             # left and right aims have opposite means so that they aim apart
 
-            self.x_change_2 += self.p * xerror_2 + self.d * xerrorchange_2 + self.random_multiplier * random.gauss(.75, self.random_std) * globals.DELTA_TIME
-            self.y_change_2 += self.p * yerror_2 + self.d * yerrorchange_2 + self.random_multiplier * random.gauss(self.random_mean, self.random_std) * globals.DELTA_TIME
+            self.x_change_2 += self.p * xerror_2 + self.d * xerrorchange_2 + self.random_multiplier * random.gauss(.85, self.random_std) * globals.DELTA_TIME
+            self.y_change_2 += self.p * yerror_2 + self.d * yerrorchange_2 + self.random_multiplier*3 * random.gauss(self.random_mean*3, self.random_std) * globals.DELTA_TIME
 
             self.aim_coordinates[0] += self.x_change * globals.DELTA_TIME
             self.aim_coordinates[1] += self.y_change * globals.DELTA_TIME

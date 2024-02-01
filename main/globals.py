@@ -96,7 +96,7 @@ GUN = os.path.join(WEAPONS_DIR, "gun.png")
 
 PARROT_INSULTS = []
 
-
+WASTED = os.path.join(ASSETS_DIR, "sounds/wasted.mp3")
 
 HITMARKER_FONT = None
 
@@ -106,5 +106,8 @@ def init_fonts_and_sounds():
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/heheheha.mp3")), "heheheha!"))
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/stoopid.mp3")), "stoopid!"))
     PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/yousuck.mp3")), "you suck!"))
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/what_aiming_at.mp3")), "WHAT ARE YOU AIMING AT!"))
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/what_aiming_at.mp3")), "WHAT ARE YOU AIMING AT!"))
+    PARROT_INSULTS.append((pygame.mixer.Sound(os.path.join(ASSETS_DIR, "sounds/parrot_insults/yourtrashkid.mp3")), "your trash kid"))
 
     

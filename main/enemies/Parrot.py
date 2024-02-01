@@ -55,7 +55,7 @@ class Parrot(Enemy):
     def insult(self):
         insult = random.choice(globals.PARROT_INSULTS)
         pygame.mixer.Sound.play(insult[0])
-        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), insult[1], (100, 100, 200)))
+        self.hit_markers.append(HitMarker(self.hit_markers, len(self.hit_markers), (self.world_coordinates[0]+self.relative_hitmarker_position[0], self.world_coordinates[1]+self.relative_hitmarker_position[1]), insult[1], (75, 75, 200)))
 
 
     def render(self, _screen, _camera_offset):
