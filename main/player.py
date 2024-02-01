@@ -13,13 +13,15 @@ class Player:
         self.coords = [self.x, SCREEN_HEIGHT/2]
         self.gun = PlayerGun()
         self.game_instance = _game_instance
+
         self.ducking = False
-        self.ducking_kick_timer = 0
+        self.ducking_kick_timer = 6 # needs to init more than 3
         self.ducking_kick_max = 10
         self.hp = 100
 
         self.move_speed = 1200 # pixels per second
 
+        self.duck_cooldown_timer = 0
 
 
     def handle_input(self, _level_size):
@@ -45,7 +47,7 @@ class Player:
                 self.gun.shoot()
                 self.game_instance.current_level.check_enemy_point_collisions(self.gun.crosshair_coords, self.gun.damage)
         
-        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not self.ducking:
+        if (keys[pygame.K_s] or keys[pygame.K_DOWN]) and not self.ducking and self.duck_cooldown_timer > 5:
             self.ducking = True
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(3)
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center = (self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[0], self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].image_rect.center[1] - 1050)
@@ -53,6 +55,8 @@ class Player:
         if (keys[pygame.K_w] or keys[pygame.K_UP]) and self.ducking:
             self.game_instance.current_level.foreground_images[len(self.game_instance.current_level.foreground_images)-1].scale(1/3)
             self.ducking = False
+            # cool down
+            self.duck_cooldown_timer = 0
     
     def move(self, _x, _level_size):
         self.x += _x
@@ -70,6 +74,7 @@ class Player:
     def update(self):
         #print(self.x)
         self.gun.update()
+        self.duck_cooldown_timer += globals.DELTA_TIME
 
 class PlayerGun:
     def __init__(self):
